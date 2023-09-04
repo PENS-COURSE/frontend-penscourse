@@ -102,11 +102,13 @@
                   </div>
 
                   <div class="flex justify-end">
-                    <button
-                      class="bg-blue text-white ml-auto py-2 px-20 rounded-lg"
-                    >
-                      Kerjakan
-                    </button>
+                    <NuxtLink to="/quizConfirmation">
+                      <button
+                        class="bg-blue text-white ml-auto py-2 px-20 rounded-lg"
+                      >
+                        Kerjakan
+                      </button>
+                    </NuxtLink>
                   </div>
                 </div>
               </template>
