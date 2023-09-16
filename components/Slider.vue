@@ -1,6 +1,8 @@
 <template>
   <div class="mx-4 sm:mx-8 md:mx-16 lg:mx-32 xl:mx-44">
-    <div class="navigation-wrapper relative overflow-hidden xl:h-96">
+    <div
+      class="navigation-wrapper relative overflow-hidden h-40 md:h-60 xl:h-96"
+    >
       <div ref="container" class="keen-slider w-full h-full absolute top-0">
         <div class="keen-slider__slide number-slide1">
           <img

@@ -40,7 +40,7 @@
           <li class="mr-2 last:mr-0 flex-auto text-center cursor-pointer">
             <a
               class="text-xs font-bold px-5 py-3 block leading-normal"
-              v-on:click="toggleTabs(1)"
+              @click="toggleTabs(1)"
               :class="{
                 'text-blue bg-white': openTab !== 1,
                 'text-blue  border-b-2 border-blue': openTab === 1,
@@ -52,7 +52,7 @@
           <li class="mr-2 last:mr-0 flex-auto text-center cursor-pointer">
             <a
               class="text-xs font-bold px-5 py-3 block leading-normal"
-              v-on:click="toggleTabs(2)"
+              @click="toggleTabs(2)"
               :class="{
                 'text-blue bg-white': openTab !== 2,
                 'text-blue  border-b-2 border-blue': openTab === 2,
@@ -125,19 +125,20 @@
               alt=""
               class="rounded-md shadow-md mb-5"
             />
-            <h4 class="font-semibold text-lg mb-5">Rp1.250.000</h4>
-            <NuxtLink to="/course/livestream">
-              <Button
-                text="Beli Kelas Ini"
-                class="mb-5 py-4 w-full text-white bg-blue rounded-md"
-              />
+            <h4 class="font-semibold text-lg mb-5 hidden">Rp1.250.000</h4>
+            <NuxtLink
+              to="/course/livestream"
+              class="flex justify-center gap-4 mb-5 py-4 w-full text-white bg-blue rounded-md"
+            >
+              <img src="~assets/images/camera.svg" alt="" />
+              Masuk Kelas
             </NuxtLink>
-            <p class="capitalize mb-3">Yang akan kamu dapatkan:</p>
-            <div class="flex gap-2">
+            <p class="capitalize mb-3 hidden">Yang akan kamu dapatkan:</p>
+            <div class="gap-2 hidden">
               <img src="~assets/images/notepad.svg" alt="" />
               <p class="text-gray2">Pembahasan Ujian</p>
             </div>
-            <div class="flex gap-2">
+            <div class="hidden gap-2">
               <img src="~assets/images/notepad.svg" alt="" />
               <p class="text-gray2">Seluruh Materi Perkuliahan</p>
             </div>
@@ -157,18 +158,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      openTab: 1,
-    };
-  },
-  methods: {
-    toggleTabs: function (tabNumber) {
-      this.openTab = tabNumber;
-    },
-  },
+<script setup>
+const openTab = ref(1);
+const toggleTabs = (tabNumber) => {
+  openTab.value = tabNumber;
 };
 </script>
 
