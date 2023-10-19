@@ -2,7 +2,11 @@
 module.exports = {
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        poppins: ["Poppins"],
+      },
+    },
     colors: {
       blue: "#0F497A",
       blue2: "#ABD4F1",
@@ -11,6 +15,7 @@ module.exports = {
       yellow: "#FFE000",
       gray: "#DCDFE3",
       gray2: "#7D8997",
+      transparent: "transparent",
     },
   },
 

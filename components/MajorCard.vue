@@ -1,12 +1,10 @@
 <template>
-  <NuxtLink to="/major">
-    <div class="bg-white relative rounded-xl">
-      <img
-        src="~assets/images/major.png"
-        alt=""
-        class="object-contain rounded-t-xl"
-      />
-      <h4 class="text-blue bottom-5 left-5 p-3">{{ major.major }}</h4>
+  <NuxtLink to="/major/informatika">
+    <div
+      class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center"
+    >
+      <img :src="major.image" alt="major page" width="80" height="85" />
+      <h5 class="text-dark">{{ major.major }}</h5>
     </div>
   </NuxtLink>
 </template>
@@ -14,5 +12,6 @@
 <script setup>
 const { major } = defineProps({
   major: Object,
+  image: String,
 });
 </script>

@@ -1,97 +1,152 @@
 <template>
-  <section class="bg-gray-50 dark:bg-gray-900">
+  <div class="flex flex-col md:flex-row h-screen">
+    <title>Login | Pens Course</title>
+
     <div
-      class="flex items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
+      class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-blue via-blue to-[#3E6F96] text-white"
     >
-      <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1
-            class="text-xl font-bold leading-tight tracking-tight text-dark md:text-2xl"
+      <img
+        src="~assets/images/pens_white.png"
+        alt="Logo"
+        width="40"
+        height="40"
+        class="mb-10"
+      />
+      <h2 class="text-2xl lg:text-4xl xl:text-6xl font-semibold">
+        Selamat Datang di PENS Course!
+      </h2>
+
+      <img src="~assets/images/main-section.png" alt="Logo" />
+    </div>
+
+    <div
+      class="flex min-h-full flex-1 flex-col bg-white justify-center mx-6 lg:mx-8"
+    >
+      <h2 class="mb-1 text-2xl font-semibold text-center text-blue">
+        Selamat Datang Kembali!
+      </h2>
+
+      <p class="text-gray2 text-center mb-8">Silahkan masukkan data anda</p>
+
+      <div
+        class="sm:mx-auto sm:w-full sm:max-w-sm border border-gray p-6 rounded-3xl"
+      >
+        <form @submit.prevent="handleLogin">
+          <div class="flex items-center justify-between">
+            <label
+              htmlFor="email"
+              class="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Email
+            </label>
+          </div>
+
+          <input
+            v-model="user.email"
+            id="email"
+            name="email"
+            placeholder="masukkan email anda"
+            type="email"
+            autoComplete="email"
+            class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+          />
+
+          <div class="flex items-center justify-between mt-2">
+            <label
+              htmlFor="password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Password
+            </label>
+          </div>
+
+          <div class="relative">
+            <input
+              v-model="user.password"
+              id="password"
+              name="password"
+              type="password"
+              placeholder="masukkan password anda"
+              autoComplete="password"
+              class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            />
+
+            <button
+              class="absolute bottom-2 right-3 text-gray2 flex items-center"
+            >
+              <font-awesome-icon :icon="['fas', 'eye']" />
+            </button>
+          </div>
+
+          <div class="mb-16 text-xs text-right py-1 text-blue">
+            <a href="/forget-password">Lupa password?</a>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-blue py-4 text-sm font-semibold text-white mb-6"
           >
-            Silahkan Masuk
-          </h1>
-          <form class="space-y-4 md:space-y-6" action="#">
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-dark"
-                >Email</label
-              >
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="bg-gray-50 border border-gray2 text-dark sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5"
-                placeholder="name@company.com"
-                required=""
-              />
-            </div>
-            <div>
-              <label
-                for="password"
-                class="block mb-2 text-sm font-medium text-dark"
-                >Password</label
-              >
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                class="bg-gray-50 border border-gray2 text-dark sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5"
-                required=""
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    type="checkbox"
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                    required=""
-                  />
-                </div>
-                <div class="ml-3 text-sm">
-                  <label for="remember" class="text-gray-500 dark:text-gray-300"
-                    >Remember me</label
-                  >
-                </div>
-              </div>
-              <a
-                href="#"
-                class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >Forgot password?</a
-              >
-            </div>
+            Masuk
+          </button>
 
-            <NuxtLink to="/">
-              <Button
-                text="Masuk"
-                class="w-full mt-5 text-white bg-blue focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              />
-            </NuxtLink>
+          <p class="text-center text-sm mb-6">Atau masuk melalui</p>
 
-            <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-              Don’t have an account yet?
-              <NuxtLink
-                to="/auth/register"
-                class="font-medium text-blue hover:underline"
-              >
-                Sign up
-              </NuxtLink>
-            </p>
-          </form>
-        </div>
+          <button
+            class="py-3 mb-6 w-full rounded-lg border border-gray flex justify-center items-center gap-4 text-sm hover:scale-105 duration-300 font-bold"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 48 48"
+              width="25"
+              height="25"
+            >
+              <path
+                fill="#FFC107"
+                d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+              />
+              <path
+                fill="#FF3D00"
+                d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+              />
+              <path
+                fill="#4CAF50"
+                d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+              />
+              <path
+                fill="#1976D2"
+                d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+              />
+            </svg>
+            Google
+          </button>
+
+          <p class="text-sm text-center">
+            Belum punya akun?
+            <NuxtLink to="/auth/register" class="text-blue"> Daftar </NuxtLink>
+          </p>
+        </form>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup>
+import { useAuthStore } from "~/store/auth.js";
+
 definePageMeta({
   layout: "auth",
 });
+
+const authStore = useAuthStore();
+
+let user = {
+  email: null,
+  password: null,
+};
+
+const handleLogin = async () => {
+  await authStore.login(user);
+};
 </script>
 
 <style></style>
