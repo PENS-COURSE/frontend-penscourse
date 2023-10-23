@@ -9,7 +9,17 @@ export const useAuthStore = defineStore({
       // isLoading: false,
     };
   },
-  getters: {},
+
+  getters: {
+    getUser() {
+      if (localStorage.getItem("user")) {
+        return JSON.parse(localStorage.getItem("user"));
+      } else {
+        return "gagal get item";
+      }
+    },
+  },
+
   actions: {
     async login(user) {
       const config = useRuntimeConfig();
@@ -36,7 +46,7 @@ export const useAuthStore = defineStore({
 
         this.isLogin = true;
         // this.isLoading = true;
-        this.user = response.data.data.user.name;
+        // this.user = response.data.data.user.name;
 
         navigateTo("/");
         // this.isLogin = false;
@@ -48,7 +58,7 @@ export const useAuthStore = defineStore({
     async register(user) {
       const config = useRuntimeConfig();
 
-      const regisrerPayload = {
+      const registerPayload = {
         name: user.name,
         email: user.email,
         password: user.password,
@@ -58,7 +68,7 @@ export const useAuthStore = defineStore({
       try {
         const response = await axios.post(
           `${config.public.API_URL}/authentication/register`,
-          regisrerPayload
+          registerPayload
         );
         console.log(response);
         navigateTo("/auth/login");

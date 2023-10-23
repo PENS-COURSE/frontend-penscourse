@@ -72,14 +72,14 @@
         Daftar
       </NuxtLink>
 
-      <div v-if="authStore.isLogin">
+      <div v-if="authStore.isLogin" class="flex items-center gap-10">
         <font-awesome-icon :icon="['fas', 'bell']" class="text-white" />
         <img src="~assets/images/profile.png" alt="" />
         <p
           class="text-white font-light cursor-pointer"
           @click="authStore.logout()"
         >
-          {{ authStore.user }}
+          {{ profileStore?.user?.name }}
         </p>
       </div>
     </div>
@@ -88,11 +88,26 @@
 
 <script setup>
 import { useAuthStore } from "~/store/auth.js";
+import { useProfileStore } from "~/store/profileStore.js";
 
 let showMenu = ref(false);
+const name = ref("");
 const authStore = useAuthStore();
 
-console.log(authStore.user);
+const profileStore = useProfileStore();
+
+const getUserProfile = async () => {
+  await profileStore.getUser();
+};
+
+onMounted(async () => {
+  await getUserProfile();
+  // console.log(profileStore.user.name);
+});
+
+onMounted(() => {
+  name.value = authStore.getUser.name;
+});
 
 const toggleNav = () => {
   showMenu.value = !showMenu.value;

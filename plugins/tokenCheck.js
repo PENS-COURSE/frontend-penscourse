@@ -9,7 +9,6 @@ export default ({ context }) => {
       localStorage.getItem("user")
     ) {
       loginStore.isLogin = true;
-      // loginStore.user = JSON.parse(localStorage.getItem("user"));
     } else {
       navigateTo("/auth/login");
     }

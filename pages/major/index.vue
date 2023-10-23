@@ -33,137 +33,40 @@
     <button class="bg-blue text-white py-2 px-6 rounded-lg">Search</button>
   </div>
 
+  <!-- <pre>{{ majors }}</pre> -->
   <div
     class="px-10 lg:px-16 md:py-16 xl:px-32 gap-6 justify-items-center grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4"
   >
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-it.png" alt="" width="80" height="85" />
-        <h5>Teknik Informatika</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-ce.png" alt="" width="80" height="85" />
-        <h5>Teknik Komputer</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-elka.png" alt="" width="80" height="85" />
-        <h5>Teknik Elektronika</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-elin.png" alt="" width="80" height="85" />
-        <h5>Teknik Elektro Industri</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-telkom.png" alt="" width="80" height="85" />
-        <h5>Teknik Telekomunikasi</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-spe.png" alt="" width="80" height="85" />
-        <h5>Sistem Pembangkit Energi</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-meka.png" alt="" width="80" height="85" />
-        <h5>Teknik Mekatronika</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-gt.png" alt="" width="80" height="85" />
-        <h5>Teknologi Game</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-mmb.png" alt="" width="80" height="85" />
-        <h5>Multimedia Broadcasting</h5>
-      </div>
-    </NuxtLink>
-
-    <NuxtLink to="/major/informatika">
-      <div
-        class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
-      >
-        <img src="~assets/icons/ic-sdt.png" alt="" width="80" height="85" />
-        <h5>Sains Data Terapan</h5>
-      </div>
-    </NuxtLink>
+    <div v-for="major in majors" :key="major.id">
+      <NuxtLink to="/major/informatika">
+        <div
+          class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
+        >
+          <img :src="major.icon" alt="" width="80" class="max-h-20" />
+          <h5>{{ major.name }}</h5>
+        </div>
+      </NuxtLink>
+    </div>
   </div>
 </template>
 
 <script setup>
-const majors = [
-  {
-    id: 1,
-    major: "Teknik Informatika",
-    image: "~assets/icons/ic-it.png",
-  },
-  {
-    id: 2,
-    major: "Teknik Komputer",
-  },
-  {
-    id: 3,
-    major: "Teknik Mekatronika",
-  },
-  {
-    id: 4,
-    major: "Teknik Komputer",
-  },
-  {
-    id: 5,
-    major: "Sistem Pembangkit Energi",
-  },
-  {
-    id: 6,
-    major: "Teknik Elektro Industri",
-  },
-  {
-    id: 7,
-    major: "Sains Data Terapan",
-  },
-  {
-    id: 8,
-    major: "Teknologi Game",
-  },
-];
+import { useMajorStore } from "~/store/major.js";
+
+const majorStore = useMajorStore();
+
+const getMajor = async () => {
+  await majorStore.getAllMajor();
+};
+
+const majors = computed(() => {
+  return majorStore.major;
+});
+
+onMounted(async () => {
+  await getMajor();
+  // console.log(profileStore.user.name);
+});
 </script>
 
 <style></style>

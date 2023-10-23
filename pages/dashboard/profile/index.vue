@@ -46,12 +46,36 @@
 
       <div
         class="border border-gray rounded-lg p-6 flex flex-col items-center gap-4 mt-6 md:flex-row md:justify-between"
+        v-if="authStore.isLogin"
       >
         <div class="flex flex-col items-center md:flex-row md:gap-4">
           <img src="~assets/images/profile.png" alt="" width="80" height="80" />
           <div class="flex flex-col text-center md:text-start">
-            <h4 class="font-medium text-lg md:text-xl">Ghifari Ramadhan</h4>
-            <p class="text-sm md:text-base">ghifariramadhan2001@gmail.com</p>
+            <h4 class="font-medium text-lg md:text-xl">
+              {{ profileStore?.user?.name }}
+            </h4>
+            <p class="text-sm md:text-base">{{ profileStore?.user?.email }}</p>
+          </div>
+        </div>
+        <button class="py-2 px-6 bg-blue text-white rounded-lg">Edit</button>
+        <!-- <EditProfile
+          v-if="isOpen"
+          :isOpen="isConfirmationDialogOpen"
+          :message="confirmationMessage"
+          @confirmed="onConfirm"
+          @canceled="onCancel"
+        /> -->
+      </div>
+
+      <div
+        class="border border-gray rounded-lg p-6 flex flex-col items-center gap-4 mt-6 md:flex-row md:justify-between"
+        v-if="!authStore.isLogin"
+      >
+        <div class="flex flex-col items-center md:flex-row md:gap-4">
+          <img src="~assets/images/profile.png" alt="" width="80" height="80" />
+          <div class="flex flex-col text-center md:text-start">
+            <h4 class="font-medium text-lg md:text-xl">login sek bang</h4>
+            <p class="text-sm md:text-base">login sek bang</p>
           </div>
         </div>
         <button class="py-2 px-6 bg-blue text-white rounded-lg">Edit</button>
@@ -98,8 +122,15 @@
 </template>
 
 <script setup>
+import { useProfileStore } from "~/store/profileStore.js";
+import { useAuthStore } from "~/store/auth.js";
+
+const authStore = useAuthStore();
+
 // const { isOpen, message, openDialog, closeDialog } = useConfirmationDialog();
 // const confirmationMessage = "Are you sure you want to proceed?";
+
+// import { useProfileStore } from "~/store/profile.js";
 
 // function openConfirmationDialog() {
 //   openDialog(confirmationMessage);
@@ -130,6 +161,17 @@
 //     isOpen.value = false;
 //   }
 // }
+
+const profileStore = useProfileStore();
+
+const getUserProfile = async () => {
+  await profileStore.getUser();
+};
+
+onMounted(async () => {
+  await getUserProfile();
+  // console.log(profileStore.user.name);
+});
 </script>
 
 <style></style>
