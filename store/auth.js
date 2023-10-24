@@ -78,9 +78,6 @@ export const useAuthStore = defineStore({
     },
 
     logout() {
-      // localStorage.removeItem("user");
-      // localStorage.removeItem("access_token");
-      // localStorage.removeItem("refresh_token");
       localStorage.clear();
       this.isLogin = false;
     },

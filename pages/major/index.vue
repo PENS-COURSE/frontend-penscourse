@@ -33,12 +33,11 @@
     <button class="bg-blue text-white py-2 px-6 rounded-lg">Search</button>
   </div>
 
-  <!-- <pre>{{ majors }}</pre> -->
   <div
     class="px-10 lg:px-16 md:py-16 xl:px-32 gap-6 justify-items-center grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4"
   >
     <div v-for="major in majors" :key="major.id">
-      <NuxtLink to="/major/informatika">
+      <NuxtLink :to="`/major/${major.slug}`">
         <div
           class="px-6 w-64 h-64 border border-gray flex flex-col justify-center items-center hover:bg-blue2 transition-colors"
         >
