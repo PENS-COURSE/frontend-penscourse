@@ -121,7 +121,7 @@
         <div class="fixed right-44 flex flex-col gap-10 top-60">
           <div class="p-5 shadow-lg rounded-md bg-white">
             <img
-              src="~assets/images/course_banner.png"
+              src="~assets/images/course.png"
               alt=""
               class="rounded-md shadow-md mb-5"
             />
