@@ -70,7 +70,6 @@ export const useAuthStore = defineStore({
           `${config.public.API_URL}/authentication/register`,
           registerPayload
         );
-        console.log(response);
         navigateTo("/auth/login");
       } catch (error) {
         console.error("Permintaan gagal:", error.response.data);
