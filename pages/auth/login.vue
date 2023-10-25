@@ -60,7 +60,7 @@
             </label>
           </div>
 
-          <div class="relative">
+          <div class="relative mb-16">
             <input
               v-model="user.password"
               id="password"
@@ -76,10 +76,6 @@
             >
               <font-awesome-icon :icon="['fas', 'eye']" />
             </button>
-          </div>
-
-          <div class="mb-16 text-xs text-right py-1 text-blue">
-            <a href="/forget-password">Lupa password?</a>
           </div>
 
           <button
