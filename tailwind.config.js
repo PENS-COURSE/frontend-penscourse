@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         poppins: ["Poppins"],
+        nunito: ['nunito', 'sans-serif'],
       },
     },
     colors: {
