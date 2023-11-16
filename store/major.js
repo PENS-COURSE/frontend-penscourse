@@ -44,8 +44,7 @@ export const useMajorStore = defineStore("major", {
         const response = await axios.get(
           `${config.public.API_URL}/departments/${this.majorDetail.slug}/courses`
         );
-        console.log(response);
-        this.courses = response.data.data;
+        this.courses = response.data.data.data;
       } catch (error) {
         console.error("Permintaan gagal:", error.response.data);
       }

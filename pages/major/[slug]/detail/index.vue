@@ -53,13 +53,19 @@
     <div
       class="mt-12 gap-x-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
-      <template v-for="i in 5" :key="i">
-        <NuxtLink to="/major/informatika/detail/detail-course">
+      <template v-for="course in courses">
+        <NuxtLink :to="`/major/${major.slug}/detail/${course.slug}`">
           <div
             class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-gray rounded-md"
           >
-            <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
-            <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
+            <img
+              v-if="course.thumbnail == null"
+              src="~assets/images/course.png"
+              alt=""
+              class="w-full mb-2"
+            />
+            <img v-else :src="course.thumbnail" alt="" class="w-full mb-2" />
+            <h4 class="font-semibold text-base mb-1">{{ course.name }}</h4>
             <h4 class="text-sm text-gray2 mb-1">Teknik Informatika</h4>
             <div class="flex text-sm gap-2 items-center mb-4">
               <font-awesome-icon :icon="['fas', 'star']" class="text-yellow" />
@@ -67,7 +73,15 @@
               <p class="text-gray">(12k)</p>
             </div>
             <div class="flex justify-between items-center">
-              <h5 class="text-blue font-semibold text-xl">Rp120.000</h5>
+              <h5
+                v-if="course.is_free == true"
+                class="text-blue font-semibold text-xl"
+              >
+                Gratis
+              </h5>
+              <h5 v-else class="text-blue font-semibold text-xl">
+                {{ course.price }}
+              </h5>
               <h5 class="line-through text-sm text-gray2 font-medium">
                 Rp120.000
               </h5>

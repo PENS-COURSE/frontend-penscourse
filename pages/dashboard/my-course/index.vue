@@ -76,26 +76,12 @@
       </div>
 
       <div class="mt-8 gap-8 grid grid-cols-1 md:grid-cols-3">
-        <template v-for="i in 3" :key="i">
+        <template v-for="course in courses">
           <div class="border border-gray p-4">
             <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
-            <h4 class="font-semibold text-base mb-1">Pemrograman Dasar</h4>
-            <p class="text-gray2 mb-4">Teknik Informatika</p>
-
-            <div class="w-full bg-gray rounded-full">
-              <div
-                class="bg-blue text-white text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-                style="width: 45%"
-              >
-                45%
-              </div>
-            </div>
-          </div>
-        </template>
-        <template v-for="i in 3" :key="i">
-          <div class="border border-gray p-4">
-            <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
-            <h4 class="font-semibold text-base mb-1">Pemrograman Dasar</h4>
+            <h4 class="font-semibold text-base mb-1">
+              {{ course.course.name }}
+            </h4>
             <p class="text-gray2 mb-4">Teknik Informatika</p>
 
             <div class="w-full bg-gray rounded-full">
@@ -113,6 +99,22 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useCourseStore } from "~/store/course.js";
+
+const courseStore = useCourseStore();
+
+const getEnrollmentCourse = async () => {
+  await courseStore.getEnrollmentCourse();
+};
+
+const courses = computed(() => {
+  return courseStore.courseEnrollment;
+});
+
+onMounted(async () => {
+  await getEnrollmentCourse();
+});
+</script>
 
 <style></style>

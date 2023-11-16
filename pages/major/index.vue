@@ -64,7 +64,6 @@ const majors = computed(() => {
 
 onMounted(async () => {
   await getMajor();
-  // console.log(profileStore.user.name);
 });
 </script>
 

@@ -9,11 +9,8 @@ export const useProfileStore = defineStore({
   actions: {
     async getUser() {
       await useFethWithToken("/profile").then((res) => {
-        // console.log(res.data.data);
         this.user = res.data.data;
       });
-
-      // console.log(response);
     },
   },
 });

@@ -13,7 +13,7 @@
       </NuxtLink>
       <NuxtLink
         to="/dashboard/notification"
-        class="bg-blue text-gray2 px-6 py-4 flex items-center gap-4"
+        class="bg-blue text-white px-6 py-4 flex items-center gap-4"
       >
         <font-awesome-icon :icon="['fas', 'bell']" />
         <h5 class="font-medium text-sm md:text-lg">Notifikasi</h5>

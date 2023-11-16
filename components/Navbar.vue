@@ -115,7 +115,7 @@ const toggleNav = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .router-link-exact-active {
   color: #dcdfe3;
 }
