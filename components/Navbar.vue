@@ -74,7 +74,19 @@
 
       <div v-if="authStore.isLogin" class="flex items-center gap-10">
         <font-awesome-icon :icon="['fas', 'bell']" class="text-white" />
-        <img src="~assets/images/profile.png" alt="" />
+        <img
+          v-if="profileStore?.user?.avatar == null"
+          src="~assets/images/profile.png"
+          alt=""
+        />
+        <img
+          v-else
+          :src="`${useRuntimeConfig().public.BASE_API_URL}/${
+            profileStore?.user?.avatar
+          }`"
+          class="rounded-full w-10 h-10"
+          alt="profile picture"
+        />
         <p
           class="text-white font-light cursor-pointer"
           @click="authStore.logout()"

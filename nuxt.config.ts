@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       API_URL: "http://103.186.31.38:63523/api",
+      BASE_API_URL: "http://103.186.31.38:63523",
     },
   },
   devtools: { enabled: true },

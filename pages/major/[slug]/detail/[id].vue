@@ -121,13 +121,20 @@
               </h4> -->
             </div>
 
-            <NuxtLink to="/payment">
-              <button
-                class="w-full py-3 text-white bg-blue rounded-md text-center mb-4"
-              >
-                Beli Kelas
-              </button>
-            </NuxtLink>
+            <button
+              v-if="course?.is_free == true"
+              @click="enrollCourse"
+              class="w-full py-3 text-white bg-blue rounded-md text-center mb-4"
+            >
+              Dapatkan Kelas
+            </button>
+
+            <button
+              v-else
+              class="w-full py-3 text-white bg-blue rounded-md text-center mb-4"
+            >
+              Beli Kelas
+            </button>
 
             <!-- <NuxtLink to="/course/livestream">
               <button
@@ -176,16 +183,20 @@ const course = computed(() => {
   return courseStore.courseDetail;
 });
 
-onMounted(async () => {
-  await getDetailCourse();
-});
-
 const getCurriculums = async () => {
   await courseStore.getCurriculums();
 };
 
+const enrollCourse = async () => {
+  await courseStore.enrollCourse();
+};
+
 const curriculum = computed(() => {
   return courseStore.courseDetail;
+});
+
+onMounted(async () => {
+  await getDetailCourse();
 });
 
 onMounted(async () => {

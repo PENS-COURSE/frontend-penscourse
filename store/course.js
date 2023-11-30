@@ -35,6 +35,27 @@ export const useCourseStore = defineStore("course", {
       }
     },
 
+    async enrollCourse() {
+      const config = useRuntimeConfig();
+      const { id } = useRoute().params;
+      const token = localStorage.getItem("access_token");
+
+      try {
+        const response = await axios.post(
+          `${config.public.API_URL}/courses/${id}/enroll`,
+          { id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response);
+      } catch (error) {
+        console.log("ini eror cuu", error);
+      }
+    },
+
     async getEnrollmentCourse() {
       try {
         const response = await useFethWithToken(`/enrollments`);

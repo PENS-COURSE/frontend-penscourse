@@ -49,22 +49,74 @@
         v-if="authStore.isLogin"
       >
         <div class="flex flex-col items-center md:flex-row md:gap-4">
-          <img src="~assets/images/profile.png" alt="" width="80" height="80" />
+          <img
+            v-if="profile?.avatar == null"
+            src="~assets/images/profile.png"
+            alt=""
+          />
+          <img
+            v-else
+            :src="`${useRuntimeConfig().public.BASE_API_URL}/${
+              profile?.avatar
+            }`"
+            class="rounded-full w-16 h-1w-16"
+            alt="profile picture"
+          />
           <div class="flex flex-col text-center md:text-start">
             <h4 class="font-medium text-lg md:text-xl">
-              {{ profileStore?.user?.name }}
+              {{ profile?.name }}
             </h4>
-            <p class="text-sm md:text-base">{{ profileStore?.user?.email }}</p>
+            <p class="text-sm md:text-base">{{ profile?.email }}</p>
           </div>
         </div>
-        <button class="py-2 px-6 bg-blue text-white rounded-lg">Edit</button>
-        <!-- <EditProfile
-          v-if="isOpen"
-          :isOpen="isConfirmationDialogOpen"
-          :message="confirmationMessage"
-          @confirmed="onConfirm"
-          @canceled="onCancel"
-        /> -->
+        <button
+          @click="togglePopUp"
+          class="py-2 px-6 bg-blue text-white rounded-lg"
+        >
+          Edit
+        </button>
+        <Popup
+          text="Edit Profile"
+          :modal-active="isOpen"
+          @close-modal="togglePopUp"
+        >
+          <div class="flex justify-center">
+            <img
+              class="w-20 h-20 p-1 rounded-full ring-2 ring-gray2 dark:ring-gray-500"
+              :src="`${useRuntimeConfig().public.BASE_API_URL}/${
+                profile?.avatar
+              }`"
+              alt="Bordered avatar"
+            />
+          </div>
+
+          <form action="">
+            <div class="mb-6">
+              <label
+                class="block mb-2 text-sm font-medium text-gray2"
+                for="file_input"
+                >Upload file</label
+              >
+              <input
+                class="block w-full text-sm text-gray-900 border border-gray2 rounded-lg cursor-pointer bg-white"
+                id="file_input"
+                type="file"
+                name="avatar"
+              />
+            </div>
+
+            <div class="mb-6">
+              <label class="block mb-2 text-sm font-medium text-gray2"
+                >Nama Lengkap</label
+              >
+              <input
+                name="name"
+                type="text"
+                class="bg-white border border-gray2 text-gray-900 text-sm rounded-lg focus:ring-blue2 focus:border-blue block w-full p-2.5"
+              />
+            </div>
+          </form>
+        </Popup>
       </div>
 
       <div
@@ -79,13 +131,6 @@
           </div>
         </div>
         <button class="py-2 px-6 bg-blue text-white rounded-lg">Edit</button>
-        <!-- <EditProfile
-          v-if="isOpen"
-          :isOpen="isConfirmationDialogOpen"
-          :message="confirmationMessage"
-          @confirmed="onConfirm"
-          @canceled="onCancel"
-        /> -->
       </div>
 
       <div class="mt-10 flex flex-col gap-5 w-full md:flex-row">
@@ -126,47 +171,21 @@ import { useProfileStore } from "~/store/profileStore.js";
 import { useAuthStore } from "~/store/auth.js";
 
 const authStore = useAuthStore();
-
-// const { isOpen, message, openDialog, closeDialog } = useConfirmationDialog();
-// const confirmationMessage = "Are you sure you want to proceed?";
-
-// import { useProfileStore } from "~/store/profile.js";
-
-// function openConfirmationDialog() {
-//   openDialog(confirmationMessage);
-// }
-
-// function onConfirm() {
-//   // Handle confirmation logic here
-//   console.log("Confirmed");
-//   closeDialog();
-// }
-
-// function onCancel() {
-//   // Handle cancellation logic here
-//   console.log("Canceled");
-//   closeDialog();
-// }
-
-// function useConfirmationDialog() {
-//   const isOpen = ref(false);
-//   const message = ref("");
-
-//   function openDialog(messageText) {
-//     message.value = messageText;
-//     isOpen.value = true;
-//   }
-
-//   function closeDialog() {
-//     isOpen.value = false;
-//   }
-// }
-
 const profileStore = useProfileStore();
+
+const isOpen = ref(false);
+
+const togglePopUp = () => {
+  isOpen.value = !isOpen.value;
+};
 
 const getUserProfile = async () => {
   await profileStore.getUser();
 };
+
+const profile = computed(() => {
+  return profileStore.user;
+});
 
 onMounted(async () => {
   await getUserProfile();
