@@ -46,26 +46,17 @@
           </p>
         </div>
 
-        <div class="relative flex flex-col bg-white w-full mb-6">
+        <div class="w-full mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
-          <template v-for="i in 5" :key="i">
-            <div
-              class="flex justify-between items-center mb-5 shadow-sm px-5 py-4 border border-gray rounded-md cursor-pointer"
-              @click="show = !show"
-            >
-              <h4 class="font-medium text-xl">Sesi {{ i }}: Introduction</h4>
-              <font-awesome-icon
-                :icon="['fas', show ? 'angle-down' : 'angle-right']"
-                class="font-medium text-gray2"
-              />
-            </div>
-            <Transition v-if="show">
-              <p>haii</p>
-            </Transition>
+          <template v-if="c != null" v-for="c in curriculum">
+            <Curriculums :curriculum="c">
+              <Curriculum :curriculum="c" />
+            </Curriculums>
           </template>
+          <div v-else>belum ada kurikulum</div>
         </div>
 
-        <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
+        <!-- <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
         <div class="flex flex-col md:flex-row gap-5">
           <template v-for="i in 3" :key="i">
             <div class="bg-white border border-gray rounded-lg p-6">
@@ -88,7 +79,7 @@
               </p>
             </div>
           </template>
-        </div>
+        </div> -->
       </div>
 
       <div class="md:w-1/4 md:-mt-44 lg:-mt-48 xl:-mt-56 2xl:-mt-72">
@@ -192,7 +183,7 @@ const enrollCourse = async () => {
 };
 
 const curriculum = computed(() => {
-  return courseStore.courseDetail;
+  return courseStore.curriculums;
 });
 
 onMounted(async () => {

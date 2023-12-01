@@ -5,6 +5,7 @@ export const useCourseStore = defineStore("course", {
     return {
       courseDetail: null,
       courseEnrollment: null,
+      curriculums: null,
     };
   },
   getters: {},
@@ -17,7 +18,6 @@ export const useCourseStore = defineStore("course", {
         const response = await axios.get(
           `${config.public.API_URL}/courses/${id}`
         );
-        console.log(response.data.data);
         this.courseDetail = response.data.data;
       } catch (error) {
         console.error("Permintaan gagal:", error.response.data);
@@ -29,7 +29,7 @@ export const useCourseStore = defineStore("course", {
 
       try {
         const response = await useFethWithToken(`/courses/${id}/curriculums`);
-        // console.log(response);
+        this.curriculums = response.data.data;
       } catch (error) {
         console.error(error);
       }
@@ -60,7 +60,6 @@ export const useCourseStore = defineStore("course", {
       try {
         const response = await useFethWithToken(`/enrollments`);
         this.courseEnrollment = response.data.data.data;
-        console.log(response.data.data.data);
       } catch (error) {
         console.error(error);
       }

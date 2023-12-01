@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-gray bg-gray text-dark rounded-lg shadow-sm">
+  <div class="mb-4 border border-gray bg-gray text-dark rounded-lg shadow-sm">
     <button
       @click.prevent="togglePanel"
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"

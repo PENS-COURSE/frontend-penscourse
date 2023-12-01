@@ -1,7 +1,11 @@
 <template>
   <div class="w-full h-full rounded-lg">
     <p>
-      {{ curriculum.description }}
+      {{
+        curriculum.description != null
+          ? curriculum.description
+          : "belum ada kurikulum"
+      }}
     </p>
   </div>
 </template>
