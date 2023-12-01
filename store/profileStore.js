@@ -14,6 +14,7 @@ export const useProfileStore = defineStore({
         this.user = res.data.data;
       });
     },
+
     async updateProfile(data) {
       const config = useRuntimeConfig();
       const token = localStorage.getItem("access_token");
@@ -24,7 +25,7 @@ export const useProfileStore = defineStore({
       };
 
       try {
-        const respone = axios.post(
+        const response = await axios.patch(
           `${config.public.API_URL}/profile/update-profile`,
           dataPayload,
           {
@@ -33,7 +34,9 @@ export const useProfileStore = defineStore({
             },
           }
         );
-        console.log(respone);
+        console.log(response);
+        this.user = response.data.data;
+        navigateTo("/dashboard/profile");
       } catch (error) {
         console.log(error);
       }

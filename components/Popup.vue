@@ -16,14 +16,6 @@
         />
       </div>
       <slot />
-      <div class="flex justify-center">
-        <button
-          @click="$emit('close-modal')"
-          class="text-white bg-blue py-2 px-6 rounded-md"
-        >
-          Simpan
-        </button>
-      </div>
     </div>
   </div>
 </template>

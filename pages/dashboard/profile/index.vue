@@ -83,25 +83,29 @@
           <div class="flex justify-center">
             <img
               class="w-20 h-20 p-1 rounded-full ring-2 ring-gray2 dark:ring-gray-500"
-              :src="`${useRuntimeConfig().public.BASE_API_URL}/${
-                profile?.avatar
-              }`"
+              :src="
+                profilePicture
+                  ? profilePicture
+                  : `${useRuntimeConfig().public.BASE_API_URL}/${
+                      profile?.avatar
+                    }`
+              "
               alt="Bordered avatar"
             />
           </div>
 
-          <form action="">
+          <form @submit.prevent="handleUpdateProfile">
             <div class="mb-6">
               <label
                 class="block mb-2 text-sm font-medium text-gray2"
-                for="file_input"
+                for="avatar"
                 >Upload file</label
               >
               <input
                 class="block w-full text-sm text-gray-900 border border-gray2 rounded-lg cursor-pointer bg-white"
-                id="file_input"
                 type="file"
                 name="avatar"
+                @change="handleFileChange"
               />
             </div>
 
@@ -112,8 +116,17 @@
               <input
                 name="name"
                 type="text"
+                v-model="profilePayload.name"
                 class="bg-white border border-gray2 text-gray-900 text-sm rounded-lg focus:ring-blue2 focus:border-blue block w-full p-2.5"
               />
+            </div>
+            <div class="flex justify-center">
+              <button
+                type="submit"
+                class="text-white bg-blue py-2 px-6 rounded-md"
+              >
+                Simpan
+              </button>
             </div>
           </form>
         </Popup>
@@ -174,6 +187,12 @@ const authStore = useAuthStore();
 const profileStore = useProfileStore();
 
 const isOpen = ref(false);
+const profilePicture = ref(null);
+
+let profilePayload = {
+  name: null,
+  avatar: null,
+};
 
 const togglePopUp = () => {
   isOpen.value = !isOpen.value;
@@ -189,8 +208,22 @@ const profile = computed(() => {
 
 onMounted(async () => {
   await getUserProfile();
-  // console.log(profileStore.user.name);
 });
+
+const handleUpdateProfile = async () => {
+  // profilePayload.value = profile.value;
+  await profileStore.updateProfile(profilePayload);
+};
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  profilePicture.value = URL.createObjectURL(file);
+  console.log(profilePicture.value);
+
+  const formData = new FormData();
+
+  formData.append("profile_picture", file);
+};
 </script>
 
 <style></style>
