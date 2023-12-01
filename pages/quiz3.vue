@@ -13,11 +13,7 @@
             <input type="radio" name="select" id="option-2" />
             <input type="radio" name="select" id="option-3" />
             <input type="radio" name="select" id="option-4" />
-            <img
-              src="~assets/images/content_soal.svg"
-              alt=""
-              class="w-64 pb-3"
-            />
+            <img src="" alt="" class="w-64 pb-3" />
             <label for="option-1" class="option-1">
               <div class="dot"></div>
               <div class="text">Javascript Adalah haha</div>
