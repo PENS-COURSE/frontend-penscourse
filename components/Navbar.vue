@@ -56,7 +56,7 @@
       :class="showMenu ? 'flex' : 'hidden'"
       class="gap-5 mt-10 lg:flex lg:flex-row lg:items-center lg:mt-0"
     >
-      <div v-if="!authStore.isLogin">
+      <div v-if="!authStore.isLogin" class="flex items-center gap-4">
         <NuxtLink
           to="/auth/login"
           class="py-2 px-12 text-white border border-blue rounded-lg bg-yellow hover:opacity-90"

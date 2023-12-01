@@ -2,8 +2,8 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      API_URL: "http://103.186.31.38:63523/api",
-      BASE_API_URL: "http://103.186.31.38:63523",
+      API_URL: "https://pens-api.superrexy-dev.my.id/api",
+      BASE_API_URL: "https://pens-api.superrexy-dev.my.id",
     },
   },
   devtools: { enabled: true },
