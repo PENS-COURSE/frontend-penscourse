@@ -3,7 +3,7 @@
     base='/'
     publish='dist'
     command='nuxt generate'
-    environment = { NODE_VERSION = "18.0.0" }
+    environment = { NODE_VERSION = "16.15.1" }
 
 # We can put redirects 
 [[redirects]]
