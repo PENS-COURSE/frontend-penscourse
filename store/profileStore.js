@@ -16,6 +16,7 @@ export const useProfileStore = defineStore({
     },
     async updateProfile(data) {
       const config = useRuntimeConfig();
+      const token = localStorage.getItem("access_token");
 
       const dataPayload = {
         name: data.name,
@@ -25,9 +26,17 @@ export const useProfileStore = defineStore({
       try {
         const respone = axios.post(
           `${config.public.API_URL}/profile/update-profile`,
-          dataPayload
+          dataPayload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-      } catch (error) {}
+        console.log(respone);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

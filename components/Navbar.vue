@@ -56,21 +56,21 @@
       :class="showMenu ? 'flex' : 'hidden'"
       class="gap-5 mt-10 lg:flex lg:flex-row lg:items-center lg:mt-0"
     >
-      <NuxtLink
-        to="/auth/login"
-        v-if="!authStore.isLogin"
-        class="py-2 px-12 text-white border border-blue rounded-lg bg-yellow hover:opacity-90"
-      >
-        Masuk
-      </NuxtLink>
+      <div v-if="!authStore.isLogin">
+        <NuxtLink
+          to="/auth/login"
+          class="py-2 px-12 text-white border border-blue rounded-lg bg-yellow hover:opacity-90"
+        >
+          Masuk
+        </NuxtLink>
 
-      <NuxtLink
-        to="/auth/register"
-        v-if="!authStore.isLogin"
-        class="py-2 px-12 text-dark bg-white rounded-md hover:bg-white hover:opacity-90"
-      >
-        Daftar
-      </NuxtLink>
+        <NuxtLink
+          to="/auth/register"
+          class="py-2 px-12 text-dark bg-white rounded-md hover:bg-white hover:opacity-90"
+        >
+          Daftar
+        </NuxtLink>
+      </div>
 
       <div v-if="authStore.isLogin" class="flex items-center gap-10">
         <font-awesome-icon :icon="['fas', 'bell']" class="text-white" />

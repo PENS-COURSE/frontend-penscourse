@@ -48,12 +48,14 @@
 
         <div class="w-full mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
-          <template v-if="c != null" v-for="c in curriculum">
+          <div v-if="curriculum == 0">
+            <h1>belum ada kurikulum</h1>
+          </div>
+          <div v-else v-for="c in curriculum">
             <Curriculums :curriculum="c">
               <Curriculum :curriculum="c" />
             </Curriculums>
-          </template>
-          <div v-else>belum ada kurikulum</div>
+          </div>
         </div>
 
         <!-- <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
@@ -107,9 +109,6 @@
               <h4 v-else class="font-semibold text-sm mb-6 text-blue">
                 Rp {{ course?.price }}
               </h4>
-              <!-- <h4 class="line-through font-normal text-sm text-gray2">
-                Rp1.250.000
-              </h4> -->
             </div>
 
             <button
@@ -126,14 +125,6 @@
             >
               Beli Kelas
             </button>
-
-            <!-- <NuxtLink to="/course/livestream">
-              <button
-                class="w-full py-3 text-white bg-blue rounded-md text-center mb-4"
-              >
-                Masuk Kelas
-              </button>
-            </NuxtLink> -->
 
             <h6 class="font-semibold text-base text-blue mb-6">Paket Kelas</h6>
 
@@ -164,7 +155,6 @@
 import { useCourseStore } from "~/store/course.js";
 
 const courseStore = useCourseStore();
-const show = ref(false);
 
 const getDetailCourse = async () => {
   await courseStore.getDetailCourse();
@@ -174,6 +164,10 @@ const course = computed(() => {
   return courseStore.courseDetail;
 });
 
+const curriculum = computed(() => {
+  return courseStore.curriculums;
+});
+
 const getCurriculums = async () => {
   await courseStore.getCurriculums();
 };
@@ -181,10 +175,6 @@ const getCurriculums = async () => {
 const enrollCourse = async () => {
   await courseStore.enrollCourse();
 };
-
-const curriculum = computed(() => {
-  return courseStore.curriculums;
-});
 
 onMounted(async () => {
   await getDetailCourse();

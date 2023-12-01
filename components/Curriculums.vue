@@ -31,7 +31,7 @@ defineProps({
 
 const showPanel = ref(false);
 
-const togglePanel = (event) => {
+const togglePanel = () => {
   showPanel.value = !showPanel.value;
 };
 </script>
