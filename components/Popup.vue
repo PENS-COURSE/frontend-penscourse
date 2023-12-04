@@ -9,11 +9,11 @@
     >
       <div class="flex justify-between items-center gap-10 mb-10">
         <h1>{{ text }}</h1>
-        <font-awesome-icon
+        <!-- <font-awesome-icon
           :icon="['fas', 'xmark']"
           @click="$emit('close-modal')"
           class="cursor-pointer"
-        />
+        /> -->
       </div>
       <slot />
     </div>

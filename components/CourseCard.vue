@@ -1,14 +1,31 @@
 <template>
-  <NuxtLink to="/course">
-    <div class="bg-white rounded-lg relative">
-      <img src="~assets/images/course.png" alt="" class="object-cover" />
-      <h4 class="absolute text-white bottom-5 left-5">{{ course.course }}</h4>
+  <div
+    class="w-full h-40 rounded-lg border border-alto-500/50 overflow-hidden text-white relative"
+  >
+    <div class="p-3 absolute flex flex-col justify-between inset-0">
+      <h4 class="text-lg font-medium">{{ course?.name }}</h4>
+      <div class="flex justify-between items-center">
+        <p class="text-sm truncate">
+          {{ course?.user?.name }} asfasfasfasfqwrqwr
+        </p>
+        <img
+          src="https://source.unsplash.com/random/800x600"
+          class="w-8 h-8 rounded-full"
+        />
+      </div>
     </div>
-  </NuxtLink>
+    <img
+      src="https://source.unsplash.com/random/800x600"
+      class="object-cover bg-no-repeat object-center w-full h-full"
+    />
+  </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { course } = defineProps({
-  course: Object,
+  course: {
+    type: Object as PropType<Course>,
+    required: true,
+  },
 });
 </script>

@@ -14,7 +14,7 @@
             <a
               href="https://www.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               PENS Website
             </a>
@@ -23,7 +23,7 @@
             <a
               href="https://student.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
               >Students</a
             >
           </li>
@@ -31,7 +31,7 @@
             <a
               href="https://lecturer.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
               >Lectures</a
             >
           </li>
@@ -39,7 +39,7 @@
             <a
               href="https://online.mis.pens.ac.id/index.php"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               Online MIS
             </a>
@@ -48,7 +48,7 @@
             <a
               href="https://emitter.pens.ac.id/index.php/emitter/about/editorialTeam"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               PENS Editorial
             </a>
@@ -57,7 +57,7 @@
             <a
               href="https://virtualtour.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               Virtual Tour
             </a>
@@ -72,7 +72,7 @@
             <a
               href="https://www.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               PENS Website
             </a>
@@ -81,7 +81,7 @@
             <a
               href="https://student.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
               >Students</a
             >
           </li>
@@ -89,7 +89,7 @@
             <a
               href="https://lecturer.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
               >Lectures</a
             >
           </li>
@@ -97,7 +97,7 @@
             <a
               href="https://online.mis.pens.ac.id/index.php"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               Online MIS
             </a>
@@ -106,7 +106,7 @@
             <a
               href="https://emitter.pens.ac.id/index.php/emitter/about/editorialTeam"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               PENS Editorial
             </a>
@@ -115,7 +115,7 @@
             <a
               href="https://virtualtour.pens.ac.id/"
               target="_blank"
-              class="hover:text-blue cursor-pointer hover:underline"
+              class="hover:text-regal-blue-500 cursor-pointer hover:underline"
             >
               Virtual Tour
             </a>

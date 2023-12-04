@@ -6,16 +6,16 @@
     >
       {{ curriculum?.title }}
       <span class="material-icons" v-if="showPanel">
-        <font-awesome-icon
+        <!-- <font-awesome-icon
           :icon="['fas', 'angle-down']"
           class="font-medium text-dark"
-        />
+        /> -->
       </span>
       <span class="material-icons" v-else>
-        <font-awesome-icon
+        <!-- <font-awesome-icon
           :icon="['fas', 'angle-right']"
           class="font-medium text-dark"
-        />
+        /> -->
       </span>
     </button>
     <div class="p-4 bg-white" v-if="showPanel">

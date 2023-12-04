@@ -1,42 +1,44 @@
 <template>
   <div class="mt-16 mx-10 lg:mx-16 xl:mx-32 flex flex-col gap-8 md:flex-row">
-    <div class="border border-gray h-96 rounded-lg md:w-1/4">
+    <div class="border border-alto-500 h-96 rounded-lg md:w-1/4">
       <div class="px-6 py-4">
-        <h5 class="font-medium text-base md:text-xl text-gray2">Dashboard</h5>
+        <h5 class="font-medium text-base md:text-xl text-slate-gray-500">
+          Dashboard
+        </h5>
       </div>
       <NuxtLink
         to="/dashboard/profile"
-        class="bg-blue text-white px-6 py-4 flex items-center gap-4"
+        class="bg-regal-blue-500 text-white px-6 py-4 flex items-center gap-4"
       >
-        <font-awesome-icon :icon="['fas', 'user']" />
+        <!-- <font-awesome-icon :icon="['fas', 'user']" /> -->
         <h5 class="font-medium text-sm md:text-lg">Profile</h5>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/notification"
-        class="text-gray2 px-6 py-4 flex items-center gap-4"
+        class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <font-awesome-icon :icon="['fas', 'bell']" />
+        <!-- <font-awesome-icon :icon="['fas', 'bell']" /> -->
         <h5 class="font-medium text-sm md:text-lg">Notifikasi</h5>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/my-course"
-        class="text-gray2 px-6 py-4 flex items-center gap-4"
+        class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <font-awesome-icon :icon="['fas', 'note-sticky']" />
+        <!-- <font-awesome-icon :icon="['fas', 'note-sticky']" /> -->
         <h5 class="font-medium text-sm md:text-lg">Kursus Saya</h5>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/certificate"
-        class="text-gray2 px-6 py-4 flex items-center gap-4"
+        class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <font-awesome-icon :icon="['fas', 'file']" />
+        <!-- <font-awesome-icon :icon="['fas', 'file']" /> -->
         <h5 class="font-medium text-sm md:text-lg">Sertifikat</h5>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/transaction"
-        class="text-gray2 px-6 py-4 flex items-center gap-4"
+        class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <font-awesome-icon :icon="['fas', 'cart-shopping']" />
+        <!-- <font-awesome-icon :icon="['fas', 'cart-shopping']" /> -->
         <h5 class="font-medium text-sm md:text-lg">Transaksi</h5>
       </NuxtLink>
     </div>
@@ -45,8 +47,8 @@
       <h4 class="font-semibold text-2xl">Profil Saya</h4>
 
       <div
-        class="border border-gray rounded-lg p-6 flex flex-col items-center gap-4 mt-6 md:flex-row md:justify-between"
-        v-if="authStore.isLogin"
+        class="border border-alto-500 rounded-lg p-6 flex flex-col items-center gap-4 mt-6 md:flex-row md:justify-between"
+        v-if="authenticated"
       >
         <div class="flex flex-col items-center md:flex-row md:gap-4">
           <img
@@ -133,8 +135,8 @@
       </div>
 
       <div
-        class="border border-gray rounded-lg p-6 flex flex-col items-center gap-4 mt-6 md:flex-row md:justify-between"
-        v-if="!authStore.isLogin"
+        class="border border-alto-500 rounded-lg p-6 flex flex-col items-center gap-4 mt-6 md:flex-row md:justify-between"
+        v-if="!authenticated"
       >
         <div class="flex flex-col items-center md:flex-row md:gap-4">
           <img src="~assets/images/profile.png" alt="" width="80" height="80" />
@@ -147,30 +149,36 @@
       </div>
 
       <div class="mt-10 flex flex-col gap-5 w-full md:flex-row">
-        <div class="border border-gray rounded-lg">
+        <div class="border border-alto-500 rounded-lg">
           <div class="py-4 px-6">
-            <h5 class="text-gray2 font-medium text-base">Kursus Saya</h5>
+            <h5 class="text-slate-gray-500 font-medium text-base">
+              Kursus Saya
+            </h5>
           </div>
 
-          <div class="border-t border-gray px-6 py-3">
+          <div class="border-t border-alto-500 px-6 py-3">
             <h5>4</h5>
           </div>
         </div>
-        <div class="border border-gray rounded-lg">
+        <div class="border border-alto-500 rounded-lg">
           <div class="py-4 px-6">
-            <h5 class="text-gray2 font-medium text-base">Kursus Selesai</h5>
+            <h5 class="text-slate-gray-500 font-medium text-base">
+              Kursus Selesai
+            </h5>
           </div>
 
-          <div class="border-t border-gray px-6 py-3">
+          <div class="border-t border-alto-500 px-6 py-3">
             <h5>4</h5>
           </div>
         </div>
-        <div class="border border-gray rounded-lg">
+        <div class="border border-alto-500 rounded-lg">
           <div class="py-4 px-6">
-            <h5 class="text-gray2 font-medium text-base">Sertifikat Saya</h5>
+            <h5 class="text-slate-gray-500 font-medium text-base">
+              Sertifikat Saya
+            </h5>
           </div>
 
-          <div class="border-t border-gray px-6 py-3">
+          <div class="border-t border-alto-500 px-6 py-3">
             <h5>4</h5>
           </div>
         </div>
@@ -180,11 +188,8 @@
 </template>
 
 <script setup>
-import { useProfileStore } from "~/store/profileStore.js";
-import { useAuthStore } from "~/store/auth.js";
-
 const authStore = useAuthStore();
-const profileStore = useProfileStore();
+const { authenticated, user } = storeToRefs(authStore);
 
 const isOpen = ref(false);
 const profilePicture = ref(null);
@@ -198,16 +203,8 @@ const togglePopUp = () => {
   isOpen.value = !isOpen.value;
 };
 
-const getUserProfile = async () => {
-  await profileStore.getUser();
-};
-
 const profile = computed(() => {
-  return profileStore.user;
-});
-
-onMounted(async () => {
-  await getUserProfile();
+  return user.value;
 });
 
 const handleUpdateProfile = async () => {

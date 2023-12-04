@@ -3,7 +3,7 @@
     <title>Login | Pens Course</title>
 
     <div
-      class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-blue via-blue to-[#3E6F96] text-white"
+      class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] text-white"
     >
       <img
         src="~assets/images/pens_white.png"
@@ -22,20 +22,22 @@
     <div
       class="flex min-h-full flex-1 flex-col bg-white justify-center mx-6 lg:mx-8"
     >
-      <h2 class="mb-1 text-2xl font-semibold text-center text-blue">
+      <h2 class="mb-1 text-2xl font-semibold text-center text-regal-blue-500">
         Selamat Datang Kembali!
       </h2>
 
-      <p class="text-gray2 text-center mb-8">Silahkan masukkan data anda</p>
+      <p class="text-slate-gray-500 text-center mb-8">
+        Silahkan masukkan data anda
+      </p>
 
       <div
-        class="sm:mx-auto sm:w-full sm:max-w-sm border border-gray p-6 rounded-3xl"
+        class="sm:mx-auto sm:w-full sm:max-w-sm border border-alto-500 p-6 rounded-3xl"
       >
         <form @submit.prevent="handleLogin">
           <div class="flex items-center justify-between">
             <label
               htmlFor="email"
-              class="block text-sm font-medium leading-6 text-gray-900"
+              class="block text-sm font-medium leading-6 text-alto-500-900"
             >
               Email
             </label>
@@ -45,16 +47,17 @@
             v-model="user.email"
             id="email"
             name="email"
-            placeholder="masukkan email anda"
+            placeholder="Masukkan email anda"
             type="email"
             autoComplete="email"
-            class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            required
+            class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
           />
 
           <div class="flex items-center justify-between mt-2">
             <label
               htmlFor="password"
-              class="block text-sm font-medium leading-6 text-gray-900"
+              class="block text-sm font-medium leading-6 text-alto-500-900"
             >
               Password
             </label>
@@ -65,30 +68,36 @@
               v-model="user.password"
               id="password"
               name="password"
-              type="password"
-              placeholder="masukkan password anda"
+              :type="isPasswordVisible ? 'text' : 'password'"
+              placeholder="Masukkan password anda"
               autoComplete="password"
-              class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+              required
+              class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
             />
 
             <button
-              class="absolute bottom-2 right-3 text-gray2 flex items-center"
+              class="absolute bottom-2 right-3 text-slate-gray-500 flex items-center"
+              type="button"
+              @click="isPasswordVisible = !isPasswordVisible"
             >
-              <font-awesome-icon :icon="['fas', 'eye']" />
+              <!-- <font-awesome-icon
+                :icon="isPasswordVisible ? 'eye-slash' : 'eye'"
+              /> -->
             </button>
           </div>
 
           <button
             type="submit"
-            class="w-full rounded-lg bg-blue py-4 text-sm font-semibold text-white mb-6"
+            :disabled="loading"
+            class="w-full rounded-lg bg-regal-blue-500 py-4 text-sm font-semibold text-white mb-6"
           >
-            Masuk
+            {{ loading ? "Loading..." : "Masuk" }}
           </button>
 
           <p class="text-center text-sm mb-6">Atau masuk melalui</p>
 
           <button
-            class="py-3 mb-6 w-full rounded-lg border border-gray flex justify-center items-center gap-4 text-sm hover:scale-105 duration-300 font-bold"
+            class="py-3 mb-6 w-full rounded-lg border border-alto-500 flex justify-center items-center gap-4 text-sm hover:scale-105 duration-300 font-bold"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +127,9 @@
 
           <p class="text-sm text-center">
             Belum punya akun?
-            <NuxtLink to="/auth/register" class="text-blue"> Daftar </NuxtLink>
+            <NuxtLink to="/auth/register" class="text-regal-blue-500">
+              Daftar
+            </NuxtLink>
           </p>
         </form>
       </div>
@@ -126,22 +137,31 @@
   </div>
 </template>
 
-<script setup>
-import { useAuthStore } from "~/store/auth.js";
+<script setup lang="ts">
+import { useAuthStore } from "../../store/auth";
 
 definePageMeta({
   layout: "auth",
+  middleware: "guest",
 });
 
-const authStore = useAuthStore();
+const { login } = useAuthStore();
+const { authenticated, loading } = storeToRefs(useAuthStore());
+const router = useRouter();
 
-let user = {
-  email: null,
-  password: null,
-};
+const isPasswordVisible = ref(false);
+
+const user = ref({
+  email: "",
+  password: "",
+});
 
 const handleLogin = async () => {
-  await authStore.login(user);
+  await login(user.value);
+
+  if (authenticated.value) {
+    router.push("/");
+  }
 };
 </script>
 

@@ -11,16 +11,16 @@
 
     <div class="flex justify-start max-w-xl mt-6 mb-4 gap-16">
       <div class="flex gap-2 items-center">
-        <font-awesome-icon :icon="['fas', 'star']" class="text-yellow" />
+        <!-- <font-awesome-icon :icon="['fas', 'star']" class="text-yellow" /> -->
         <p class="text-yellow">4.3</p>
         <p class="text-gray text-xs">(12.000+ Ulasan)</p>
       </div>
       <div class="flex gap-2 items-center">
-        <font-awesome-icon :icon="['fas', 'clock']" class="text-white" />
+        <!-- <font-awesome-icon :icon="['fas', 'clock']" class="text-white" /> -->
         <p class="text-white">2 jam / sesi</p>
       </div>
       <div class="flex gap-2 items-center">
-        <font-awesome-icon :icon="['fas', 'signal']" class="text-white" />
+        <!-- <font-awesome-icon :icon="['fas', 'signal']" class="text-white" /> -->
         <p class="text-white">{{ course?.grade_level }}</p>
       </div>
     </div>
@@ -129,19 +129,19 @@
             <h6 class="font-semibold text-base text-blue mb-6">Paket Kelas</h6>
 
             <div class="flex items-center text-gray2 gap-5 mb-2">
-              <font-awesome-icon :icon="['fas', 'video']" />
+              <!-- <font-awesome-icon :icon="['fas', 'video']" /> -->
               <p>10 kelas online</p>
             </div>
             <div class="flex items-center text-gray2 gap-5 mb-2">
-              <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+              <!-- <font-awesome-icon :icon="['fas', 'pen-to-square']" /> -->
               <p>5 Kuis</p>
             </div>
             <div class="flex items-center text-gray2 gap-5 mb-2">
-              <font-awesome-icon :icon="['fas', 'file']" />
+              <!-- <font-awesome-icon :icon="['fas', 'file']" /> -->
               <p>Sertifikat elektronik</p>
             </div>
             <div class="flex items-center text-gray2 gap-5 pb-6">
-              <font-awesome-icon :icon="['fas', 'lock']" />
+              <!-- <font-awesome-icon :icon="['fas', 'lock']" /> -->
               <p>Akses materi seumur hidup</p>
             </div>
           </div>

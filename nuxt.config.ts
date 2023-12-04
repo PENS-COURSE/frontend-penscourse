@@ -2,17 +2,29 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      API_URL: "https://pens-api.superrexy-dev.my.id/api",
-      BASE_API_URL: "https://pens-api.superrexy-dev.my.id",
+      API_URL: "http://localhost:3005/api",
+      BASE_URL: "http://localhost:3005",
     },
   },
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "@pinia/nuxt"],
-  plugins: ["@/plugins/tokenCheck.js"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/google-fonts",
+    "@pinia/nuxt",
+    "nuxt-icon",
+    "@pinia-plugin-persistedstate/nuxt",
+  ],
   googleFonts: {
     families: {
       Poppins: true,
     },
   },
-  css: ["@fortawesome/fontawesome-svg-core/styles.css"],
+  pinia: {
+    disableVuex: true,
+    storesDirs: ["./store/**"],
+  },
+  piniaPersistedstate: {},
+  imports: {
+    dirs: ["models/**"],
+  },
 });

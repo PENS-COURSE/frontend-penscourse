@@ -1,6 +1,6 @@
 <template>
   <section
-    class="w-full bg-gradient-to-r from-blue via-blue to-[#3E6F96] p-10 lg:px-16 md:py-32 xl:px-32"
+    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-32 xl:px-32"
   >
     <div
       class="flex flex-col justify-center items-center md:grid md:grid-cols-2 md:order-1"
@@ -23,7 +23,10 @@
         </p>
 
         <div class="flex justify-center md:justify-start md:pt-5">
-          <NuxtLink to="/auth/register" class="bg-yellow py-2 px-6 rounded-lg">
+          <NuxtLink
+            to="/auth/register"
+            class="bg-school-bus-yellow-500 py-2 px-6 rounded-lg"
+          >
             Daftar Sekarang
           </NuxtLink>
         </div>
@@ -32,14 +35,14 @@
   </section>
 
   <section class="mt-16 mx-10 lg:mx-16 xl:mx-32">
-    <h4 class="font-semibold text-2xl text-blue text-center">
+    <h4 class="font-semibold text-2xl text-regal-blue-500 text-center">
       Benefit yang di dapat
     </h4>
     <p class="md:text-base text-center">
       dengan memikuti kelas di PENS Classroom
     </p>
     <div class="mt-16 flex flex-col gap-8 md:flex-row">
-      <div class="bg-white border border-gray rounded-md px-4 py-9">
+      <div class="bg-white border border-alto-500 rounded-md px-4 py-9">
         <img
           src="~assets/images/live.png"
           alt=""
@@ -48,11 +51,11 @@
           class="pb-6"
         />
         <h4 class="font-semibold text-sm pb-2">Pembelajaran Live</h4>
-        <p class="text-xs text-gray2">
+        <p class="text-xs text-slate-gray-500">
           Kamu Dapat Pengalaman Belajar di Dalam Kelas Secara Online
         </p>
       </div>
-      <div class="bg-white border border-gray rounded-md px-4 py-9">
+      <div class="bg-white border border-alto-500 rounded-md px-4 py-9">
         <img
           src="~assets/images/convert_sks.png"
           alt=""
@@ -61,11 +64,11 @@
           class="pb-6"
         />
         <h4 class="font-semibold text-sm pb-2">Pembelajaran Live</h4>
-        <p class="text-xs text-gray2">
+        <p class="text-xs text-slate-gray-500">
           Kamu Dapat Pengalaman Belajar di Dalam Kelas Secara Online
         </p>
       </div>
-      <div class="bg-white border border-gray rounded-md px-4 py-9">
+      <div class="bg-white border border-alto-500 rounded-md px-4 py-9">
         <img
           src="~assets/images/sertifikat.png"
           alt=""
@@ -74,11 +77,11 @@
           class="pb-6"
         />
         <h4 class="font-semibold text-sm pb-2">Pembelajaran Live</h4>
-        <p class="text-xs text-gray2">
+        <p class="text-xs text-slate-gray-500">
           Kamu Dapat Pengalaman Belajar di Dalam Kelas Secara Online
         </p>
       </div>
-      <div class="bg-white border border-gray rounded-md px-4 py-9">
+      <div class="bg-white border border-alto-500 rounded-md px-4 py-9">
         <img
           src="~assets/images/profesional_dosen.png"
           alt=""
@@ -87,7 +90,7 @@
           class="pb-6"
         />
         <h4 class="font-semibold text-sm pb-2">Pembelajaran Live</h4>
-        <p class="text-xs text-gray2">
+        <p class="text-xs text-slate-gray-500">
           Kamu Dapat Pengalaman Belajar di Dalam Kelas Secara Online
         </p>
       </div>
@@ -95,7 +98,9 @@
   </section>
 
   <section class="mt-16 mx-10 lg:mx-16 xl:mx-32">
-    <h4 class="font-semibold text-2xl text-blue text-center">Mata Kuliah</h4>
+    <h4 class="font-semibold text-2xl text-regal-blue-500 text-center">
+      Mata Kuliah
+    </h4>
     <p class="md:text-base text-center">
       dengan memikuti kelas di PENS Classroom
     </p>
@@ -109,8 +114,8 @@
             class="text-xs font-bold px-5 py-3 block leading-normal"
             @click="toggleTabs(1)"
             :class="{
-              'text-blue bg-white': openTab !== 1,
-              'text-white bg-blue rounded-md': openTab === 1,
+              'text-regal-blue-500 bg-white': openTab !== 1,
+              'text-white bg-regal-blue-500 rounded-md': openTab === 1,
             }"
           >
             Teknik Informatika
@@ -121,8 +126,8 @@
             class="text-xs font-bold px-5 py-3 block leading-normal"
             @click="toggleTabs(2)"
             :class="{
-              'text-blue bg-white': openTab !== 2,
-              'text-white bg-blue rounded-md': openTab === 2,
+              'text-regal-blue-500 bg-white': openTab !== 2,
+              'text-white bg-regal-blue-500 rounded-md': openTab === 2,
             }"
           >
             Teknik Mekatronika
@@ -133,8 +138,8 @@
             class="text-xs font-bold px-5 py-3 block leading-normal"
             @click="toggleTabs(3)"
             :class="{
-              'text-blue bg-white': openTab !== 3,
-              'text-white bg-blue rounded-md': openTab === 3,
+              'text-regal-blue-500 bg-white': openTab !== 3,
+              'text-white bg-regal-blue-500 rounded-md': openTab === 3,
             }"
           >
             Teknik Telekomunikasi
@@ -145,8 +150,8 @@
             class="text-xs font-bold px-5 py-3 block leading-normal"
             @click="toggleTabs(4)"
             :class="{
-              'text-blue bg-white': openTab !== 4,
-              'text-white bg-blue rounded-md': openTab === 4,
+              'text-regal-blue-500 bg-white': openTab !== 4,
+              'text-white bg-regal-blue-500 rounded-md': openTab === 4,
             }"
           >
             Teknik Elektronika
@@ -157,8 +162,8 @@
             class="text-xs font-bold px-5 py-3 block leading-normal"
             @click="toggleTabs(5)"
             :class="{
-              'text-blue bg-white': openTab !== 5,
-              'text-white bg-blue rounded-md': openTab === 5,
+              'text-regal-blue-500 bg-white': openTab !== 5,
+              'text-white bg-regal-blue-500 rounded-md': openTab === 5,
             }"
           >
             Teknik Komputer
@@ -174,7 +179,7 @@
             <template v-for="i in 4" :key="i">
               <div
                 :class="{ hidden: openTab !== 1, block: openTab === 1 }"
-                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-gray rounded-md"
+                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
               >
                 <img
                   src="~assets/images/course.png"
@@ -182,18 +187,24 @@
                   class="w-full mb-2"
                 />
                 <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
-                <h4 class="text-sm text-gray2 mb-1">Teknik Informatika</h4>
+                <h4 class="text-sm text-slate-gray-500 mb-1">
+                  Teknik Informatika
+                </h4>
                 <div class="flex text-sm gap-2 items-center mb-4">
-                  <font-awesome-icon
+                  <!-- <font-awesome-icon
                     :icon="['fas', 'star']"
-                    class="text-yellow"
-                  />
-                  <p class="text-yellow">3.4</p>
-                  <p class="text-gray">(12k)</p>
+                    class="text-school-bus-yellow-500"
+                  /> -->
+                  <p class="text-school-bus-yellow-500">3.4</p>
+                  <p class="text-alto-500">(12k)</p>
                 </div>
                 <div class="flex justify-between items-center">
-                  <h5 class="text-blue font-semibold text-xl">Rp120.000</h5>
-                  <h5 class="line-through text-sm text-gray2 font-medium">
+                  <h5 class="text-regal-blue-500 font-semibold text-xl">
+                    Rp120.000
+                  </h5>
+                  <h5
+                    class="line-through text-sm text-slate-gray-500 font-medium"
+                  >
                     Rp120.000
                   </h5>
                 </div>
@@ -202,7 +213,7 @@
             <template v-for="i in 4" :key="i">
               <div
                 :class="{ hidden: openTab !== 2, block: openTab === 2 }"
-                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-gray rounded-md"
+                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
               >
                 <img
                   src="~assets/images/course.png"
@@ -210,18 +221,24 @@
                   class="w-full mb-2"
                 />
                 <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
-                <h4 class="text-sm text-gray2 mb-1">Teknik Informatika</h4>
+                <h4 class="text-sm text-slate-gray-500 mb-1">
+                  Teknik Informatika
+                </h4>
                 <div class="flex text-sm gap-2 items-center mb-4">
-                  <font-awesome-icon
+                  <!-- <font-awesome-icon
                     :icon="['fas', 'star']"
-                    class="text-yellow"
-                  />
-                  <p class="text-yellow">3.4</p>
-                  <p class="text-gray">(12k)</p>
+                    class="text-school-bus-yellow-500"
+                  /> -->
+                  <p class="text-school-bus-yellow-500">3.4</p>
+                  <p class="text-alto-500">(12k)</p>
                 </div>
                 <div class="flex justify-between items-center">
-                  <h5 class="text-blue font-semibold text-xl">Rp120.000</h5>
-                  <h5 class="line-through text-sm text-gray2 font-medium">
+                  <h5 class="text-regal-blue-500 font-semibold text-xl">
+                    Rp120.000
+                  </h5>
+                  <h5
+                    class="line-through text-sm text-slate-gray-500 font-medium"
+                  >
                     Rp120.000
                   </h5>
                 </div>
@@ -230,7 +247,7 @@
             <template v-for="i in 4" :key="i">
               <div
                 :class="{ hidden: openTab !== 3, block: openTab === 3 }"
-                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-gray rounded-md"
+                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
               >
                 <img
                   src="~assets/images/course.png"
@@ -238,18 +255,24 @@
                   class="w-full mb-2"
                 />
                 <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
-                <h4 class="text-sm text-gray2 mb-1">Teknik Informatika</h4>
+                <h4 class="text-sm text-slate-gray-500 mb-1">
+                  Teknik Informatika
+                </h4>
                 <div class="flex text-sm gap-2 items-center mb-4">
-                  <font-awesome-icon
+                  <!-- <font-awesome-icon
                     :icon="['fas', 'star']"
-                    class="text-yellow"
-                  />
-                  <p class="text-yellow">3.4</p>
-                  <p class="text-gray">(12k)</p>
+                    class="text-school-bus-yellow-500"
+                  /> -->
+                  <p class="text-school-bus-yellow-500">3.4</p>
+                  <p class="text-alto-500">(12k)</p>
                 </div>
                 <div class="flex justify-between items-center">
-                  <h5 class="text-blue font-semibold text-xl">Rp120.000</h5>
-                  <h5 class="line-through text-sm text-gray2 font-medium">
+                  <h5 class="text-regal-blue-500 font-semibold text-xl">
+                    Rp120.000
+                  </h5>
+                  <h5
+                    class="line-through text-sm text-slate-gray-500 font-medium"
+                  >
                     Rp120.000
                   </h5>
                 </div>
@@ -263,7 +286,7 @@
     <div class="flex justify-center mb-7">
       <NuxtLink
         to="/major"
-        class="border border-blue text-blue px-6 py-2 rounded-lg font-bold text-sm hover:bg-blue hover:text-white transition-colors"
+        class="border border-regal-blue-500 text-regal-blue-500 px-6 py-2 rounded-lg font-bold text-sm hover:bg-regal-blue-500 hover:text-white transition-colors"
       >
         Lihat Lebih lengkap
       </NuxtLink>
@@ -271,25 +294,25 @@
   </section>
 
   <section class="bg-[#FAFAFA]">
-    <h4 class="text-blue font-semibold text-4xl text-center pt-16">
+    <h4 class="text-regal-blue-500 font-semibold text-4xl text-center pt-16">
       Testimonial
     </h4>
-    <p class="font-medium text-gray2 text-center pt-2">
+    <p class="font-medium text-slate-gray-500 text-center pt-2">
       Dengarkan apa ulasan dari pengalaman mereka
     </p>
     <div class="py-16 flex flex-col md:flex-row gap-5 mx-10 lg:mx-16 xl:mx-32">
       <template v-for="i in 3" :key="i">
-        <div class="bg-white border border-gray rounded-lg p-6">
+        <div class="bg-white border border-alto-500 rounded-lg p-6">
           <div class="flex gap-3 mb-3">
             <img src="~assets/images/profile.png" alt="" />
             <div class="flex-col">
               <h5>Ghifari Ramadhan</h5>
               <div class="flex items-center">
-                <font-awesome-icon
+                <!-- <font-awesome-icon
                   :icon="['fas', 'star']"
-                  class="text-yellow"
-                />
-                <p class="text-yellow">4.3</p>
+                  class="text-school-bus-yellow-500"
+                /> -->
+                <p class="text-school-bus-yellow-500">4.3</p>
               </div>
             </div>
           </div>
@@ -303,7 +326,7 @@
   </section>
 
   <section
-    class="py-16 flex flex-col justify-center items-center bg-gradient-to-r from-blue via-blue to-[#3E6F96]"
+    class="py-16 flex flex-col justify-center items-center bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96]"
   >
     <h4 class="text-white font-semibold text-3xl mb-2">
       Tertarik untuk mencoba?
@@ -313,7 +336,7 @@
     </h4>
     <NuxtLink
       to="/auth/register"
-      class="bg-yellow text-white py-3 px-6 rounded-lg hover:opacity-80"
+      class="bg-school-bus-yellow-500 text-white py-3 px-6 rounded-lg hover:opacity-80"
     >
       Daftar Sekarang
     </NuxtLink>

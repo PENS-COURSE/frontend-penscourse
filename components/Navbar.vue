@@ -1,11 +1,11 @@
 <template>
   <nav
-    class="w-full fixed z-10 top-0 px-10 py-6 lg:px-16 xl:px-32 bg-gradient-to-r from-blue via-blue to-[#3E6F96] lg:flex lg:justify-between"
+    class="w-full fixed z-10 top-0 px-10 py-6 lg:px-16 xl:px-32 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] lg:flex lg:justify-between"
   >
     <div class="flex items-center justify-between">
       <NuxtLink
         to="/"
-        class="text-xl font-bold text-gray-100 lg:text-2xl hover:text-indigo-400"
+        class="text-xl font-bold text-alto-500-100 lg:text-2xl hover:text-indigo-400"
       >
         <img
           src="~assets/images/pens_white.png"
@@ -43,11 +43,11 @@
       :class="showMenu ? 'flex' : 'hidden'"
       class="flex-col mt-8 space-y-4 lg:flex lg:space-y-0 lg:flex-row lg:items-center lg:space-x-10 lg:mt-0"
     >
-      <NuxtLink to="/" class="text-white hover:text-gray">Beranda</NuxtLink>
-      <NuxtLink to="/major" class="text-white hover:text-gray"
+      <NuxtLink to="/" class="text-white hover:text-alto-500">Beranda</NuxtLink>
+      <NuxtLink to="/major" class="text-white hover:text-alto-500"
         >Jurusan</NuxtLink
       >
-      <NuxtLink to="/dashboard/profile" class="text-white hover:text-gray"
+      <NuxtLink to="/dashboard/profile" class="text-white hover:text-alto-500"
         >Dashboard</NuxtLink
       >
     </ul>
@@ -56,7 +56,7 @@
       :class="showMenu ? 'flex' : 'hidden'"
       class="gap-5 mt-10 lg:flex lg:flex-row lg:items-center lg:mt-0"
     >
-      <div v-if="!authStore.isLogin" class="flex items-center gap-4">
+      <div v-if="!authenticated" class="flex items-center gap-4">
         <NuxtLink
           to="/auth/login"
           class="py-2 px-12 text-white border border-blue rounded-lg bg-yellow hover:opacity-90"
@@ -72,26 +72,21 @@
         </NuxtLink>
       </div>
 
-      <div v-if="authStore.isLogin" class="flex items-center gap-10">
-        <font-awesome-icon :icon="['fas', 'bell']" class="text-white" />
+      <div v-if="authenticated" class="flex items-center gap-10">
+        <!-- <font-awesome-icon :icon="['fas', 'bell']" class="text-white" /> -->
         <img
-          v-if="profileStore?.user?.avatar == null"
+          v-if="user?.avatar == null"
           src="~assets/images/profile.png"
           alt=""
         />
         <img
           v-else
-          :src="`${useRuntimeConfig().public.BASE_API_URL}/${
-            profileStore?.user?.avatar
-          }`"
+          :src="`${useRuntimeConfig().public.BASE_API_URL}/${user?.avatar}`"
           class="rounded-full w-10 h-10"
           alt="profile picture"
         />
-        <p
-          class="text-white font-light cursor-pointer"
-          @click="authStore.logout()"
-        >
-          {{ profileStore?.user?.name }}
+        <p class="text-white font-light cursor-pointer" @click="auth.logOut()">
+          {{ user?.name }}
         </p>
       </div>
     </div>
@@ -99,27 +94,9 @@
 </template>
 
 <script setup>
-import { useAuthStore } from "~/store/auth.js";
-import { useProfileStore } from "~/store/profileStore.js";
-
-let showMenu = ref(false);
-const name = ref("");
-const authStore = useAuthStore();
-
-const profileStore = useProfileStore();
-
-const getUserProfile = async () => {
-  await profileStore.getUser();
-};
-
-onMounted(async () => {
-  await getUserProfile();
-  // console.log(profileStore.user.name);
-});
-
-onMounted(() => {
-  name.value = authStore.getUser.name;
-});
+const auth = useAuthStore();
+const { authenticated, user } = storeToRefs(auth);
+const showMenu = ref(false);
 
 const toggleNav = () => {
   showMenu.value = !showMenu.value;

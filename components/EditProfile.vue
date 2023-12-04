@@ -15,7 +15,7 @@
         </button>
         <button
           @click="cancel"
-          class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+          class="px-4 py-2 bg-alto-500-300 rounded hover:bg-alto-500-400"
         >
           Cancel
         </button>

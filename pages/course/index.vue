@@ -3,20 +3,24 @@
     <nav class="w-full rounded-md">
       <ol class="list-reset flex">
         <li>
-          <NuxtLink to="/" class="text-blue transition duration-150 ease-in-out"
+          <NuxtLink
+            to="/"
+            class="text-regal-blue-500 transition duration-150 ease-in-out"
             >Home
           </NuxtLink>
         </li>
 
         <li>
-          <span class="mx-2 text-dark">/</span>
+          <span class="mx-2 text-dark-500">/</span>
         </li>
         <li class="text-neutral-500 dark:text-neutral-400">Pemrograman Web</li>
       </ol>
     </nav>
   </div>
 
-  <section class="w-full mt-10 bg-gradient-to-r from-yellow to-white">
+  <section
+    class="w-full mt-10 bg-gradient-to-r from-school-bus-yellow-500 to-white"
+  >
     <div class="container mx-auto">
       <h1 class="text-5xl font-semibold pt-10">Pemrograman Web</h1>
       <p class="text-sm pt-4 md:text-lg md:w-3/4">
@@ -42,8 +46,9 @@
               class="text-xs font-bold px-5 py-3 block leading-normal"
               @click="toggleTabs(1)"
               :class="{
-                'text-blue bg-white': openTab !== 1,
-                'text-blue  border-b-2 border-blue': openTab === 1,
+                'text-regal-blue-500 bg-white': openTab !== 1,
+                'text-regal-blue-500  border-b-2 border-regal-blue-500':
+                  openTab === 1,
               }"
             >
               Materi
@@ -54,8 +59,9 @@
               class="text-xs font-bold px-5 py-3 block leading-normal"
               @click="toggleTabs(2)"
               :class="{
-                'text-blue bg-white': openTab !== 2,
-                'text-blue  border-b-2 border-blue': openTab === 2,
+                'text-regal-blue-500 bg-white': openTab !== 2,
+                'text-regal-blue-500  border-b-2 border-regal-blue-500':
+                  openTab === 2,
               }"
             >
               Ujian
@@ -69,19 +75,19 @@
               <template v-for="i in 10" :key="i">
                 <div
                   :class="{ hidden: openTab !== 1, block: openTab === 1 }"
-                  class="mb-5 shadow-sm px-5 py-5 border border-gray rounded-md"
+                  class="mb-5 shadow-sm px-5 py-5 border border-alto-500 rounded-md"
                 >
                   <h4 class="font-semibold text-2xl">
                     {{ i }}. Tipe Data dan Variabel
                   </h4>
                   <div class="flex gap-2 pt-4">
                     <img src="~assets/images/notepad.svg" alt="" />
-                    <p class="text-gray2">pdf</p>
+                    <p class="text-slate-gray-500">pdf</p>
                   </div>
 
                   <div class="flex justify-end">
                     <button
-                      class="bg-blue text-white ml-auto py-2 px-20 rounded-lg"
+                      class="bg-regal-blue-500 text-white ml-auto py-2 px-20 rounded-lg"
                     >
                       Lihat Materi
                     </button>
@@ -91,20 +97,20 @@
               <template v-for="i in 10" :key="i">
                 <div
                   :class="{ hidden: openTab !== 2, block: openTab === 2 }"
-                  class="mb-5 shadow-sm px-5 py-5 border border-gray rounded-md"
+                  class="mb-5 shadow-sm px-5 py-5 border border-alto-500 rounded-md"
                 >
                   <h4 class="font-semibold text-2xl">
                     {{ i }}. Tipe Data dan Variabel
                   </h4>
                   <div class="flex gap-2 pt-4">
                     <img src="~assets/images/notepad.svg" alt="" />
-                    <p class="text-gray2">pdf</p>
+                    <p class="text-slate-gray-500">pdf</p>
                   </div>
 
                   <div class="flex justify-end">
                     <NuxtLink to="/quizConfirmation">
                       <button
-                        class="bg-blue text-white ml-auto py-2 px-20 rounded-lg"
+                        class="bg-regal-blue-500 text-white ml-auto py-2 px-20 rounded-lg"
                       >
                         Kerjakan
                       </button>
@@ -128,7 +134,7 @@
             <h4 class="font-semibold text-lg mb-5 hidden">Rp1.250.000</h4>
             <NuxtLink
               to="/course/livestream"
-              class="flex justify-center gap-4 mb-5 py-4 w-full text-white bg-blue rounded-md"
+              class="flex justify-center gap-4 mb-5 py-4 w-full text-white bg-regal-blue-500 rounded-md"
             >
               <img src="~assets/images/camera.svg" alt="" />
               Masuk Kelas
@@ -136,11 +142,11 @@
             <p class="capitalize mb-3 hidden">Yang akan kamu dapatkan:</p>
             <div class="gap-2 hidden">
               <img src="~assets/images/notepad.svg" alt="" />
-              <p class="text-gray2">Pembahasan Ujian</p>
+              <p class="text-slate-gray-500">Pembahasan Ujian</p>
             </div>
             <div class="hidden gap-2">
               <img src="~assets/images/notepad.svg" alt="" />
-              <p class="text-gray2">Seluruh Materi Perkuliahan</p>
+              <p class="text-slate-gray-500">Seluruh Materi Perkuliahan</p>
             </div>
           </div>
 
@@ -148,7 +154,7 @@
             <h4 class="font-semibold text-lg mb-5">Sertifikat</h4>
             <Button
               text="Download Sertifikat"
-              class="mb-5 py-4 w-full text-white bg-blue rounded-md"
+              class="mb-5 py-4 w-full text-white bg-regal-blue-500 rounded-md"
             />
             <p>Nilai Kamu: 90</p>
           </div>

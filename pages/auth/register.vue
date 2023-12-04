@@ -3,7 +3,7 @@
     <title>Register | Pens Course</title>
 
     <div
-      class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-blue via-blue to-[#3E6F96] text-white"
+      class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] text-white"
     >
       <img
         src="~assets/images/pens_white.png"
@@ -22,14 +22,16 @@
     <div
       class="flex min-h-full flex-1 flex-col bg-white justify-center mx-6 lg:mx-8"
     >
-      <h2 class="mb-1 text-2xl font-semibold text-center text-blue">
+      <h2 class="mb-1 text-2xl font-semibold text-center text-regal-blue-500">
         Daftar Akun Baru
       </h2>
 
-      <p class="text-gray2 text-center mb-8">Silahkan masukkan data anda</p>
+      <p class="text-slate-gray-500 text-center mb-8">
+        Silahkan masukkan data anda
+      </p>
 
       <div
-        class="sm:mx-auto sm:w-full sm:max-w-sm border border-gray p-6 rounded-3xl"
+        class="sm:mx-auto sm:w-full sm:max-w-sm border border-alto-500 p-6 rounded-3xl"
       >
         <form @submit.prevent="handleRegister">
           <div class="flex items-center justify-between">
@@ -45,7 +47,7 @@
             placeholder="masukkan nama anda"
             type="text"
             autoComplete="name"
-            class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
           />
 
           <div class="flex items-center justify-between mt-2">
@@ -61,7 +63,7 @@
             placeholder="masukkan email anda"
             type="email"
             autoComplete="email"
-            class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
           />
 
           <div class="flex items-center justify-between mt-2">
@@ -78,13 +80,13 @@
               type="password"
               placeholder="masukkan password anda"
               autoComplete="password"
-              class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+              class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
             />
 
             <button
-              class="absolute bottom-2 right-3 text-gray2 flex items-center"
+              class="absolute bottom-2 right-3 text-slate-gray-500 flex items-center"
             >
-              <font-awesome-icon :icon="['fas', 'eye']" />
+              <!-- <font-awesome-icon :icon="['fas', 'eye']" /> -->
             </button>
           </div>
 
@@ -105,19 +107,19 @@
               type="password"
               placeholder="masukkan password anda"
               autoComplete="password_confirmation"
-              class="w-full rounded-lg py-1.5 pl-4 text-blue border border-gray placeholder:text-gray focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+              class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
             />
 
             <button
-              class="absolute bottom-2 right-3 text-gray2 flex items-center"
+              class="absolute bottom-2 right-3 text-slate-gray-500 flex items-center"
             >
-              <font-awesome-icon :icon="['fas', 'eye']" />
+              <!-- <font-awesome-icon :icon="['fas', 'eye']" /> -->
             </button>
           </div>
 
           <button
             type="submit"
-            class="w-full rounded-lg bg-blue py-4 text-sm font-semibold text-white mb-6"
+            class="w-full rounded-lg bg-regal-blue-500 py-4 text-sm font-semibold text-white mb-6"
           >
             Daftar
           </button>
@@ -125,7 +127,7 @@
           <p class="text-center text-sm mb-6">Atau daftar melalui</p>
 
           <button
-            class="py-3 mb-6 w-full rounded-lg border border-gray flex justify-center items-center gap-4 text-sm hover:scale-105 duration-300 font-bold"
+            class="py-3 mb-6 w-full rounded-lg border border-alto-500 flex justify-center items-center gap-4 text-sm hover:scale-105 duration-300 font-bold"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +157,9 @@
 
           <p class="text-sm text-center">
             Sudah punya akun?
-            <NuxtLink to="/auth/login" class="text-blue"> Masuk </NuxtLink>
+            <NuxtLink to="/auth/login" class="text-regal-blue-500">
+              Masuk
+            </NuxtLink>
           </p>
         </form>
       </div>
@@ -164,29 +168,11 @@
 </template>
 
 <script setup>
-import { useAuthStore } from "~/store/auth.js";
-
 definePageMeta({
   layout: "auth",
 });
 
-const authStore = useAuthStore();
-
-let user = {
-  name: null,
-  email: null,
-  password: null,
-  password_confirmation: null,
-};
-
-const handleRegister = async () => {
-  if (user.password !== user.password_confirmation) {
-    alert("Password dan konfirmasi password harus sama!");
-  } else {
-    console.log("pendaftaran berhasil");
-    await authStore.register(user);
-  }
-};
+const handleRegister = async () => {};
 </script>
 
 <style></style>
