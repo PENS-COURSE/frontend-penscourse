@@ -81,19 +81,24 @@
         />
         <img
           v-else
-          :src="`${useRuntimeConfig().public.BASE_API_URL}/${user?.avatar}`"
+          :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
           class="rounded-full w-10 h-10"
           alt="profile picture"
         />
-        <p class="text-white font-light cursor-pointer" @click="auth.logOut()">
+        <p class="text-white font-light">
           {{ user?.name }}
         </p>
+        <Icon
+          name="ic:baseline-logout"
+          class="w-5 h-5 text-white cursor-pointer hover:text-alto-500"
+          @click="auth.logOut()"
+        />
       </div>
     </div>
   </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 const showMenu = ref(false);

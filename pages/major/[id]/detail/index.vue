@@ -1,6 +1,6 @@
 <template>
   <section
-    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-32 xl:px-32"
+    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-16 xl:px-32"
   >
     <div class="text-white">
       <h2 class="font-semibold text-4xl pb-2">{{ major?.name }}</h2>
@@ -56,7 +56,7 @@
       class="mt-12 gap-x-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <template v-for="course in courses">
-        <NuxtLink :to="`/course`">
+        <NuxtLink :to="`/major/${major?.slug}/detail/${course.slug}`">
           <div
             class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
           >
@@ -102,24 +102,26 @@ import type {
 } from "../../../../models/Data";
 import type { Department } from "../../../../models/Department";
 
-const router = useRoute();
+const { id } = useRoute().params;
 const { data: coursesData } = await useRestClient<
   APIResponsePagination<Course>
->(`/departments/${router.params.id}/courses`);
+>(`/departments/${id}/courses`);
 
 const { data: majorData } = await useRestClient<APIResponseDetail<Department>>(
-  `/departments/${router.params.id}`
+  `/departments/${id}`
 );
+
+console.log(majorData.value?.data);
 
 const courses = computed(() => coursesData?.value?.data?.data);
 const major = computed(() => majorData?.value?.data);
 
 watch(courses, () => {
-  console.log(courses.value);
+  // console.log(courses.value);
 });
 
 watch(major, () => {
-  console.log(major.value);
+  // console.log(major.value);
 });
 </script>
 

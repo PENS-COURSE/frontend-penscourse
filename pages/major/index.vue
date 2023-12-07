@@ -42,7 +42,7 @@
     <div v-for="major in majors" :key="major.id">
       <NuxtLink :to="`/major/${major.slug}`">
         <div
-          class="px-6 w-64 h-64 border border-alto-500 flex flex-col justify-center items-center hover:bg-regal-blue-5002 transition-colors"
+          class="px-6 w-64 h-64 border border-alto-500 flex flex-col justify-center items-center hover:bg-blue-200 transition-colors"
         >
           <img :src="major.icon" alt="" width="80" class="max-h-20" />
           <h5>{{ major.name }}</h5>

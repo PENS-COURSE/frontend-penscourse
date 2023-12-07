@@ -31,14 +31,14 @@
         to="/dashboard/certificate"
         class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <!-- <font-awesome-icon :icon="['fas', 'file']" /> -->
+        <Icon name="ic:outline-credit-card" />
         <h5 class="font-medium text-sm md:text-lg">Sertifikat</h5>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/transaction"
         class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <!-- <font-awesome-icon :icon="['fas', 'cart-shopping']" /> -->
+        <Icon name="ic:sharp-shopping-cart" />
         <h5 class="font-medium text-sm md:text-lg">Transaksi</h5>
       </NuxtLink>
     </div>
@@ -103,22 +103,17 @@
   </div>
 </template>
 
-<script setup>
-import { useCourseStore } from "~/store/course.js";
+<script setup lang="ts">
+import { useRestClient } from "../../../composables/useRestClient";
+import type { APIResponsePagination } from "../../../models/Data";
+import type { Enrollment } from "../../../models/Enrollment";
 
-const courseStore = useCourseStore();
+const { data } = await useRestClient<APIResponsePagination<Enrollment>>(
+  "/enrollments"
+);
+console.log(data.value?.data.data);
 
-const getEnrollmentCourse = async () => {
-  await courseStore.getEnrollmentCourse();
-};
-
-const courses = computed(() => {
-  return courseStore.courseEnrollment;
-});
-
-onMounted(async () => {
-  await getEnrollmentCourse();
-});
+const courses = computed(() => data.value?.data.data);
 </script>
 
 <style></style>

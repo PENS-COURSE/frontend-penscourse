@@ -41,7 +41,7 @@
           </div>
 
           <input
-            v-model="user.name"
+            v-model="registerPayload.name"
             id="name"
             name="name"
             placeholder="masukkan nama anda"
@@ -57,7 +57,7 @@
           </div>
 
           <input
-            v-model="user.email"
+            v-model="registerPayload.email"
             id="email"
             name="email"
             placeholder="masukkan email anda"
@@ -74,7 +74,7 @@
 
           <div class="relative">
             <input
-              v-model="user.password"
+              v-model="registerPayload.password"
               id="password"
               name="password"
               type="password"
@@ -101,7 +101,7 @@
 
           <div class="relative mb-16">
             <input
-              v-model="user.password_confirmation"
+              v-model="registerPayload.password_confirmation"
               id="password_confirmation"
               name="password_confirmation"
               type="password"
@@ -119,9 +119,10 @@
 
           <button
             type="submit"
+            :disabled="loading"
             class="w-full rounded-lg bg-regal-blue-500 py-4 text-sm font-semibold text-white mb-6"
           >
-            Daftar
+            {{ loading ? "Loading..." : "Daftar" }}
           </button>
 
           <p class="text-center text-sm mb-6">Atau daftar melalui</p>
@@ -170,9 +171,24 @@
 <script setup>
 definePageMeta({
   layout: "auth",
+  middleware: "guest",
 });
 
-const handleRegister = async () => {};
+import { useAuthStore } from "../../store/auth";
+
+const { register } = useAuthStore();
+const { loading } = storeToRefs(useAuthStore());
+
+const registerPayload = ref({
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+});
+
+const handleRegister = async () => {
+  await register(registerPayload.value);
+};
 </script>
 
 <style></style>

@@ -31,14 +31,14 @@
         to="/dashboard/certificate"
         class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <!-- <font-awesome-icon :icon="['fas', 'file']" /> -->
+        <Icon name="ic:outline-credit-card" />
         <h5 class="font-medium text-sm md:text-lg">Sertifikat</h5>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/transaction"
         class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <!-- <font-awesome-icon :icon="['fas', 'cart-shopping']" /> -->
+        <Icon name="ic:sharp-shopping-cart" />
         <h5 class="font-medium text-sm md:text-lg">Transaksi</h5>
       </NuxtLink>
     </div>
@@ -58,9 +58,7 @@
           />
           <img
             v-else
-            :src="`${useRuntimeConfig().public.BASE_API_URL}/${
-              profile?.avatar
-            }`"
+            :src="`${useRuntimeConfig().public.BASE_URL}/${profile?.avatar}`"
             class="rounded-full w-16 h-1w-16"
             alt="profile picture"
           />
@@ -96,7 +94,7 @@
             />
           </div>
 
-          <form @submit.prevent="handleUpdateProfile">
+          <form>
             <div class="mb-6">
               <label
                 class="block mb-2 text-sm font-medium text-gray2"
@@ -107,7 +105,6 @@
                 class="block w-full text-sm text-gray-900 border border-gray2 rounded-lg cursor-pointer bg-white"
                 type="file"
                 name="avatar"
-                @change="handleFileChange"
               />
             </div>
 
@@ -187,7 +184,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const authStore = useAuthStore();
 const { authenticated, user } = storeToRefs(authStore);
 
@@ -207,20 +204,20 @@ const profile = computed(() => {
   return user.value;
 });
 
-const handleUpdateProfile = async () => {
-  // profilePayload.value = profile.value;
-  await profileStore.updateProfile(profilePayload);
-};
+// const handleUpdateProfile = async () => {
+//   // profilePayload.value = profile.value;
+//   await profileStore.updateProfile(profilePayload);
+// };
 
-const handleFileChange = (event) => {
-  const file = event.target.files[0];
-  profilePicture.value = URL.createObjectURL(file);
-  console.log(profilePicture.value);
+// const handleFileChange = (event) => {
+//   const file = event.target.files[0];
+//   profilePicture.value = URL.createObjectURL(file);
+//   console.log(profilePicture.value);
 
-  const formData = new FormData();
+//   const formData = new FormData();
 
-  formData.append("profile_picture", file);
-};
+//   formData.append("profile_picture", file);
+// };
 </script>
 
 <style></style>

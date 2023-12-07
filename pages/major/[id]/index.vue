@@ -1,6 +1,6 @@
 <template>
   <section
-    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-32 xl:px-32"
+    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-16 xl:px-32"
   >
     <div class="text-white">
       <h2 class="font-semibold text-4xl pb-2">{{ major?.name }}</h2>
@@ -49,12 +49,14 @@
     <div
       class="mt-12 gap-x-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
-      <template v-for="i in 4" :key="i">
+      <template v-for="course in courses">
         <div
           class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
         >
           <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
-          <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
+          <h4 class="font-semibold text-base mb-1">
+            {{ course.name }}
+          </h4>
           <h4 class="text-sm text-slate-gray-500 mb-1">Teknik Informatika</h4>
           <div class="flex text-sm gap-2 items-center mb-4">
             <!-- <font-awesome-icon :icon="['fas', 'star']" class="text-school-bus-yellow-500" /> -->
@@ -62,9 +64,14 @@
             <p class="text-alto-500">(12k)</p>
           </div>
           <div class="flex justify-between items-center">
-            <h5 class="text-regal-blue-500 font-semibold text-xl">Rp120.000</h5>
-            <h5 class="line-through text-sm text-slate-gray-500 font-medium">
-              Rp120.000
+            <h5 class="text-regal-blue-500 font-semibold text-xl">
+              {{ course.is_free == true ? "Gratis" : `Rp ${course.price} ,-` }}
+            </h5>
+            <h5
+              :class="course.discount == null ? 'hidden' : ''"
+              class="line-through text-sm text-slate-gray-500 font-medium"
+            >
+              Rp 120000,=
             </h5>
           </div>
         </div>
@@ -83,13 +90,21 @@
 <script setup lang="ts">
 import type { APIResponseDetail } from "../../../models/Data";
 import type { Department } from "../../../models/Department";
+import type { Course } from "../../../models/Course";
 
-const router = useRoute();
+const route = useRoute().params;
 const { data } = await useRestClient<APIResponseDetail<Department>>(
-  `/departments/${router.params.id}`
+  `/departments/${route.id}`
 );
 
+const { data: coursesData } = await useRestClient<
+  APIResponsePagination<Course>
+>(`/departments/${route.id}/courses`);
+
+// console.log(coursesData.value?.data.data);
+
 const major = computed(() => data?.value?.data);
+const courses = computed(() => coursesData?.value?.data.data);
 </script>
 
 <style></style>

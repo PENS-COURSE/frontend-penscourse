@@ -8,6 +8,13 @@ interface AuthPayloadInterface {
   password: string;
 }
 
+interface RegisterPayloadInterface {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     access_token: "",
@@ -40,6 +47,36 @@ export const useAuthStore = defineStore("auth", {
         this.user = data.value.data.user;
       }
     },
+
+    async register({
+      name,
+      email,
+      password,
+      password_confirmation,
+    }: RegisterPayloadInterface) {
+      this.loading = true;
+      await useRestClient<APIResponseDetail<Authentication>>(
+        "/authentication/register",
+        {
+          method: "POST",
+          body: {
+            name,
+            email,
+            password,
+            password_confirmation,
+          },
+        }
+      )
+        .then((res) => {
+          console.log(res);
+          navigateTo("/auth/login");
+          this.loading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     logOut() {
       navigateTo("/auth/login", { replace: true });
 

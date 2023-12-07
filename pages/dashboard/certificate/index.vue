@@ -31,14 +31,14 @@
         to="/dashboard/certificate"
         class="bg-regal-blue-500 text-white px-6 py-4 flex items-center gap-4"
       >
-        <!-- <font-awesome-icon :icon="['fas', 'file']" /> -->
+        <Icon name="ic:outline-credit-card" />
         <h5 class="font-medium text-sm md:text-lg">Sertifikat</h5>
       </NuxtLink>
       <NuxtLink
         to="/dashboard/transaction"
         class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <!-- <font-awesome-icon :icon="['fas', 'cart-shopping']" /> -->
+        <Icon name="ic:sharp-shopping-cart" />
         <h5 class="font-medium text-sm md:text-lg">Transaksi</h5>
       </NuxtLink>
     </div>
