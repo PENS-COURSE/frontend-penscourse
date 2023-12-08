@@ -46,7 +46,7 @@
           </p>
         </div>
 
-        <div class="w-3/4 mb-6">
+        <div class="w-3/5 mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
           <div v-if="curriculum == 0">
             <h1>belum ada kurikulum</h1>
