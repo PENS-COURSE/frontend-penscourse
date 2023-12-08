@@ -10,20 +10,23 @@
         <Icon name="ic:baseline-add-circle-outline" class="w-5 h-5" />
       </NuxtLink>
     </div>
-    <div class="grid grid-cols-5 mt-5 gap-5">
-      <CourseCard v-for="course in data?.data?.data" :course="course" />
+    <div class="grid grid-cols-4 mt-5 gap-5">
+      <CourseCard v-for="course in courses" :course="course" :key="course.id" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { APIResponsePagination } from "../../models/Data";
+import type { APIResponsePagination } from "~/models/Data";
+import type {Course} from "~/models/Course";
 
 definePageMeta({
   middleware: "authenticated",
 });
 
-const { data } = await useRestClient<APIResponsePagination<Course>>(
+const { data: {value} } = await useRestClient<APIResponsePagination<Course>>(
   "/courses/admins"
 );
+
+const courses = computed(() => value?.data?.data ?? []);
 </script>

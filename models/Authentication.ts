@@ -15,7 +15,7 @@ export interface User {
   email_verified_at: null;
   google_id: null;
   avatar: null;
-  role: string;
+  role: "admin" | "user" | "dosen";
   created_at: Date;
   updated_at: Date;
 }
