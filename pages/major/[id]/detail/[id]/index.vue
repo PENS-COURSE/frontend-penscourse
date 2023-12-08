@@ -46,7 +46,7 @@
           </p>
         </div>
 
-        <!-- <div class="w-3/4 mb-6">
+        <div class="w-3/4 mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
           <div v-if="curriculum == 0">
             <h1>belum ada kurikulum</h1>
@@ -56,7 +56,7 @@
               <Curriculum :curriculum="c" />
             </Curriculums>
           </div>
-        </div> -->
+        </div>
 
         <!-- <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
         <div class="flex flex-col md:flex-row gap-5">
@@ -152,6 +152,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Curriculum } from "~/models/Curriculum";
 import type { APIResponseDetail } from "../../../../../models/Data";
 
 const { id } = useRoute().params;
@@ -160,7 +161,15 @@ const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
 );
 
+const { data: detailCurriculum } = await useRestClient<APIResponseDetail<Curriculum>>(
+  `/courses/${id}/curriculums`
+);
+
 const course = computed(() => detailCourse?.value?.data);
+
+const curriculum = computed(() => detailCurriculum?.value?.data);
+
+console.log(curriculum.value)
 
 const endrollCourse = async () => {
   await useRestClient<APIResponseDetail<Course>>(`/courses/${id}/enroll`, {
@@ -169,6 +178,8 @@ const endrollCourse = async () => {
     .then((res) => console.log(res))
     .catch((err) => console.log(err));
 };
+
+
 
 // watch(course, () => {
 //   console.log(course.value);
