@@ -1,7 +1,7 @@
 <template>
     <div class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
         <div
-        class="border-b-2 border-opacity-30 border-[#14487A] text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]"
+        class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]"
         >
         Sisa Waktu
         </div>

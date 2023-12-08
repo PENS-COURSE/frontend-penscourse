@@ -48,7 +48,7 @@
 
         <div class="w-3/5 mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
-          <div v-if="curriculum == 0">
+          <div v-if="curriculum == null">
             <h1>belum ada kurikulum</h1>
           </div>
           <div v-else v-for="c in curriculum">

@@ -40,6 +40,7 @@
     margin: 10px 0;
     padding-left: 20px;
     cursor: default;
+    border-radius: 10px;
     transition: all 0.3s ease;
     background: #e0e8f3;
     border-color: #e0e8f3;

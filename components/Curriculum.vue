@@ -60,7 +60,26 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+
+import type { Quiz } from "../models/Quiz";
+import type { Course } from "../models/Course";
+import type { APIResponseDetail } from "../models/Data";
+
+// const {id} = useRoute().params;
+
+// const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
+//   `/courses/${id}`
+// );
+  
+// const course = computed(() => detailCourse?.value?.data);
+  
+// const { data: detailQuiz } = await useRestClient<APIResponseDetail<Quiz>>(
+//   `/courses/${course.value?.slug}/quiz/${id}/enroll`
+//   );
+  
+//   const quizzes = computed(() => detailQuiz?.value?.data);
+
 defineProps({
   curriculum: Object,
 });
