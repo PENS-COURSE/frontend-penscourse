@@ -10,6 +10,12 @@ export interface APIResponseDetail<T> {
   data: T;
 }
 
+export interface APIResponseList<T> {
+  message: string;
+  statusCode: number;
+  data: T[];
+}
+
 export interface DataList<T> {
   data: T[];
   meta: Meta;

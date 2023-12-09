@@ -1,23 +1,4 @@
 export interface Quiz {
-    id:          string;
-    slug:        string;
-    title:       string;
-    description: string;
-    course_id:   number;
-    week:        number;
-    created_at:  Date;
-    updated_at:  Date;
-    subjects:    Subjects;
-}
-
-export interface Subjects {
-    quizzes:        QuizElement[];
-    file_contents:  any[];
-    live_classes:   any[];
-    video_contents: any[];
-}
-
-export interface QuizElement {
     id:            string;
     title:         string;
     description:   string;

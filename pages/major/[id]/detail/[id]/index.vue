@@ -153,7 +153,7 @@
 
 <script setup lang="ts">
 import type { Curriculum } from "~/models/Curriculum";
-import type { APIResponseDetail } from "../../../../../models/Data";
+import type { APIResponseDetail, APIResponseList } from "../../../../../models/Data";
 
 const { id } = useRoute().params;
 
@@ -161,7 +161,7 @@ const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
 );
 
-const { data: detailCurriculum } = await useRestClient<APIResponseDetail<Curriculum>>(
+const { data: detailCurriculum } = await useRestClient<APIResponseList<Curriculum>>(
   `/courses/${id}/curriculums`
 );
 
@@ -178,12 +178,6 @@ const endrollCourse = async () => {
     .then((res) => console.log(res))
     .catch((err) => console.log(err));
 };
-
-
-
-// watch(course, () => {
-//   console.log(course.value);
-// });
 </script>
 
 <style></style>

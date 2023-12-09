@@ -29,11 +29,11 @@
         <span>Kuis</span>
       </div>
 
-      <div>
+      <NuxtLink to="/major">
         <button class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center">
           <span>Mulai</span>
         </button>
-      </div>
+      </NuxtLink>
       
     </div>
 
@@ -81,6 +81,6 @@ import type { APIResponseDetail } from "../models/Data";
 //   const quizzes = computed(() => detailQuiz?.value?.data);
 
 defineProps({
-  curriculum: Object,
+  curriculum: Object as PropType<Curriculum>,
 });
 </script>
