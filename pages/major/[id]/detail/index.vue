@@ -56,7 +56,7 @@
       class="mt-12 gap-x-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <template v-for="course in courses">
-        <NuxtLink :to="`/major/${major?.slug}/detail/${course.slug}`">
+        <NuxtLink :to="`/course/${course.slug}`">
           <div
             class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
           >
@@ -66,7 +66,12 @@
               alt=""
               class="w-full mb-2"
             />
-            <img v-else :src="course?.thumbnail" alt="" class="w-full mb-2" />
+            <img
+              v-else
+              :src="`${useRuntimeConfig().public.BASE_URL}/${course.thumbnail}`"
+              alt=""
+              class="w-full mb-2"
+            />
             <h4 class="font-semibold text-base mb-1">{{ course.name }}</h4>
             <h4 class="text-sm text-slate-gray-500 mb-1">Teknik Informatika</h4>
             <div class="flex text-sm gap-2 items-center mb-4">
@@ -111,18 +116,16 @@ const { data: majorData } = await useRestClient<APIResponseDetail<Department>>(
   `/departments/${id}`
 );
 
-console.log(majorData.value?.data);
-
 const courses = computed(() => coursesData?.value?.data?.data);
 const major = computed(() => majorData?.value?.data);
 
-watch(courses, () => {
-  // console.log(courses.value);
-});
+// watch(courses, () => {
+// console.log(courses.value);
+// });
 
-watch(major, () => {
-  // console.log(major.value);
-});
+// watch(major, () => {
+// console.log(major.value);
+// });
 </script>
 
 <style></style>

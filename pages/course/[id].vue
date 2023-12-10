@@ -1,6 +1,6 @@
 <template>
   <section
-    class="w-full bg-gradient-to-r from-blue via-blue to-[#3E6F96] p-10 lg:px-16 md:py-16 xl:px-32"
+    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-16 xl:px-32"
   >
     <div class="text-white">
       <h2 class="font-semibold text-4xl pb-2">{{ course?.name }}</h2>
@@ -12,8 +12,8 @@
     <div class="flex justify-start max-w-xl mt-6 mb-4 gap-16">
       <div class="flex gap-2 items-center">
         <!-- <font-awesome-icon :icon="['fas', 'star']" class="text-yellow" /> -->
-        <p class="text-yellow">4.3</p>
-        <p class="text-gray text-xs">(12.000+ Ulasan)</p>
+        <p class="text-white">4.3</p>
+        <p class="text-white text-xs">(12.000+ Ulasan)</p>
       </div>
       <div class="flex gap-2 items-center">
         <!-- <font-awesome-icon :icon="['fas', 'clock']" class="text-white" /> -->
@@ -46,15 +46,17 @@
           </p>
         </div>
 
-        <div class="w-full mb-6">
+        <div class="w-3/5 mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
           <div v-if="curriculum == 0">
             <h1>belum ada kurikulum</h1>
           </div>
-          <div v-else v-for="c in curriculum">
-            <Curriculums :curriculum="c">
-              <Curriculum :curriculum="c" />
-            </Curriculums>
+          <div v-else>
+            <CurriculumCard
+              :curriculum="c"
+              :quiz="c.subjects.quizzes[0]"
+              v-for="c in curriculum"
+            />
           </div>
         </div>
 
@@ -94,37 +96,37 @@
           />
           <img
             v-else
-            :src="course?.thumbnail"
+            :src="`${useRuntimeConfig().public.BASE_URL}/${course.thumbnail}`"
             alt=""
             class="rounded-t-lg shadow-md mb-5 w-full"
           />
+
           <div class="px-6">
-            <div class="flex justify-between">
-              <h4
-                v-if="course?.is_free == true"
-                class="font-semibold text-sm mb-6 text-blue"
-              >
-                Gratis
-              </h4>
-              <h4 v-else class="font-semibold text-sm mb-6 text-blue">
-                Rp {{ course?.price }}
-              </h4>
-            </div>
+            <h4
+              v-if="course?.is_free == true"
+              class="font-extrabold text-lg mb-6 text-blue"
+            >
+              Gratis
+            </h4>
+            <h4 v-else class="font-extrabold text-lg mb-6 text-blue">
+              Rp {{ course?.price }}
+            </h4>
 
             <button
               v-if="course?.is_free == true"
-              @click="enrollCourse"
-              class="w-full py-3 text-white bg-blue rounded-md text-center mb-4"
+              @click="endrollCourse"
+              class="w-full py-3 text-white bg-regal-blue-500 rounded-md text-center mb-4"
             >
               Dapatkan Kelas
             </button>
 
-            <button
+            <div
               v-else
-              class="w-full py-3 text-white bg-blue rounded-md text-center mb-4"
+              class="w-full py-3 text-white bg-regal-blue-500 rounded-md text-center mb-4"
+              to="/payment"
             >
               Beli Kelas
-            </button>
+            </div>
 
             <h6 class="font-semibold text-base text-blue mb-6">Paket Kelas</h6>
 
@@ -151,38 +153,33 @@
   </section>
 </template>
 
-<script setup>
-import { useCourseStore } from "~/store/course.js";
+<script setup lang="ts">
+import type { Curriculum } from "~/models/Curriculum";
+import type { APIResponseDetail, APIResponseList } from "../../models/Data";
 
-const courseStore = useCourseStore();
+const { id } = useRoute().params;
 
-const getDetailCourse = async () => {
-  await courseStore.getDetailCourse();
+const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
+  `/courses/${id}`
+);
+
+const { data: detailCurriculum } = await useRestClient<
+  APIResponseList<Curriculum>
+>(`/courses/${id}/curriculums`);
+
+const course = computed(() => detailCourse?.value?.data);
+
+const curriculum = computed(() => detailCurriculum?.value?.data);
+
+console.log(curriculum.value);
+
+const endrollCourse = async () => {
+  await useRestClient<APIResponseDetail<Course>>(`/courses/${id}/enroll`, {
+    method: "POST",
+  })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
 };
-
-const course = computed(() => {
-  return courseStore.courseDetail;
-});
-
-const curriculum = computed(() => {
-  return courseStore.curriculums;
-});
-
-const getCurriculums = async () => {
-  await courseStore.getCurriculums();
-};
-
-const enrollCourse = async () => {
-  await courseStore.enrollCourse();
-};
-
-onMounted(async () => {
-  await getDetailCourse();
-});
-
-onMounted(async () => {
-  await getCurriculums();
-});
 </script>
 
 <style></style>

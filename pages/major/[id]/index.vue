@@ -101,8 +101,6 @@ const { data: coursesData } = await useRestClient<
   APIResponsePagination<Course>
 >(`/departments/${route.id}/courses`);
 
-// console.log(coursesData.value?.data.data);
-
 const major = computed(() => data?.value?.data);
 const courses = computed(() => coursesData?.value?.data.data);
 </script>
