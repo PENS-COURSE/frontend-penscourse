@@ -55,6 +55,7 @@
             <CurriculumCard
               :curriculum="c"
               :quiz="c.subjects.quizzes[0]"
+              :slug="id"
               v-for="c in curriculum"
             />
           </div>

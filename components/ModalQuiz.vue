@@ -1,14 +1,14 @@
-<template>
+<!-- <template>
   <transition name="modal-fade">
     <div class="modal-overlay" @click="$emit('close-modal')">
       <div class="modal" @click.stop>
-        <!-- <img class="check" src="~/assets/check-icon.png" alt="" /> -->
+        <img class="check" src="~/assets/check-icon.png" alt="" />
         <h6>Saved!</h6>
         <p>Your Details have been saved Successfully</p>
         <button>Go Home</button>
       </div>
       <div class="close" @click="$emit('close-modal')">
-        <!-- <img class="close-img" src="~/assets/close-icon.svg" alt="" /> -->
+        <img class="close-img" src="~/assets/close-icon.svg" alt="" />
       </div>
     </div>
   </transition>
@@ -84,4 +84,4 @@ button {
 .modal-fade-leave-active {
   transition: opacity 0.5s ease;
 }
-</style>
+</style> -->

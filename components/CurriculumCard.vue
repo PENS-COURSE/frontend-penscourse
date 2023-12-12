@@ -53,8 +53,7 @@
               />
               <span>Kuis {{ quiz?.title }}</span>
             </div>
-
-            <NuxtLink to="/quiz">
+            <NuxtLink :to="{ path : '/quiz', query: { id: `${quiz?.id}`, slug: `${slug}` } }">
               <button
                 class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
               >
@@ -97,7 +96,13 @@
 defineProps({
   curriculum: Object as PropType<Curriculum>,
   quiz: Object as PropType<Quiz>,
+  slug: String,
 });
+
+// const { curriculum, quiz } = toRefs(data);
+// const quizParams = JSON.stringify(quiz)
+
+// console.log("curiculum", curriculum?.title)
 
 const showPanel = ref(false);
 

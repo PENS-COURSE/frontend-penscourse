@@ -71,7 +71,7 @@
         </div>
         <button
           @click="togglePopUp"
-          class="py-2 px-6 bg-blue text-white rounded-lg"
+          class="rounded-lg bg-blue-50 px-5 py-2.5 text-sm font-medium text-blue-500 hover:bg-blue-100 hover:text-blue-600"
         >
           Edit
         </button>
@@ -122,7 +122,7 @@
             <div class="flex justify-center">
               <button
                 type="submit"
-                class="text-white bg-blue py-2 px-6 rounded-md"
+                class="bg-blue-100 text-blue-500 hover:bg-blue-100 hover:text-blue-600 py-2 px-6 rounded-md"
               >
                 Simpan
               </button>
