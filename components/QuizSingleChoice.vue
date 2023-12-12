@@ -6,26 +6,51 @@
         <input type="radio" name="select" id="option-4" />
         <label for="option-1" class="option-1">
         <div class="text mr-2">
-            Code diatas berfungsi untuk mengatur letak dari suatu div
+          {{ quizzes.questions[selectedSoal].question.option_a }}
         </div>
         </label>
         <label for="option-2" class="option-2">
         <div class="text">
-            Code diatas berfungsi untuk menampilkan navbar
+          {{ quizzes.questions[selectedSoal].question.option_b }}
         </div>
         </label>
         <label for="option-3" class="option-3">
         <div class="text">
-            Code diatas berfungsi untuk mengatur class pada text h1
+          {{ quizzes.questions[selectedSoal].question.option_c }}
         </div>
         </label>
         <label for="option-4" class="option-4">
         <div class="text">
-            Code diatas berfungsi untuk mengatur judul
+          {{ quizzes.questions[selectedSoal].question.option_d }}
+        </div>
+        </label>
+        <label for="option-5" class="option-5">
+        <div class="text">
+          {{ quizzes.questions[selectedSoal].question.option_e }}
         </div>
         </label>
     </div>
 </template>
+
+<script setup lang="ts">
+// defineProps({
+//   quizzes: Object as PropType<QuestionQuestion>,
+//   slug: String,
+
+// });
+const { id } = useRoute().params;
+const { slug } = useRoute().query;
+
+const { data: quizDetail } = await useRestClient<
+      APIResponseList<QuizResponse>>(
+        `/courses/${slug}/quiz/${id}/enroll`);
+
+    const quizzes = computed(() => quizDetail?.value?.data);
+
+    const selectedSoal = 0;
+
+    console.log(quizzes.value);
+</script>
 
 <style scoped>
   .font-nunito {

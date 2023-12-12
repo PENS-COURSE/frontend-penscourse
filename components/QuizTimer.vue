@@ -15,8 +15,20 @@
     </div>
 </template>
 
-<script setup>
-  
+<script setup lang="ts">
+  const { id } = useRoute().params;
+  const { slug } = useRoute().query;
+
+  const { data: quizDetail } = await useRestClient<
+        APIResponseList<QuizResponse>>(
+          `/courses/${slug}/quiz/${id}/enroll`);
+
+      const quizzes = computed(() => quizDetail?.value?.data);
+
+      const selectedSoal = 0;
+
+      console.log(quizzes.value);
+
   // Set the date we're counting down to
   var countDownDate = new Date("Dec 13, 2023 15:37:25").getTime();
   
