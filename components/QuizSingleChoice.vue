@@ -1,55 +1,32 @@
 <template>
     <div class="box">
-        <input type="radio" name="select" id="option-1" />
-        <input type="radio" name="select" id="option-2" />
-        <input type="radio" name="select" id="option-3" />
-        <input type="radio" name="select" id="option-4" />
-        <label for="option-1" class="option-1">
-        <div class="text mr-2">
-          {{ quizzes.questions[selectedSoal].question.option_a }}
-        </div>
+      <div v-for="(item, index) in soal" :key="index">
+        <input @change="event => handleClick(event)" type="radio" :value="item.option" name="select" :id="`option-${index + 1}`" />
+        <label :for="`option-${index + 1}`" :class="`option-${index + 1}`">
+          <div class="text mr-2">
+            {{ item.answer }}
+          </div>
         </label>
-        <label for="option-2" class="option-2">
-        <div class="text">
-          {{ quizzes.questions[selectedSoal].question.option_b }}
-        </div>
-        </label>
-        <label for="option-3" class="option-3">
-        <div class="text">
-          {{ quizzes.questions[selectedSoal].question.option_c }}
-        </div>
-        </label>
-        <label for="option-4" class="option-4">
-        <div class="text">
-          {{ quizzes.questions[selectedSoal].question.option_d }}
-        </div>
-        </label>
-        <label for="option-5" class="option-5">
-        <div class="text">
-          {{ quizzes.questions[selectedSoal].question.option_e }}
-        </div>
-        </label>
+      </div>
     </div>
 </template>
 
 <script setup lang="ts">
-// defineProps({
-//   quizzes: Object as PropType<QuestionQuestion>,
-//   slug: String,
+  const selected = '';
+  const props = defineProps({
+      soal: [] as any,
+  });
 
-// });
-const { id } = useRoute().params;
-const { slug } = useRoute().query;
+  const emit = defineEmits(['selectedAnswer']);
 
-const { data: quizDetail } = await useRestClient<
-      APIResponseList<QuizResponse>>(
-        `/courses/${slug}/quiz/${id}/enroll`);
+  const handleClick = (event : any) => {
+    selectedAnswer((event.target as HTMLTextAreaElement).value);
+  }
 
-    const quizzes = computed(() => quizDetail?.value?.data);
-
-    const selectedSoal = 0;
-
-    console.log(quizzes.value);
+  const selectedAnswer = (answer : string) => {
+      console.log("Single Choice ans", answer);
+      emit('selectedAnswer', answer);
+  }
 </script>
 
 <style scoped>
@@ -73,7 +50,8 @@ const { data: quizDetail } = await useRestClient<
   #option-1:checked ~ .option-1,
   #option-2:checked ~ .option-2,
   #option-3:checked ~ .option-3,
-  #option-4:checked ~ .option-4 {
+  #option-4:checked ~ .option-4,
+  #option-5:checked ~ .option-5 {
     background: #14487a;
   }
   .box label .text {
@@ -86,7 +64,8 @@ const { data: quizDetail } = await useRestClient<
   #option-1:checked ~ .option-1 .text,
   #option-2:checked ~ .option-2 .text,
   #option-3:checked ~ .option-3 .text,
-  #option-4:checked ~ .option-4 .text {
+  #option-4:checked ~ .option-4 .text,
+  #option-5:checked ~ .option-5 .text {
     color: #fff;
   }
   .box input[type="radio"] {

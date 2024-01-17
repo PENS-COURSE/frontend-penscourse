@@ -7,48 +7,22 @@
     >
       <div class="w-full md:px-12 gap-8">
         <div class="flex flex-row flex-wrap py-4">
-          <aside
-            class="w-full sm:w-1/3 md:w-[140px] lg:w-[234px] px-2 flex-row sm:flex-col"
-          >
-            <QuizTimer/>
-  
-            <QuizListNumber/>
-            
+          <aside class="w-full sm:w-1/3 md:w-[140px] lg:w-[234px] px-2 flex-row sm:flex-col">
+            <QuizTimer :duration="quizzes.quiz.duration"/>
+            <div class="flex-row p-2 min-h-[270px] bg-white rounded-xl w-full px-4 mx-auto mb-4">
+              <QuizListNumber @update-parent-variable="updateVariable" :soalLength="soal.length"/>
+              <button @click="handleSubmit" type="button"
+                class="content-end items-end place-self-end mt-32 w-full text-[#23262F] text-opacity-50 hover:text-white bg-[#E0E8F3] hover:bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto">
+                Selesaikan pengerjaan
+              </button>
+            </div>
           </aside>
           <main
             role="main"
             class="w-full sm:w-2/3 md:max-w-[80%] lg:max-w-[90%] xl:w-[75%] pl-2 md:mt-0"
           >
-            <div class="p-4 bg-[white] rounded-xl w-full px-10">
-              <div
-                class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]"
-              >
-                Pertanyaan no 3
-              </div>
-              <!-- <img
-                class="my-4 lg:max-w-md lg:max-h-72 sm:max-w-xs"
-                src="~assets/images/contentsoal.png"
-                alt=""
-              /> -->
-              <div
-                
-                class="border-b-2 border-opacity-30 border-[#14487A] py-2 pb-4 text-start font-normal antialiased xl:text-lg text-base text-black"
-              >
-                {{ quizzes.questions[selectedSoal].question.question }}
-              </div>
-              <div
-                class="py-3 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]"
-              >
-                Pilihan Jawaban
-              </div>
-              <div class="row h-100vh items-left">
-                <QuizSingleChoice 
-                />
-              </div>
-            </div>
-
-            <QuizSessionNext/>
-            
+            <QuizQuestion :soal="soal[selectedSoal]" :pilihan="pilihan" @selected-answer="selectedAnswer"/>
+            <QuizSessionNext />
           </main>
         </div>
       </div>
@@ -58,28 +32,116 @@
   <script setup lang="ts">
     import type { APIResponseDetail, APIResponseList, APIResponsePagination } from "../../../models/Data";
     import type { QuizResponse } from "../../../models/Quiz";
-
+    
+    const answerPicked = ref('')
     const { id } = useRoute().params;
     const { slug } = useRoute().query;
+    const selectedSoal = ref(0);
+    const pilihan = ref([] as any);
  
-    // const { data: quizDetail } = await useRestClient<QuizResponse>(
-    //   `/courses/${slug}/quiz/${id}/enroll`
-    // );
-
-    // const quizzes = computed(() => quizDetail?.value?.data?.questions);
-    // const questionList = quizzes?.value?.questions;
-
     const { data: quizDetail } = await useRestClient<
       APIResponseList<QuizResponse>>(
         `/courses/${slug}/quiz/${id}/enroll`);
 
     const quizzes = computed(() => quizDetail?.value?.data);
+    const soal = initQuiz([...quizzes?.value?.questions]);
 
-    const selectedSoal = 0;
+    function initQuiz(arr: any[]): any[] {
+      let randomizedArr = [...arr]; // Creating a copy of the input array
+      const data: any[] = [];
+      for (let i = randomizedArr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [randomizedArr[i], randomizedArr[j]] = [randomizedArr[j], randomizedArr[i]]; // Swap elements
+      }
 
-    console.log(quizzes.value);
+      data.push({
+        option: "A",
+        answer: randomizedArr[0].question.option_a
+      });
+      data.push({
+        option: "B",
+        answer: randomizedArr[0].question.option_b
+      });
+      data.push({
+        option: "C",
+        answer: randomizedArr[0].question.option_c
+      });
+      data.push({
+        option: "D",
+        answer: randomizedArr[0].question.option_d
+      });
+      data.push({
+        option: "E",
+        answer: randomizedArr[0].question.option_e
+      });
 
-    
+      pilihan.value = randomizeArray(data);
+
+      return randomizedArr;
+    }
+
+    const selectedAnswer = (answer : string) => {
+      answerPicked.value = answer;
+      console.log("Index ans", answerPicked)
+    }
+
+    function randomizeArray(arr: string[]): string[] {
+      let randomizedArr = [...arr]; // Creating a copy of the input array
+      for (let i = randomizedArr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [randomizedArr[i], randomizedArr[j]] = [randomizedArr[j], randomizedArr[i]]; // Swap elements
+      }
+      return randomizedArr;
+    }
+
+    const updateVariable = async (newValue: number) => {
+      const data: any[] = [];
+
+      const response = await useRestClient<APIResponseList<any>>(
+        `/courses/quiz/update-answer`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            session_id: quizzes?.value?.detail.session_id.toString() || '',
+            question_id: soal[selectedSoal.value || 0].question.id.toString(),
+            answer: [answerPicked.value]
+          })
+        }
+      );
+      
+      selectedSoal.value = newValue;
+
+      data.push({
+        option: "A",
+        answer: soal[newValue].question.option_a
+      });
+      data.push({
+        option: "B",
+        answer: soal[newValue].question.option_b
+      });
+      data.push({
+        option: "C",
+        answer: soal[newValue].question.option_c
+      });
+      data.push({
+        option: "D",
+        answer: soal[newValue].question.option_d
+      });
+      data.push({
+        option: "E",
+        answer: soal[newValue].question.option_e
+      });
+      
+      pilihan.value = data;
+    };
+
+    const handleSubmit = async () => {
+      const response = await useRestClient<APIResponseList<any>>(
+        `/courses/quiz/${quizzes?.value?.detail.session_id.toString() || ''}/submit`, {
+          method: 'PATCH'
+        }
+      );
+    }
+
   </script>
   
   <style scoped>
