@@ -33,7 +33,7 @@
   <section class="mt-16 mx-10 lg:mx-16 xl:mx-32">
     <div class="flex flex-col-reverse md:flex-row gap-10">
       <div class="flex flex-col md:w-3/4">
-        <div class="mb-16">
+        <!-- <div class="mb-16">
           <h4 class="font-semibold text-2xl text-blue mb-6">Deskripsi</h4>
           <p class="text-xs md:text-sm text-justify text-gray2">
             Mata kuliah "Konsep Pemrograman" merupakan salah satu komponen
@@ -44,7 +44,7 @@
             penting seperti algoritma, struktur data, logika pemrograman, serta
             dasar-dasar pemrograman menggunakan bahasa pemrograman tertentu.
           </p>
-        </div>
+        </div> -->
 
         <div class="w-3/5 mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
