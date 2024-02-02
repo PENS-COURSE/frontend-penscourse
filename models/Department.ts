@@ -4,11 +4,11 @@ export interface Department {
   slug: string;
   description: string;
   participant_note: string;
-  participant_thumbnail: null;
+  participant_thumbnail: string | null;
   benefits_note: string;
-  benefits_thumbnail: null;
+  benefits_thumbnail: string | null;
   opportunities_note: string;
-  opportunities_thumbnail: null;
+  opportunities_thumbnail: string | null;
   icon: string;
   is_active: boolean;
   created_at: Date;

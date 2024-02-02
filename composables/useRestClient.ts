@@ -1,6 +1,6 @@
 export const useRestClient: typeof useFetch = (path, options = {}) => {
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
+  let headers: HeadersInit = {
+    Accept: "application/json",
   };
 
   const config = useRuntimeConfig();
@@ -11,9 +11,16 @@ export const useRestClient: typeof useFetch = (path, options = {}) => {
     headers["Authorization"] = `Bearer ${access_token.value}`;
   }
 
+  const headersOptions = options.headers || {};
+
+  delete options.headers;
+
   return useFetch(path, {
     baseURL: config.public.API_URL,
-    headers: headers,
+    headers: {
+      ...headers,
+      ...headersOptions,
+    },
     ...options,
     onResponse: async ({ response }) => {
       if (response.status === 401 && refresh_token.value != "") {
