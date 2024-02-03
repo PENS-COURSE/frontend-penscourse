@@ -9,7 +9,6 @@
                     {{ index }}
                 </button>
             </div>
-           
         </div>
 </template>
 

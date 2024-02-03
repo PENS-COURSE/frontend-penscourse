@@ -1,8 +1,37 @@
-export interface TaskModel {
-  quiz: Quiz;
-  questions: QuestionElement[];
-  detail: Detail;
+export interface Quiz {
+  id:            string;
+  title:         string;
+  description:   string;
+  duration:      number;
+  start_date:    Date;
+  end_date:      Date;
+  is_ended:      boolean;
+  is_active:     boolean;
+  pass_grade:    number;
+  curriculum_id: string;
+  created_at:    Date;
+  updated_at:    Date;
+  is_taken:      boolean;
 }
+
+export interface QuizResponse {
+  message:    string;
+  statusCode: number;
+  data:       Data;
+}
+
+export interface Data {
+  quiz:      QuizClass;
+  questions: QuestionElement[];
+  detail:    Detail;
+
+}
+
+// export interface TaskModel {
+//   quiz: Quiz;
+//   questions: QuestionElement[];
+//   detail: Detail;
+// }
 
 export interface Detail {
   end_quiz: Date;
@@ -25,18 +54,34 @@ export interface QuestionQuestion {
   question_type: string;
 }
 
-export interface Quiz {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  start_date: Date;
-  end_date: Date;
-  is_ended: boolean;
-  is_active: boolean;
-  show_result: boolean;
-  pass_grade: number;
+export interface QuizClass {
+  id:            string;
+  title:         string;
+  description:   string;
+  duration:      number;
+  start_date:    Date;
+  end_date:      Date;
+  is_ended:      boolean;
+  is_active:     boolean;
+  show_result:   boolean;
+  pass_grade:    number;
   curriculum_id: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at:    Date;
+  updated_at:    Date;
 }
+
+// export interface Quiz {
+//   id: string;
+//   title: string;
+//   description: string;
+//   duration: number;
+//   start_date: Date;
+//   end_date: Date;
+//   is_ended: boolean;
+//   is_active: boolean;
+//   show_result: boolean;
+//   pass_grade: number;
+//   curriculum_id: string;
+//   created_at: Date;
+//   updated_at: Date;
+// }
