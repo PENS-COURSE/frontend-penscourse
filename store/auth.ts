@@ -78,7 +78,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     logOut() {
-      navigateTo("/auth/login", { replace: true });
+      navigateTo("/", { replace: true });
 
       const { pending } = useRestClient<APIResponseDetail<null>>(
         "/authentication/logout",
