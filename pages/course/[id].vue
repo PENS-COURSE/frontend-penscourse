@@ -33,19 +33,6 @@
   <section class="mt-16 mx-10 lg:mx-16 xl:mx-32">
     <div class="flex flex-col-reverse md:flex-row gap-10">
       <div class="flex flex-col md:w-3/4">
-        <!-- <div class="mb-16">
-          <h4 class="font-semibold text-2xl text-blue mb-6">Deskripsi</h4>
-          <p class="text-xs md:text-sm text-justify text-gray2">
-            Mata kuliah "Konsep Pemrograman" merupakan salah satu komponen
-            fundamental dalam pendidikan di bidang ilmu komputer dan teknologi
-            informasi. Mata kuliah ini bertujuan untuk memberikan pemahaman
-            dasar tentang prinsip-prinsip dasar dalam pemrograman komputer.
-            Dalam mata kuliah ini, mahasiswa akan mempelajari konsep-konsep
-            penting seperti algoritma, struktur data, logika pemrograman, serta
-            dasar-dasar pemrograman menggunakan bahasa pemrograman tertentu.
-          </p>
-        </div> -->
-
         <div class="w-3/5 mb-6">
           <h4 class="font-semibold text-2xl text-blue mb-6">Kurikulum</h4>
           <div v-if="curriculum == 0">
@@ -59,9 +46,96 @@
               v-for="c in curriculum"
             />
           </div>
+
+          <Disclosure v-slot="{ open }" v-for="c in curriculum">
+            <DisclosureButton
+              class="flex w-full justify-between mb-2 rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75"
+            >
+              <span>{{ c.title }} (Minggu {{ c.week }})</span>
+              <Icon
+                name="ic:outline-arrow-upward"
+                :class="open ? 'rotate-180 transform transition-transform' : ''"
+                class="h-5 w-5 text-purple-500"
+              />
+            </DisclosureButton>
+            <DisclosurePanel
+              class="px-4 pb-2 pt-4 text-sm text-gray-500 transform transition-transform"
+            >
+              <div class="w-full h-full rounded-lg">
+                <p>
+                  {{ c?.description != null ? c?.description : "" }}
+                </p>
+
+                <div class="row my-3">
+                  <div class="flex justify-between">
+                    <div>
+                      <Icon
+                        name="material-symbols:menu-book-outline"
+                        class="w-5 h-5 mr-2 my-2"
+                      />
+                      <span>Materi</span>
+                    </div>
+
+                    <div>
+                      <button
+                        class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+                      >
+                        <Icon
+                          name="material-symbols:download-2"
+                          class="w-4 h-4 mr-2"
+                        />
+                        <span>Download</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="flex justify-between my-4">
+                    <div>
+                      <Icon
+                        name="material-symbols:edit-square-outline-rounded"
+                        class="w-5 h-5 mr-2 my-2"
+                      />
+                      <!-- <span>{{ quiz?.title }}</span> -->
+                    </div>
+                    <!-- <NuxtLink :to="{ path : '/quiz', query: { id: `${quiz?.id}`, slug: `${slug}` } }">
+              <button
+                class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+              >
+                <span>Mulai</span>
+              </button>
+            </NuxtLink> -->
+                  </div>
+
+                  <div class="flex justify-between my-4">
+                    <div>
+                      <Icon
+                        name="material-symbols:play-circle-outline-rounded"
+                        class="w-5 h-5 mr-2 my-2"
+                      />
+                      <span>Kelas Online</span>
+                    </div>
+
+                    <div>
+                      <button
+                        class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+                      >
+                        <span>Masuk</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="content-end items-end place-self-end w-full rounded text-white bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium text-[12px] py-2 px-4 text-center dark:focus:ring-gray-500 mx-auto"
+                  >
+                    Selesai
+                  </button>
+                </div>
+              </div>
+            </DisclosurePanel>
+          </Disclosure>
         </div>
 
-        <!-- <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
+        <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
         <div class="flex flex-col md:flex-row gap-5">
           <template v-for="i in 3" :key="i">
             <div class="bg-white border border-gray rounded-lg p-6">
@@ -84,7 +158,7 @@
               </p>
             </div>
           </template>
-        </div> -->
+        </div>
       </div>
 
       <div class="md:w-1/4 md:-mt-44 lg:-mt-48 xl:-mt-56 2xl:-mt-72">
@@ -157,8 +231,11 @@
 <script setup lang="ts">
 import type { Curriculum } from "~/models/Curriculum";
 import type { APIResponseDetail, APIResponseList } from "../../models/Data";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 
 const { id } = useRoute().params;
+
+const materi = ref([]);
 
 const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
@@ -172,7 +249,9 @@ const course = computed(() => detailCourse?.value?.data);
 
 const curriculum = computed(() => detailCurriculum?.value?.data);
 
-console.log(curriculum.value);
+// const getMateri = async () => {
+//   materi.value = curriculum.value;
+// };
 
 const endrollCourse = async () => {
   await useRestClient<APIResponseDetail<Course>>(`/courses/${id}/enroll`, {

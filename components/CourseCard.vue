@@ -7,7 +7,7 @@
         <h4 class="text-base font-medium">{{ course?.name }}</h4>
         <Menu as="div">
           <MenuButton>
-            <Icon name="mdi:menu" class="hover:text-white" />
+            <Icon name="mdi:menu" class="text-white hover:text-gray-300" />
             <transition
               enter-active-class="transition duration-100 ease-out"
               enter-from-class="transform scale-95 opacity-0"

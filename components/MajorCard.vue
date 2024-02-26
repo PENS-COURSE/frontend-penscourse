@@ -1,17 +1,19 @@
 <template>
-  <NuxtLink to="/major/informatika">
+  <NuxtLink :to="`/dosen/major/edit/${major.slug}`">
     <div
-      class="px-6 w-64 h-64 border border-alto-500 flex flex-col justify-center items-center"
+      class="px-6 w-64 h-64 border border-alto-500 flex flex-col justify-center items-center hover:bg-blue-200 transition-colors"
     >
-      <img :src="major.image" alt="major page" width="80" height="85" />
-      <h5 class="text-dark-500">{{ major.major }}</h5>
+      <img :src="major.icon" alt="" width="80" class="max-h-20" />
+      <h5>{{ major.name }}</h5>
     </div>
   </NuxtLink>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { major } = defineProps({
-  major: Object,
-  image: String,
+  major: {
+    type: Object as PropType<Department>,
+    required: true,
+  },
 });
 </script>

@@ -98,6 +98,13 @@
       </template>
     </div>
   </section>
+
+  <Pagination
+    :total_page="10"
+    :per_page="5"
+    :current_page="current_page"
+    @pagechanged="onPageChange"
+  />
 </template>
 
 <script setup lang="ts">
@@ -107,25 +114,24 @@ import type {
 } from "../../../../models/Data";
 import type { Department } from "../../../../models/Department";
 
-const { id } = useRoute().params;
+const current_page = ref(1);
+
+const route = useRoute().params;
 const { data: coursesData } = await useRestClient<
   APIResponsePagination<Course>
->(`/departments/${id}/courses`);
+>(`/departments/${route.id}/courses`);
 
 const { data: majorData } = await useRestClient<APIResponseDetail<Department>>(
-  `/departments/${id}`
+  `/departments/${route.id}`
 );
 
 const courses = computed(() => coursesData?.value?.data?.data);
 const major = computed(() => majorData?.value?.data);
 
-// watch(courses, () => {
-// console.log(courses.value);
-// });
-
-// watch(major, () => {
-// console.log(major.value);
-// });
+const onPageChange = (page: number) => {
+  console.log(page);
+  current_page.value = page;
+};
 </script>
 
 <style></style>

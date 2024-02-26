@@ -57,9 +57,8 @@ import { useRestClient } from "../../composables/useRestClient";
 import type { APIResponsePagination } from "../../models/Data";
 import type { Department } from "../../models/Department";
 
-const { data } = await useRestClient<APIResponsePagination<Department>>(
-  "/departments"
-);
+const { data } =
+  await useRestClient<APIResponsePagination<Department>>("/departments");
 const majors = computed(() => data?.value?.data?.data);
 </script>
 

@@ -1,9 +1,7 @@
 <template>
-  <div class="container mx-auto py-32">
-    <h1 class="text-2xl font-medium mb-5">Tambah Mata Pelajaran</h1>
-
+  <div class="mx-auto">
     <div class="border border-alto-500/50 rounded w-full p-4">
-      <h2 class="text-lg">Mata Pelajaran</h2>
+      <h1 class="text-2xl font-medium mb-5">Tambah Mata Kuliah</h1>
       <hr class="border border-alto-500/40 mt-2" />
       <form @submit.prevent="handleSubmit">
         <div class="mt-3">
@@ -177,17 +175,25 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: "authenticated",
+  layout: "admin",
+});
+
 import type { APIResponsePagination } from "../../../models/Data";
 
 const { user } = storeToRefs(useAuthStore());
 const router = useRouter();
 
+const inputSearchJurusan = ref("");
 const modal = reactive({
   jurusanModal: false,
 });
-
 const items = reactive({
   jurusan: [] as Department[],
+});
+const loading = reactive({
+  jurusan: false,
 });
 
 const payload = reactive<{
@@ -221,11 +227,6 @@ const payload = reactive<{
   user_id: undefined,
   thumbnail: undefined,
 });
-
-const loading = reactive({
-  jurusan: false,
-});
-const inputSearchJurusan = ref("");
 
 watch(modal, async (value) => {
   if (value.jurusanModal) {
@@ -333,7 +334,7 @@ const handleSubmit = async () => {
   );
 
   if (!error.value) {
-    router.replace("/dosen");
+    navigateTo("/dosen");
   }
 };
 

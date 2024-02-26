@@ -22,6 +22,7 @@ export const useAuthStore = defineStore("auth", {
     user: {} as User,
     authenticated: false,
     loading: false,
+    isOpenModal: false,
   }),
   persist: true,
   actions: {
@@ -41,7 +42,6 @@ export const useAuthStore = defineStore("auth", {
 
       if (data.value) {
         this.authenticated = true;
-
         this.access_token = data.value.data.token.access_token;
         this.refresh_token = data.value.data.token.refresh_token;
         this.user = data.value.data.user;
@@ -95,10 +95,19 @@ export const useAuthStore = defineStore("auth", {
       this.access_token = "";
       this.refresh_token = "";
       this.user = {} as User;
+      navigateTo("/auth/login");
     },
     async setTokens({ access_token, refresh_token }: Token) {
       this.access_token = access_token;
       this.refresh_token = refresh_token;
+    },
+
+    async getProfile() {
+      const { data } = await useRestClient<APIResponseDetail<User>>("/profile");
+
+      if (data.value) {
+        this.user = data.value.data;
+      }
     },
   },
 });

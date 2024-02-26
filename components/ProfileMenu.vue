@@ -5,43 +5,52 @@
         Dashboard
       </h5>
     </div>
-    <NuxtLink
-      to="/dashboard/profile"
-      class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
-    >
-      <Icon name="ic:baseline-person" />
-      <h5 class="font-medium text-sm md:text-lg">Profile</h5>
-    </NuxtLink>
-    <NuxtLink
-      to="/dashboard/notification"
-      class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
-    >
-      <Icon name="ic:baseline-notifications" />
-      <h5 class="font-medium text-sm md:text-lg">Notifikasi</h5>
-    </NuxtLink>
-    <NuxtLink
-      to="/dashboard/my-course"
-      class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
-    >
-      <Icon name="ic:outline-insert-drive-file" />
-      <h5 class="font-medium text-sm md:text-lg">Kursus Saya</h5>
-    </NuxtLink>
-    <NuxtLink
-      to="/dashboard/certificate"
-      class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
-    >
-      <Icon name="ic:outline-credit-card" />
-      <h5 class="font-medium text-sm md:text-lg">Sertifikat</h5>
-    </NuxtLink>
-    <NuxtLink
-      to="/dashboard/transaction"
-      class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
-    >
-      <Icon name="ic:sharp-shopping-cart" />
-      <h5 class="font-medium text-sm md:text-lg">Transaksi</h5>
-    </NuxtLink>
+    <template v-for="menu in menus">
+      <NuxtLink
+        :to="menu.route"
+        class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
+      >
+        <Icon :name="menu.icon" />
+        <h5 class="font-medium text-sm md:text-lg">{{ menu.title }}</h5>
+      </NuxtLink>
+    </template>
   </div>
 </template>
+
+<script setup lang="ts">
+const menus = [
+  {
+    id: 1,
+    route: "/dashboard/profile",
+    icon: "ic:baseline-person",
+    title: "Profile",
+  },
+  {
+    id: 2,
+    route: "/dashboard/notification",
+    icon: "ic:baseline-notifications",
+    title: "Notifikasi",
+  },
+  {
+    id: 3,
+    route: "/dashboard/my-course",
+    icon: "ic:outline-insert-drive-file",
+    title: "Kursus Saya",
+  },
+  {
+    id: 4,
+    route: "/dashboard/certificate",
+    icon: "ic:outline-credit-card",
+    title: "Sertifikat",
+  },
+  {
+    id: 5,
+    route: "/dashboard/transaction",
+    icon: "ic:sharp-shopping-cart",
+    title: "Transaksi",
+  },
+];
+</script>
 
 <style scoped>
 .router-link-exact-active {

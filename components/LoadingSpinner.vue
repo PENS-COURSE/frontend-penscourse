@@ -1,27 +1,48 @@
 <template>
-  <div className="spinner-container">
-    <div className="loading-spinner"></div>
-  </div>
+  <span class="loader"></span>
 </template>
 
 <script></script>
 
 <style>
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
+.loader {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite;
+}
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  animation: prixClipFix 2s linear infinite;
+}
+
+@keyframes rotate {
   100% {
     transform: rotate(360deg);
   }
 }
-.loading-spinner {
-  margin: auto;
-  width: 25px;
-  height: 25px;
-  border: 5px solid #f3f3f3; /* Light grey */
-  border-top: 5px solid #383636; /* Blue */
-  border-radius: 50%;
-  animation: spinner 1.5s linear infinite;
+
+@keyframes prixClipFix {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+  }
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+  }
 }
 </style>

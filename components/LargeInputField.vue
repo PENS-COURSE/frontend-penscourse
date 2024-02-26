@@ -8,7 +8,8 @@
       >
       <span class="text-red-500 ml-1" v-if="required">*</span>
     </div>
-    <input
+    <textarea
+      rows="4"
       :id="label"
       :name="name"
       :type="type"

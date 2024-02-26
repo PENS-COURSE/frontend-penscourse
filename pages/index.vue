@@ -109,76 +109,31 @@
       <ul
         class="w-full flex mb-0 list-none pt-3 pb-4 flex-row text-center overflow-x-auto"
       >
-        <li class="mr-2 last:mr-0 flex-auto text-center cursor-pointer">
+        <li
+          v-for="major in majors"
+          :key="major.id"
+          class="mr-2 last:mr-0 flex-auto text-center cursor-pointer"
+        >
           <a
             class="text-xs font-bold px-5 py-3 block leading-normal"
-            @click="toggleTabs(1)"
+            @click="toggleTabs(major.slug)"
             :class="{
-              'text-regal-blue-500 bg-white': openTab !== 1,
-              'text-white bg-regal-blue-500 rounded-md': openTab === 1,
+              'text-regal-blue-500 bg-white': openTab !== major.slug,
+              'text-white bg-regal-blue-500 rounded-md': openTab === major.slug,
             }"
           >
-            Teknik Informatika
-          </a>
-        </li>
-        <li class="mr-2 last:mr-0 flex-auto text-center cursor-pointer">
-          <a
-            class="text-xs font-bold px-5 py-3 block leading-normal"
-            @click="toggleTabs(2)"
-            :class="{
-              'text-regal-blue-500 bg-white': openTab !== 2,
-              'text-white bg-regal-blue-500 rounded-md': openTab === 2,
-            }"
-          >
-            Teknik Mekatronika
-          </a>
-        </li>
-        <li class="mr-2 last:mr-0 flex-auto text-center cursor-pointer">
-          <a
-            class="text-xs font-bold px-5 py-3 block leading-normal"
-            @click="toggleTabs(3)"
-            :class="{
-              'text-regal-blue-500 bg-white': openTab !== 3,
-              'text-white bg-regal-blue-500 rounded-md': openTab === 3,
-            }"
-          >
-            Teknik Telekomunikasi
-          </a>
-        </li>
-        <li class="mr-2 last:mr-0 flex-auto text-center cursor-pointer">
-          <a
-            class="text-xs font-bold px-5 py-3 block leading-normal"
-            @click="toggleTabs(4)"
-            :class="{
-              'text-regal-blue-500 bg-white': openTab !== 4,
-              'text-white bg-regal-blue-500 rounded-md': openTab === 4,
-            }"
-          >
-            Teknik Elektronika
-          </a>
-        </li>
-        <li class="mr-2 last:mr-0 flex-auto text-center cursor-pointer">
-          <a
-            class="text-xs font-bold px-5 py-3 block leading-normal"
-            @click="toggleTabs(5)"
-            :class="{
-              'text-regal-blue-500 bg-white': openTab !== 5,
-              'text-white bg-regal-blue-500 rounded-md': openTab === 5,
-            }"
-          >
-            Teknik Komputer
+            {{ major.name }}
           </a>
         </li>
       </ul>
-
       <div class="flex flex-col bg-white w-full mb-6">
         <div class="px-4 py-5 flex-auto">
           <div
             class="tab-content tab-space gap-x-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           >
-            <template v-for="i in 4" :key="i">
+            <p v-if="courseLoading">loading...</p>
+            <template v-for="c in course" v-else>
               <div
-                :class="{ hidden: openTab !== 1, block: openTab === 1 }"
                 class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
               >
                 <img
@@ -186,83 +141,13 @@
                   alt=""
                   class="w-full mb-2"
                 />
-                <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
+                <h4 class="font-semibold text-base mb-1">
+                  {{ c.name }}
+                </h4>
                 <h4 class="text-sm text-slate-gray-500 mb-1">
                   Teknik Informatika
                 </h4>
                 <div class="flex text-sm gap-2 items-center mb-4">
-                  <!-- <font-awesome-icon
-                    :icon="['fas', 'star']"
-                    class="text-school-bus-yellow-500"
-                  /> -->
-                  <p class="text-school-bus-yellow-500">3.4</p>
-                  <p class="text-alto-500">(12k)</p>
-                </div>
-                <div class="flex justify-between items-center">
-                  <h5 class="text-regal-blue-500 font-semibold text-xl">
-                    Rp120.000
-                  </h5>
-                  <h5
-                    class="line-through text-sm text-slate-gray-500 font-medium"
-                  >
-                    Rp120.000
-                  </h5>
-                </div>
-              </div>
-            </template>
-            <template v-for="i in 4" :key="i">
-              <div
-                :class="{ hidden: openTab !== 2, block: openTab === 2 }"
-                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
-              >
-                <img
-                  src="~assets/images/course.png"
-                  alt=""
-                  class="w-full mb-2"
-                />
-                <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
-                <h4 class="text-sm text-slate-gray-500 mb-1">
-                  Teknik Informatika
-                </h4>
-                <div class="flex text-sm gap-2 items-center mb-4">
-                  <!-- <font-awesome-icon
-                    :icon="['fas', 'star']"
-                    class="text-school-bus-yellow-500"
-                  /> -->
-                  <p class="text-school-bus-yellow-500">3.4</p>
-                  <p class="text-alto-500">(12k)</p>
-                </div>
-                <div class="flex justify-between items-center">
-                  <h5 class="text-regal-blue-500 font-semibold text-xl">
-                    Rp120.000
-                  </h5>
-                  <h5
-                    class="line-through text-sm text-slate-gray-500 font-medium"
-                  >
-                    Rp120.000
-                  </h5>
-                </div>
-              </div>
-            </template>
-            <template v-for="i in 4" :key="i">
-              <div
-                :class="{ hidden: openTab !== 3, block: openTab === 3 }"
-                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
-              >
-                <img
-                  src="~assets/images/course.png"
-                  alt=""
-                  class="w-full mb-2"
-                />
-                <h4 class="font-semibold text-base mb-1">Komputasi Awan</h4>
-                <h4 class="text-sm text-slate-gray-500 mb-1">
-                  Teknik Informatika
-                </h4>
-                <div class="flex text-sm gap-2 items-center mb-4">
-                  <!-- <font-awesome-icon
-                    :icon="['fas', 'star']"
-                    class="text-school-bus-yellow-500"
-                  /> -->
                   <p class="text-school-bus-yellow-500">3.4</p>
                   <p class="text-alto-500">(12k)</p>
                 </div>
@@ -343,94 +228,40 @@
   </section>
 </template>
 
-<script setup>
-const openTab = ref(1);
-const toggleTabs = (tabNumber) => {
-  openTab.value = tabNumber;
+<script setup lang="ts">
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import type { Course } from "~/models/Course";
+
+const openTab = ref();
+const course = ref();
+
+const { data: dataMajor } =
+  await useRestClient<APIResponsePagination<Department>>("/departments");
+
+const majors = computed(() => {
+  return dataMajor.value?.data.data;
+});
+
+const { data: dataCourse, pending: courseLoading } = await useRestClient<
+  APIResponsePagination<Course>
+>(`/departments/${dataMajor.value?.data.data[0].slug}/courses`);
+
+const toggleTabs = async (slug: string) => {
+  if (courseLoading) {
+    openTab.value = slug;
+
+    const { data: newDataCourse } = await useRestClient<
+      APIResponsePagination<Course>
+    >(`/departments/${slug}/courses`);
+
+    course.value = newDataCourse.value?.data.data;
+  }
 };
-const isOptionsExpanded = ref(false);
-const selectedOption = ref("Teknik Informatika");
-const options = [
-  "Teknik Informatika",
-  "Teknik Elektronika",
-  "Teknik Telekomunikasi",
-  "Teknik Komputer",
-];
 
-const setOption = (option) => {
-  selectedOption.value = option;
-  isOptionsExpanded.value = false;
-};
-
-const courses = [
-  {
-    id: 1,
-    course: "Konsep Pemrograman",
-  },
-  {
-    id: 2,
-    course: "Pemrograman Web",
-  },
-  {
-    id: 3,
-    course: "Algoritma & Struktur Data",
-  },
-  {
-    id: 4,
-    course: "Mobile Development",
-  },
-  {
-    id: 5,
-    course: "Object Oriented Programming",
-  },
-  {
-    id: 6,
-    course: "Konsep Jaringan",
-  },
-  {
-    id: 7,
-    course: "Data Mining",
-  },
-  {
-    id: 8,
-    course: "Pengolahan Citra",
-  },
-];
-
-const majors = [
-  {
-    id: 1,
-    major: "Teknik Informatika",
-  },
-  {
-    id: 2,
-    major: "Teknik Elektronika",
-  },
-  {
-    id: 3,
-    major: "Teknik Mekatronika",
-  },
-  {
-    id: 4,
-    major: "Teknik Komputer",
-  },
-  {
-    id: 5,
-    major: "Sistem Pembangkit Energi",
-  },
-  {
-    id: 6,
-    major: "Teknik Elektro Industri",
-  },
-  {
-    id: 7,
-    major: "Sains Data Terapan",
-  },
-  {
-    id: 8,
-    major: "Teknologi Game",
-  },
-];
+onMounted(() => {
+  openTab.value = dataMajor.value?.data.data[0].slug;
+  course.value = dataCourse.value?.data.data;
+});
 </script>
 
 <style>
