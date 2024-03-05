@@ -133,8 +133,9 @@
           >
             <p v-if="courseLoading">loading...</p>
             <template v-for="c in course" v-else>
-              <div
-                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
+              <NuxtLink
+                :to="`/course/${c.slug}`"
+                class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md hover:bg-gray-50 transition-colors"
               >
                 <img
                   src="~assets/images/course.png"
@@ -152,16 +153,22 @@
                   <p class="text-alto-500">(12k)</p>
                 </div>
                 <div class="flex justify-between items-center">
-                  <h5 class="text-regal-blue-500 font-semibold text-xl">
-                    Rp120.000
+                  <h5
+                    v-if="c.is_free == true"
+                    class="text-regal-blue-500 font-semibold text-xl"
+                  >
+                    Gratis
+                  </h5>
+                  <h5 v-else class="text-regal-blue-500 font-semibold text-xl">
+                    Rp {{ c.price }}
                   </h5>
                   <h5
                     class="line-through text-sm text-slate-gray-500 font-medium"
                   >
-                    Rp120.000
+                    Rp {{ c.price }}
                   </h5>
                 </div>
-              </div>
+              </NuxtLink>
             </template>
           </div>
         </div>

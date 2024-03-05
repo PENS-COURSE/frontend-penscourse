@@ -15,6 +15,10 @@ interface RegisterPayloadInterface {
   password_confirmation: string;
 }
 
+interface SendOtpPayloadInterface {
+  email: string;
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     access_token: "",
@@ -97,6 +101,25 @@ export const useAuthStore = defineStore("auth", {
       this.user = {} as User;
       navigateTo("/auth/login");
     },
+
+    async sendOtp({ email }: SendOtpPayloadInterface) {
+      this.loading = true;
+      const { data, pending } = await useRestClient<
+        APIResponseDetail<Authentication>
+      >("/authentication/forgot-password/request", {
+        method: "POST",
+        body: {
+          email,
+        },
+      });
+
+      this.loading = pending.value;
+
+      if (data.value) {
+        navigateTo("/auth/verify-otp");
+      }
+    },
+
     async setTokens({ access_token, refresh_token }: Token) {
       this.access_token = access_token;
       this.refresh_token = refresh_token;

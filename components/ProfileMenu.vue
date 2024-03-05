@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-alto-500 h-96 rounded-lg md:w-1/4">
+  <div class="border border-alto-500 h-96 md:h-[450px] rounded-lg md:w-1/4">
     <div class="px-6 py-4">
       <h5 class="font-medium text-base md:text-xl text-slate-gray-500">
         Dashboard
@@ -10,7 +10,7 @@
         :to="menu.route"
         class="text-slate-gray-500 px-6 py-4 flex items-center gap-4"
       >
-        <Icon :name="menu.icon" />
+        <Icon :name="menu.icon" class="w-5 h-5" />
         <h5 class="font-medium text-sm md:text-lg">{{ menu.title }}</h5>
       </NuxtLink>
     </template>
@@ -48,6 +48,12 @@ const menus = [
     route: "/dashboard/transaction",
     icon: "ic:sharp-shopping-cart",
     title: "Transaksi",
+  },
+  {
+    id: 5,
+    route: "/dashboard/change-password",
+    icon: "mdi:key",
+    title: "Ganti Password",
   },
 ];
 </script>

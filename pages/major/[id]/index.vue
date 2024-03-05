@@ -50,8 +50,9 @@
       class="mt-12 gap-x-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <template v-for="course in courses">
-        <div
-          class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
+        <NuxtLink
+          :to="`/course/${course.slug}`"
+          class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md hover:bg-gray-50 transition-colors"
         >
           <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
           <h4 class="font-semibold text-base mb-1">
@@ -74,7 +75,7 @@
               Rp 120000,=
             </h5>
           </div>
-        </div>
+        </NuxtLink>
       </template>
     </div>
     <div class="flex justify-center mt-8">

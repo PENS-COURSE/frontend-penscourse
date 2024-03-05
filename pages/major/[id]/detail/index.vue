@@ -58,7 +58,7 @@
       <template v-for="course in courses">
         <NuxtLink :to="`/course/${course.slug}`">
           <div
-            class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md"
+            class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md h-80 hover:bg-gray-50 transition-colors"
           >
             <img
               v-if="course?.thumbnail == null"
@@ -69,8 +69,8 @@
             <img
               v-else
               :src="`${useRuntimeConfig().public.BASE_URL}/${course.thumbnail}`"
-              alt=""
-              class="w-full mb-2"
+              :alt="course.name"
+              class="w-full mb-2 max-h-40"
             />
             <h4 class="font-semibold text-base mb-1">{{ course.name }}</h4>
             <h4 class="text-sm text-slate-gray-500 mb-1">Teknik Informatika</h4>
@@ -129,7 +129,8 @@ const courses = computed(() => coursesData?.value?.data?.data);
 const major = computed(() => majorData?.value?.data);
 
 const onPageChange = (page: number) => {
-  console.log(page);
+  console.log(current_page.value);
+
   current_page.value = page;
 };
 </script>

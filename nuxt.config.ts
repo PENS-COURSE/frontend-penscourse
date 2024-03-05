@@ -1,4 +1,5 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtConfig } from "nuxt/config";
+
 export default defineNuxtConfig({
   plugins: ["~/plugins/onesignal.client.ts"],
   runtimeConfig: {
@@ -15,7 +16,12 @@ export default defineNuxtConfig({
     "nuxt-icon",
     "@pinia-plugin-persistedstate/nuxt",
     "nuxt-typed-router",
+    "nuxt-vue3-google-signin",
   ],
+  googleSignIn: {
+    clientId:
+      "739018703622-mbedq8p94q782r4c79v7qq3b1d4kt93k.apps.googleusercontent.com",
+  },
   googleFonts: {
     families: {
       Poppins: true,

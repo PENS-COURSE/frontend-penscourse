@@ -26,7 +26,12 @@
   </div>
 
   <div class="mt-10 p-4 border border-alto-500 rounded-lg">
-    <template v-for="notif in notifications?.slice(0, 5)" :key="notif.id">
+    <p v-if="loadingNotif" class="text-center">Loading...</p>
+    <template
+      v-for="notif in notifications?.slice(0, 5)"
+      :key="notif.id"
+      v-else
+    >
       <div class="flex justify-between items-center gap-4 mb-4">
         <div class="flex items-center gap-6">
           <div class="rounded-full bg-regal-blue-5002 p-2">
@@ -57,7 +62,7 @@ definePageMeta({
   layout: "profile",
 });
 
-const { data: dataNotif } =
+const { data: dataNotif, pending: loadingNotif } =
   useRestClient<APIResponsePagination<Notif>>("notifications");
 
 const notifications = computed(() => dataNotif.value?.data.data);

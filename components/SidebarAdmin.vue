@@ -8,65 +8,60 @@
     >
 
     <div class="flex flex-col mt-6 gap-1">
-      <NuxtLink
-        to="/dosen"
-        class="px-3 py-2 text-alto-500-600 transition-colors duration-300 transform rounded-md hover:bg-regal-blue-500 hover:text-white"
-      >
-        <Icon name="mdi:view-dashboard" class="w-5 h-5 text-regal-blue-500" />
-
-        <span class="mx-2 text-sm font-medium">Dashboard</span>
-      </NuxtLink>
-
-      <NuxtLink
-        to="/dosen/major"
-        class="px-3 py-2 text-alto-500-600 transition-colors duration-300 transform rounded-md hover:bg-regal-blue-500 hover:text-white"
-      >
-        <Icon
-          name="material-symbols-light:document-scanner-sharp"
-          class="w-5 h-5 text-regal-blue-500"
-        />
-        <span class="mx-2 text-sm font-medium">Jurusan</span>
-      </NuxtLink>
-
-      <NuxtLink
-        to="/dosen/course"
-        class="px-3 py-2 text-alto-500-600 transition-colors duration-300 transform rounded-md hover:bg-regal-blue-500 hover:text-white"
-      >
-        <Icon
-          name="mdi:book-open-variant"
-          class="w-5 h-5 text-regal-blue-500"
-        />
-        <span class="mx-2 text-sm font-medium">Mata Kuliah</span>
-      </NuxtLink>
-
-      <NuxtLink
-        to="/dosen/quiz"
-        class="px-3 py-2 text-alto-500-600 transition-colors duration-300 transform rounded-md hover:bg-regal-blue-500 hover:text-white"
-      >
-        <Icon name="mdi:text-box-edit" class="w-5 h-5 text-regal-blue-500" />
-        <span class="mx-2 text-sm font-medium">Kuis</span>
-      </NuxtLink>
-
-      <NuxtLink
-        to="/"
-        class="px-3 py-2 text-alto-500-600 transition-colors duration-300 transform rounded-md hover:bg-regal-blue-500 hover:text-white"
-      >
-        <Icon name="mdi:home" class="w-5 h-5 text-regal-blue-500" />
-        <span class="mx-2 text-sm font-medium">Back to Home</span>
-      </NuxtLink>
+      <template v-for="menu in menus" :key="menu.id">
+        <NuxtLink
+          :to="menu.route"
+          class="px-3 py-2 transition-colors rounded-md hover:bg-regal-blue-500 hover:text-white"
+        >
+          <Icon
+            :name="menu.icon"
+            class="w-5 h-5 text-regal-blue-500 hover:text-white"
+          />
+          <span class="mx-2 text-sm font-medium">{{ menu.title }}</span>
+        </NuxtLink>
+      </template>
     </div>
   </aside>
 </template>
 
+<script setup lang="ts">
+const menus = [
+  {
+    id: 1,
+    route: "/dosen",
+    icon: "mdi:view-dashboard",
+    title: "Dashboard",
+  },
+  {
+    id: 2,
+    route: "/dosen/major",
+    icon: "material-symbols-light:document-scanner-sharp",
+    title: "Jurusan",
+  },
+  {
+    id: 3,
+    route: "/dosen/course",
+    icon: "mdi:book-open-variant",
+    title: "Mata Kuliah",
+  },
+  {
+    id: 4,
+    route: "/dosen/quiz",
+    icon: "mdi:text-box-edit",
+    title: "Kuis",
+  },
+  {
+    id: 5,
+    route: "/",
+    icon: "mdi:home",
+    title: "Back to Home",
+  },
+];
+</script>
+
 <style scoped>
 .router-link-exact-active {
-  background-color: #14487a;
   color: white;
+  background-color: #14487a;
 }
 </style>
-
-<script setup lang="ts">
-const props = defineProps<{
-  links?: any[];
-}>();
-</script>

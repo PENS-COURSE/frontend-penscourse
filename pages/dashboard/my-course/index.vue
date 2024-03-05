@@ -36,41 +36,50 @@
 
   <div class="mt-8 gap-8 grid grid-cols-1 md:grid-cols-3">
     <template v-for="course in courses">
-      <div class="border border-alto-500 p-4">
+      <NuxtLink
+        :to="`/course/${course.course.slug}`"
+        class="border border-alto-500 p-4"
+      >
         <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
-        <h4 class="font-semibold text-base mb-1">
+        <h4 class="font-semibold text-base mb-1 line-clamp-2">
           {{ course.course.name }}
         </h4>
         <p class="text-slate-gray-500 mb-4">Teknik Informatika</p>
 
         <div class="w-full bg-alto-500 rounded-full">
           <div
-            class="bg-regal-blue-500 text-white text-xs font-medium text-regal-blue-500-100 text-center p-0.5 leading-none rounded-full"
+            class="bg-regal-blue-500 text-white text-xs font-medium text-center p-0.5 leading-none rounded-full"
             style="width: 80%"
           >
-            80%
+            {{ course.progress_completed }}
           </div>
         </div>
-      </div>
+      </NuxtLink>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { Progress } from "~/models/Progress";
 import { useRestClient } from "../../../composables/useRestClient";
-import type { APIResponsePagination } from "../../../models/Data";
+import type {
+  APIResponseDetail,
+  APIResponsePagination,
+} from "../../../models/Data";
 import type { Enrollment } from "../../../models/Enrollment";
 
 definePageMeta({
   layout: "profile",
 });
 
-const { data } = await useRestClient<APIResponsePagination<Enrollment>>(
-  "/enrollments"
-);
-console.log(data.value?.data.data);
+const { data: enrollments } =
+  await useRestClient<APIResponsePagination<Enrollment>>("/enrollments");
 
-const courses = computed(() => data.value?.data.data);
+const courses = computed(() => enrollments.value?.data.data);
+
+// const { data: progress } = await useRestClient<APIResponseDetail<Progress>>(
+//   `/enrollments/${enrollments.value?.data.data}/progress`
+// );
 </script>
 
 <style></style>

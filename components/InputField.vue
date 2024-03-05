@@ -50,7 +50,7 @@ defineProps({
     default: false,
   },
   type: {
-    type: String as PropType<"text" | "number" | "date">,
+    type: String as PropType<"text" | "number" | "date" | "email" | "password">,
     required: false,
     default: "text",
   },

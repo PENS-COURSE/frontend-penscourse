@@ -52,15 +52,15 @@ const props = defineProps({
     default: 3,
   },
   total_page: {
-    type: Number,
+    type: Number || undefined,
     required: true,
   },
   per_page: {
-    type: Number,
+    type: Number || undefined,
     required: true,
   },
   current_page: {
-    type: Number,
+    type: Number || undefined,
     required: true,
   },
   //   last_page: {

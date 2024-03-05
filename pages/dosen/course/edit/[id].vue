@@ -199,14 +199,14 @@ const loading = reactive({
 const payload = reactive<{
   title: string | undefined;
   description: string | undefined;
-  price: string | undefined;
-  is_free: string | undefined;
-  is_certified: string | undefined;
+  price: any | undefined;
+  is_free: any | undefined;
+  is_certified: any | undefined;
   grade_level: string | undefined;
-  start_date: string | undefined;
-  end_date: string | undefined;
+  start_date: any | undefined;
+  end_date: any | undefined;
   is_active: boolean | undefined;
-  max_students: string | undefined;
+  max_students: any | undefined;
   department_id: number | undefined;
   department_selected: Department | undefined;
   user_id: number | undefined;
@@ -250,7 +250,6 @@ const optionsIsFree = [
   { value: "true", label: "Gratis" },
   { value: "false", label: "Berbayar" },
 ];
-
 const optionsIsCertificate = [
   { value: "true", label: "Ya" },
   { value: "false", label: "Tidak" },
@@ -302,10 +301,9 @@ const handleCancel = () => {
 
 const handleSubmit = async () => {
   const { error } = await useRestClient<APIResponsePagination<Department>>(
-    "/courses/create",
+    `/courses/${route.id}/update`,
     {
-      method: "POST",
-
+      method: "PATCH",
       body: !payload.thumbnail
         ? {
             name: payload.title,
@@ -340,7 +338,7 @@ const handleSubmit = async () => {
   );
 
   if (!error.value) {
-    navigateTo("/dosen");
+    navigateTo("/dosen/course");
   }
 };
 

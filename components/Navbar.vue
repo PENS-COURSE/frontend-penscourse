@@ -12,27 +12,25 @@
         />
       </NuxtLink>
       <!-- Mobile menu button -->
-      <div @click="toggleNav" v-if="showMenu == false" class="flex lg:hidden">
-        <button type="button" class="text-white">
-          <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white">
-            <path
-              fill-rule="evenodd"
-              d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-            ></path>
-          </svg>
-        </button>
-      </div>
-      <div @click="toggleNav" v-else class="flex lg:hidden">
-        <button type="button" class="">
-          <svg class="w-6 h-6 fill-white" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
+
+      <button
+        type="button"
+        class="text-white flex lg:hidden"
+        @click="toggleNav"
+        v-if="showMenu == false"
+      >
+        <Icon name="material-symbols:menu-rounded" class="w-5 h-5" />
+      </button>
+
+      <button @click="toggleNav" v-else type="button" class="flex lg:hidden">
+        <svg class="w-6 h-6 fill-white" viewBox="0 0 20 20">
+          <path
+            fillRule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </button>
     </div>
 
     <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
@@ -44,7 +42,10 @@
       <NuxtLink to="/major" class="text-white hover:text-gray-200"
         >Jurusan</NuxtLink
       >
-      <NuxtLink to="/dashboard/profile" class="text-white hover:text-gray-200"
+      <NuxtLink
+        v-if="authenticated"
+        to="/dashboard/profile"
+        class="text-white hover:text-gray-200"
         >Dashboard</NuxtLink
       >
     </ul>
@@ -75,11 +76,6 @@
             <Icon
               name="ic:baseline-notifications-none"
               class="text-white cursor-pointer hover:text-alto-500 w-6 h-6"
-            />
-            <ChevronDownIcon
-              :class="open ? 'text-orange-300' : 'text-orange-300/70'"
-              class="ml-2 h-5 w-5 transition duration-150 ease-in-out group-hover:text-orange-300/80"
-              aria-hidden="true"
             />
           </PopoverButton>
 
