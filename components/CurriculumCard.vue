@@ -51,7 +51,7 @@
                 name="material-symbols:edit-square-outline-rounded"
                 class="w-5 h-5 mr-2 my-2"
               />
-              <span>{{ quiz?.title }}</span>
+              <span>Kuis {{ quiz?.title }}</span>
             </div>
             <NuxtLink :to="{ path : '/quiz', query: { id: `${quiz?.id}`, slug: `${slug}` } }">
               <button
