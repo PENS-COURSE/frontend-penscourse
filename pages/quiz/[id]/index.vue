@@ -7,28 +7,59 @@
   >
     <div class="w-full md:px-12 gap-8">
       <div class="flex flex-row flex-wrap py-4">
-        <aside class="w-full sm:w-1/3 md:w-[140px] lg:w-[250px] px-2 flex-row sm:flex-col">
-          <QuizTimer :duration="quizzes?.quiz?.duration"/>
-          <div class="flex-row p-2 min-h-[270px] bg-white rounded-xl w-full px-4 mx-auto ">
-            <QuizListNumber @update-parent-variable="updateVariable" :soalLength="soal.length"/>
-            <button @click="openModal" type="button"
-              class="content-end items-end place-self-end mt-16 w-full text-[#23262F] text-opacity-50 hover:text-white bg-[#E0E8F3] hover:bg-[#ffe000] focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto">
+        <aside
+          class="w-full sm:w-1/3 md:w-[140px] lg:w-[250px] px-2 flex-row sm:flex-col"
+        >
+          <!-- <QuizTimer :duration="quizzes?.quiz?.duration" /> -->
+          <div class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
+            <div
+              class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]"
+            >
+              Sisa Waktu
+            </div>
+
+            <div
+              id="demo"
+              class="pt-3 text-center font-semibold antialiased text-2xl text-[#23262F]"
+            >
+              {{ formattedTimer }}
+            </div>
+          </div>
+          <div v-if="formattedTimer == '00:00:00'">
+            <h1>waktu habis!!!</h1>
+          </div>
+          <div
+            class="flex-row p-2 min-h-[270px] bg-white rounded-xl w-full px-4 mx-auto"
+          >
+            <QuizListNumber
+              @update-parent-variable="updateVariable"
+              :soalLength="soal.length"
+            />
+            <button
+              @click="openModal"
+              type="button"
+              class="content-end items-end place-self-end mt-16 w-full text-[#23262F] text-opacity-50 hover:text-white bg-[#E0E8F3] hover:bg-[#ffe000] focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
+            >
               Selesaikan pengerjaan
             </button>
           </div>
-          </aside>
-          <main
-            role="main"
-            class="w-full sm:w-2/3 md:max-w-[80%] lg:max-w-[90%] xl:w-[75%] pl-2 md:mt-0"
-          >
-            <QuizQuestion :soal="soal[selectedSoal]" :pilihan="pilihan" @selected-answer="selectedAnswer"/>
-            <QuizSessionNext />
-          </main>
-        </div>
+        </aside>
+        <main
+          role="main"
+          class="w-full sm:w-2/3 md:max-w-[80%] lg:max-w-[90%] xl:w-[75%] pl-2 md:mt-0"
+        >
+          <QuizQuestion
+            :soal="soal[selectedSoal]"
+            :pilihan="pilihan"
+            @selected-answer="selectedAnswer"
+          />
+          <QuizSessionNext />
+        </main>
       </div>
     </div>
-    
-    <TransitionRoot appear :show="isOpen" as="template">
+  </div>
+
+  <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
         as="template"
@@ -60,9 +91,9 @@
             >
               <DialogTitle
                 as="h3"
-                class="text-3xl font-semibold  text-center leading-10 text-gray-900"
+                class="text-3xl font-semibold text-center leading-10 text-gray-900"
               >
-              Apakah anda yakin untuk mengakhiri ujian?
+                Apakah anda yakin untuk mengakhiri ujian?
               </DialogTitle>
               <!-- <div class="mt-2">
                 <p class="text-sm text-gray-500">
@@ -72,10 +103,15 @@
               </div> -->
 
               <div class="row text-center mt-8 p-4">
-                <NuxtLink :to="{ path : `/sessionQuiz/${quizzes?.detail?.session_id}`, query: { slug: `${slug}` } }">
+                <NuxtLink
+                  :to="{
+                    path: `/sessionQuiz/${quizzes?.detail?.session_id}`,
+                    query: { slug: `${slug}` },
+                  }"
+                >
                   <button
-                  type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   >
                     Ya
                   </button>
@@ -101,200 +137,248 @@
       </div>
     </Dialog>
   </TransitionRoot>
+</template>
 
-  </template>
-
-  <script setup lang="ts">
-    import type { APIResponseDetail, APIResponseList, APIResponsePagination } from "../../../models/Data";
-    import type { QuizResponse, QuizScoreResponse } from "../../../models/Quiz";
-    import { ref } from 'vue'
-    import {
-      TransitionRoot,
-      TransitionChild,
-      Dialog,
-      DialogPanel,
-      DialogTitle,
-    } from '@headlessui/vue'
+<script setup lang="ts">
+import type {
+  APIResponseDetail,
+  APIResponseList,
+  APIResponsePagination,
+} from "../../../models/Data";
+import type { QuizResponse, QuizScoreResponse } from "../../../models/Quiz";
+import { ref } from "vue";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
 import QuizSessionNext from "~/components/QuizSessionNext.vue";
 
-    const router = useRouter();
-    
-    const answerPicked = ref('')
-    const { id } = useRoute<never>().params;
-    const { slug } = useRoute().query;
-    const selectedSoal = ref(0);
-    const pilihan = ref([] as any);
- 
-    const { data: quizDetail } = await useRestClient<
-      APIResponseDetail<QuizResponse>>(
-        `/courses/${slug}/quiz/${id}/enroll`);
+const router = useRouter();
 
-    const quizzes = computed(() => quizDetail?.value?.data);
-    const soal = initQuiz(quizzes?.value?.questions ?? []);
+const answerPicked = ref("");
+const { id } = useRoute<never>().params;
+const { slug } = useRoute().query;
+const selectedSoal = ref(0);
+const pilihan = ref([] as any);
 
-    function initQuiz(arr: any[]): any[] {
-      let randomizedArr = [...arr]; // Creating a copy of the input array
-      const data: any[] = [];
-      for (let i = randomizedArr.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [randomizedArr[i], randomizedArr[j]] = [randomizedArr[j], randomizedArr[i]]; // Swap elements
-      }
+const { data: quizDetail } = await useRestClient<
+  APIResponseDetail<QuizResponse>
+>(`/courses/${slug}/quiz/${id}/enroll`);
 
-      data.push({
-        option: "A",
-        answer: randomizedArr[0].question.option_a
-      });
-      data.push({
-        option: "B",
-        answer: randomizedArr[0].question.option_b
-      });
-      data.push({
-        option: "C",
-        answer: randomizedArr[0].question.option_c
-      });
-      data.push({
-        option: "D",
-        answer: randomizedArr[0].question.option_d
-      });
-      data.push({
-        option: "E",
-        answer: randomizedArr[0].question.option_e
-      });
+const quizzes = computed(() => quizDetail?.value?.data);
+const soal = initQuiz(quizzes?.value?.questions ?? []);
 
-      pilihan.value = randomizeArray(data);
-      return randomizedArr;
-    }
-
-    const selectedAnswer = (answer : string) => {
-      answerPicked.value = answer;
-      console.log("Index ans", answerPicked)
-    }
-
-    function randomizeArray(arr: string[]): string[] {
-      let randomizedArr = [...arr]; // Creating a copy of the input array
-      for (let i = randomizedArr.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [randomizedArr[i], randomizedArr[j]] = [randomizedArr[j], randomizedArr[i]]; // Swap elements
-      }
-      return randomizedArr;
-    }
-
-    const updateVariable = async (newValue: number) => {
-      const data: any[] = [];
-
-      const response = await useRestClient<APIResponseList<any>>(
-        `/courses/quiz/update-answer`, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            session_id: quizzes.value?.detail?.session_id,
-            question_id: soal[selectedSoal.value || 0].question.id.toString(),
-            answer: [answerPicked.value]
-          })
-        }
-      );
-      
-      selectedSoal.value = newValue;
-      data.push({
-        option: "A",
-        answer: soal[newValue].question.option_a
-      });
-      data.push({
-        option: "B",
-        answer: soal[newValue].question.option_b
-      });
-      data.push({
-        option: "C",
-        answer: soal[newValue].question.option_c
-      });
-      data.push({
-        option: "D",
-        answer: soal[newValue].question.option_d
-      });
-      data.push({
-        option: "E",
-        answer: soal[newValue].question.option_e
-      });
-      
-      pilihan.value = data;
-    };
-
-    const handleSubmit = async () => {
-      const response = await useRestClient<APIResponseDetail<QuizScoreResponse>>(
-        `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`, {
-          method: 'PATCH'
-        }
-      );
-
-      router.push(`/quiz/${id}/nilai`);
-
-      
-    }
-
-  const isOpen = ref(false)
-
-  function closeModal() {
-    isOpen.value = false
-  }
-  function openModal() {
-    isOpen.value = true
+function initQuiz(arr: any[]): any[] {
+  let randomizedArr = [...arr]; // Creating a copy of the input array
+  const data: any[] = [];
+  for (let i = randomizedArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [randomizedArr[i], randomizedArr[j]] = [randomizedArr[j], randomizedArr[i]]; // Swap elements
   }
 
-  const props = defineProps({
-      soalLength: Number,
+  data.push({
+    option: "A",
+    answer: randomizedArr[0].question.option_a,
+  });
+  data.push({
+    option: "B",
+    answer: randomizedArr[0].question.option_b,
+  });
+  data.push({
+    option: "C",
+    answer: randomizedArr[0].question.option_c,
+  });
+  data.push({
+    option: "D",
+    answer: randomizedArr[0].question.option_d,
+  });
+  data.push({
+    option: "E",
+    answer: randomizedArr[0].question.option_e,
   });
 
-  const emit = defineEmits(['updateParentVariable']);
-  const selectedButton = ref(null);
+  pilihan.value = randomizeArray(data);
+  return randomizedArr;
+}
 
-  const notifyParent = (index: number) => {
-      if (selectedButton.value === index) {
-          selectedButton.value = null; // Deselect if the same button is clicked again
-      } else {
-          emit('updateParentVariable', index);
-          selectedButton.value = index;
-      }
-  };
+const selectedAnswer = (answer: string) => {
+  answerPicked.value = answer;
+  console.log("Index ans", answerPicked);
+};
 
-  const previousPage = () => {
-      const currentIndex = selectedButton.value || 0;
-      const previousIndex = currentIndex > 0 ? currentIndex - 1 : props.soalLength - 1;
-      notifyParent(previousIndex);
-  };
+function randomizeArray(arr: string[]): string[] {
+  let randomizedArr = [...arr]; // Creating a copy of the input array
+  for (let i = randomizedArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [randomizedArr[i], randomizedArr[j]] = [randomizedArr[j], randomizedArr[i]]; // Swap elements
+  }
+  return randomizedArr;
+}
 
-  const nextPage = () => {
-      const currentIndex = selectedButton.value || 0;
-      const nextIndex = currentIndex < props.soalLength - 1 ? currentIndex + 1 : 0;
-      notifyParent(nextIndex);
-  };
+const updateVariable = async (newValue: number) => {
+  const data: any[] = [];
 
-  </script>
+  const response = await useRestClient<APIResponseList<any>>(
+    `/courses/quiz/update-answer`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        session_id: quizzes.value?.detail?.session_id,
+        question_id: soal[selectedSoal.value || 0].question.id.toString(),
+        answer: [answerPicked.value],
+      }),
+    }
+  );
+
+  selectedSoal.value = newValue;
+  data.push({
+    option: "A",
+    answer: soal[newValue].question.option_a,
+  });
+  data.push({
+    option: "B",
+    answer: soal[newValue].question.option_b,
+  });
+  data.push({
+    option: "C",
+    answer: soal[newValue].question.option_c,
+  });
+  data.push({
+    option: "D",
+    answer: soal[newValue].question.option_d,
+  });
+  data.push({
+    option: "E",
+    answer: soal[newValue].question.option_e,
+  });
+
+  pilihan.value = data;
+};
+
+const handleSubmit = async () => {
+  const response = await useRestClient<APIResponseDetail<QuizScoreResponse>>(
+    `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
+    {
+      method: "PATCH",
+    }
+  );
+
+  router.push(`/quiz/${id}/nilai`);
+};
+
+const isOpen = ref(false);
+
+function closeModal() {
+  isOpen.value = false;
+}
+function openModal() {
+  isOpen.value = true;
+}
+
+const props = defineProps({
+  soalLength: Number,
+});
+
+const emit = defineEmits(["updateParentVariable"]);
+const selectedButton = ref(null);
+
+const notifyParent = (index: number) => {
+  if (selectedButton.value === index) {
+    selectedButton.value = null; // Deselect if the same button is clicked again
+  } else {
+    emit("updateParentVariable", index);
+    selectedButton.value = index;
+  }
+};
+
+const previousPage = () => {
+  const currentIndex = selectedButton.value || 0;
+  const previousIndex =
+    currentIndex > 0 ? currentIndex - 1 : props.soalLength - 1;
+  notifyParent(previousIndex);
+};
+
+const nextPage = () => {
+  const currentIndex = selectedButton.value || 0;
+  const nextIndex = currentIndex < props.soalLength - 1 ? currentIndex + 1 : 0;
+  notifyParent(nextIndex);
+};
+
+interface TimerState {
+  timer: any;
+  intervalId: ReturnType<typeof setTimeout> | null;
+}
+
+const state: TimerState = reactive({
+  timer: 0,
+  intervalId: null,
+});
+
+const startTimer = () => {
+  if (state.intervalId) return;
+
+  state.timer = quizzes.value?.quiz?.duration;
+
+  state.intervalId = setInterval(() => {
+    if (state.timer === 0) {
+      clearInterval(state.intervalId);
+      state.intervalId = null;
+    } else {
+      state.timer--;
+    }
+  }, 1000);
+};
+
+const formattedTimer = computed(() => {
+  const hours = Math.floor(state.timer / 3600);
+  const minutes = Math.floor((state.timer % 3600) / 60);
+  const seconds = state.timer % 60;
+
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+});
+
+onMounted(() => {
+  startTimer();
+});
+
+// const stopTimer = () => {
+//   if (!state.intervalId) return;
+//   clearInterval(state.intervalId);
+//   state.intervalId = null;
+// };
+</script>
 
 <style scoped>
-  .font-nunito {
-    font-family: nunito, sans-serif;
-  }
-  
-  .box label {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    padding: 4px 0;
-    margin: 10px 0;
-    padding-left: 20px;
-    cursor: default;
-    transition: all 0.3s ease;
-    background: #e0e8f3;
-    border-color: #e0e8f3;
-  }
+.font-nunito {
+  font-family: nunito, sans-serif;
+}
 
-  .box label .text {
-    color: #333;
-    font-size: 18px;
-    font-weight: 400;
-    padding-inline: 5px;
-    transition: color 0.3s ease;
-  }
-  .box input[type="radio"] {
-    display: none;
-  }
+.box label {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 4px 0;
+  margin: 10px 0;
+  padding-left: 20px;
+  cursor: default;
+  transition: all 0.3s ease;
+  background: #e0e8f3;
+  border-color: #e0e8f3;
+}
+
+.box label .text {
+  color: #333;
+  font-size: 18px;
+  font-weight: 400;
+  padding-inline: 5px;
+  transition: color 0.3s ease;
+}
+.box input[type="radio"] {
+  display: none;
+}
 </style>
