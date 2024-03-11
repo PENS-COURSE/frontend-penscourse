@@ -1,11 +1,12 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
-  plugins: ["~/plugins/onesignal.client.ts"],
+  plugins: ["~/plugins/onesignal.client.ts", "~/plugins/vue3-toastify.ts"],
   runtimeConfig: {
     public: {
       API_URL: "https://pens-api.superrexy-dev.my.id/api",
       BASE_URL: "https://pens-api.superrexy-dev.my.id",
+      oneSignalAppId: "c19aa267-4682-4913-98c0-ff4d32aa76c7",
     },
   },
   devtools: { enabled: true },

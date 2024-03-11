@@ -1,10 +1,11 @@
 export interface Notif {
-  id: number;
+  id: string;
   type: string;
   title: string;
   description: string;
-  action_id: number;
-  read_at: Date;
+  action_id: string;
+  user_id: number;
+  read_at: null;
   created_at: Date;
   updated_at: Date;
 }

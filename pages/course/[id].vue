@@ -232,6 +232,7 @@
 import type { Curriculum } from "~/models/Curriculum";
 import type { APIResponseDetail, APIResponseList } from "../../models/Data";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { toast } from "vue3-toastify";
 
 const { id } = useRoute().params;
 
@@ -257,8 +258,21 @@ const endrollCourse = async () => {
   await useRestClient<APIResponseDetail<Course>>(`/courses/${id}/enroll`, {
     method: "POST",
   })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+    .then((res) => {
+      toast.info("Selamat! Berjasil Enroll Mata Kuliah!", {
+        transition: "slide",
+        autoClose: 5000,
+      });
+      console.log(res);
+    })
+    .catch((err) => {
+      toast.error("Error, terjadi kesalahan!", {
+        transition: "slide",
+        autoClose: 5000,
+      });
+      navigateTo("/dashboard/my-course");
+      console.log(err);
+    });
 };
 </script>
 

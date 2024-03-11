@@ -25,14 +25,18 @@
     </button>
   </div>
 
-  <div class="mt-10 p-4 border border-alto-500 rounded-lg">
+  <div class="mt-10 border border-alto-500 rounded-lg">
     <p v-if="loadingNotif" class="text-center">Loading...</p>
-    <template
-      v-for="notif in notifications?.slice(0, 5)"
-      :key="notif.id"
-      v-else
-    >
-      <div class="flex justify-between items-center gap-4 mb-4">
+    <template v-for="notif in returnData" v-else>
+      <NuxtLink
+        :to="`/dashboard/notification/${notif.id}`"
+        class="flex justify-between items-center gap-4 cursor-pointer transition-colors"
+        :class="
+          notif.read_at == null
+            ? 'bg-blue-100 p-4 hover:bg-blue-200'
+            : 'bg-white p-4'
+        "
+      >
         <div class="flex items-center gap-6">
           <div class="rounded-full bg-regal-blue-5002 p-2">
             <Icon
@@ -50,22 +54,65 @@
         <!-- <div>
           <p class="text-sm text-regal-blue-500">Sekarang</p>
         </div> -->
-      </div>
+      </NuxtLink>
     </template>
+  </div>
+
+  <div class="mt-10">
+    <Pagination
+      v-model.number="page"
+      :query="true"
+      :total="getTotalPages(notifications?.length as number, limit)"
+      :prev-show-count="3"
+      :next-show-count="3"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Notif } from "~/models/Notif";
+import usePagination from "~/composables/usePagination";
 
 definePageMeta({
   layout: "profile",
 });
 
-const { data: dataNotif, pending: loadingNotif } =
-  useRestClient<APIResponsePagination<Notif>>("notifications");
+const { getCurrentPage, getTotalPages, query } = usePagination();
+const page = ref(getCurrentPage(true, 1));
+const limit: number = 6;
+
+const route = useRoute();
+const cacheEnabled = true; // Enables/Disabled cache
+
+// Cache key has to be unique key across all the pages
+const cacheKey = computed(() => {
+  return route.path;
+});
+
+// Cache key has to be unique key to store correct page data
+const cacheKeyPage = computed(() => {
+  return route.fullPath;
+});
+
+const { data: dataNotif, pending: loadingNotif } = useRestClient<
+  APIResponsePagination<Notif>
+>(`/notifications?page=${page.value}&filter_read=unread`);
 
 const notifications = computed(() => dataNotif.value?.data.data);
+
+watch(
+  () => query.value.page,
+  async (value) => {
+    if (!value) {
+      page.value = 1;
+    }
+    // On page change refresh data
+    await refreshNuxtData();
+  }
+);
+
+const returnData = computed(() => {
+  return dataNotif?.value?.data.data;
+});
 </script>
 
 <style></style>
