@@ -18,6 +18,7 @@ export interface Course {
   updated_at?: Date;
   discount?: string;
   user?: UserCourse;
+  is_enrolled?: boolean;
 }
 
 export interface UserCourse {

@@ -93,6 +93,9 @@
               "
             />
           </button> -->
+          <div class="flex justify-center">
+            <GoogleLogin :callback="callback" />
+          </div>
 
           <button
             type="submit"
@@ -103,11 +106,6 @@
           </button>
 
           <p class="text-center text-sm mb-6">Atau masuk melalui</p>
-          <GoogleSignInButton
-            class="mb-6 w-full flex justify-center items-center rounded-lg"
-            @success="handleLoginSuccess"
-            @error="handleLoginError"
-          ></GoogleSignInButton>
 
           <p class="text-sm text-center">
             Belum punya akun?
@@ -127,6 +125,7 @@ import {
   type CredentialResponse,
 } from "vue3-google-signin";
 import { useAuthStore } from "../../store/auth";
+import { GoogleLogin } from "vue3-google-login";
 
 definePageMeta({
   layout: "auth",
@@ -149,6 +148,26 @@ const handleLogin = async () => {
   if (authenticated.value) {
     navigateTo("/");
   }
+};
+
+const callback = async (response: CredentialResponse) => {
+  const { credential } = response;
+  console.log(credential);
+
+  let user;
+  if (credential) {
+    user = await useRestClient<APIResponseDetail<Authentication>>(
+      "/authentication/login",
+      {
+        method: "POST",
+        body: {
+          token: credential,
+        },
+      }
+    );
+  }
+  console.log("Access Token", credential);
+  console.log("Handle the response", response);
 };
 
 // handle success event

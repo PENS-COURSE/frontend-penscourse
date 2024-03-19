@@ -18,7 +18,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 5px solid #fff;
+  border: 5px solid #000;
   animation: prixClipFix 2s linear infinite;
 }
 

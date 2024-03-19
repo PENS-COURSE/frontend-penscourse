@@ -34,7 +34,12 @@
         </div> -->
   </div>
 
-  <div class="mt-8 gap-8 grid grid-cols-1 md:grid-cols-3">
+  <div class="mt-10 flex flex-col justify-center items-center">
+    <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
+    <h2 class="text-xl font-semibold">Fitur ini masih belum bisa digunakan</h2>
+  </div>
+
+  <!-- <div class="mt-8 gap-8 grid grid-cols-1 md:grid-cols-3">
     <template v-for="i in 7" :key="i">
       <div class="border border-alto-500 p-4">
         <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
@@ -42,7 +47,7 @@
         <p class="text-slate-gray-500">Teknik Informatika</p>
       </div>
     </template>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">

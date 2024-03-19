@@ -25,16 +25,14 @@
     </button>
   </div>
 
-  <div class="mt-10 border border-alto-500 rounded-lg">
-    <p v-if="loadingNotif" class="text-center">Loading...</p>
-    <template v-for="notif in returnData" v-else>
+  <div v-if="loadingNotif" class="text-center">Loading...</div>
+  <div class="mt-10 border border-alto-500 rounded-lg" v-else>
+    <template v-for="notif in returnData">
       <NuxtLink
         :to="`/dashboard/notification/${notif.id}`"
-        class="flex justify-between items-center gap-4 cursor-pointer transition-colors"
+        class="flex justify-between items-center gap-4 p-4 cursor-pointer transition-colors"
         :class="
-          notif.read_at == null
-            ? 'bg-blue-100 p-4 hover:bg-blue-200'
-            : 'bg-white p-4'
+          notif.read_at == null ? 'bg-blue-100 hover:bg-blue-200' : 'bg-white'
         "
       >
         <div class="flex items-center gap-6">

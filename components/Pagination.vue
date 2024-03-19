@@ -139,108 +139,62 @@ const isPageActive = (page: number) => {
 </script> -->
 
 <template>
-  <div class="navigation flex">
-    <!-- <ul>
-      <li
-        v-if="!hideSearch && page <= total"
-        class="el__pagination_item el__pagination_item--search"
-      >
-        <label for="goToPage">Search for page...</label>
-        <input
-          id="goToPage"
-          v-model="inputPage"
-          aria-label="Search for page..."
-          type="text"
-          placeholder="..."
-        />
-      </li>
-    </ul> -->
-    <ul
-      v-if="total > 1"
-      class="el__pagination"
-      :class="[`el__pagination--${props?.type || 'default'}`]"
+  <ul
+    v-if="total > 1"
+    class="el__pagination flex justify-center items-center gap-10"
+    :class="[`el__pagination--${props?.type || 'default'}`]"
+  >
+    <li
+      class="border border-regal-blue-500 p-5 rounded-full hover:bg-regal-blue-500 hover:text-white transition-colors cursor-pointer"
+      @click="page = page - 1"
+    >
+      <Icon name="grommet-icons:form-previous" />
+    </li>
+    <template
+      v-for="prevPage in arrayCreate(prevShowCount).reverse()"
+      :key="`prevPage--${prevPage._id}}`"
     >
       <li
-        v-if="page > 1"
-        class="el__pagination_item el__pagination_item--first"
-      >
-        <button type="button" aria-label="Move to first page" @click="page = 1">
-          <Icon name="material-symbols:first-page" />
-        </button>
-      </li>
-      <li
-        v-if="page - 1 > 1"
-        class="el__pagination_item el__pagination_item--backward"
+        v-if="page - prevPage._id > 0"
+        class="hover:bg-regal-blue-500 hover:text-white transition-colors p-2 rounded-full"
       >
         <button
           type="button"
-          aria-label="Move to previous page"
-          @click="page = page - 1"
-        >
-          <Icon name="grommet-icons:form-previous" />
-        </button>
+          :aria-label="`Move to page ${page - prevPage._id}`"
+          @click="page = page - prevPage._id"
+          v-text="page - prevPage._id"
+        />
       </li>
-      <template
-        v-for="prevPage in arrayCreate(prevShowCount).reverse()"
-        :key="`prevPage--${prevPage._id}}`"
-      >
-        <li
-          v-if="page - prevPage._id > 0"
-          class="el__pagination_item el__pagination_item--prev"
-        >
-          <button
-            type="button"
-            :aria-label="`Move to page ${page - prevPage._id}`"
-            @click="page = page - prevPage._id"
-            v-text="page - prevPage._id"
-          />
-        </li>
-      </template>
-      <li class="el__pagination_item el__pagination_item--current">
-        <button type="button" v-text="page" />
-      </li>
-      <template
-        v-for="nextPage in arrayCreate(nextShowCount)"
-        :key="`nextPage--${nextPage._id}}`"
-      >
-        <li
-          v-if="page + nextPage._id <= total"
-          class="el__pagination_item el__pagination_item--next"
-        >
-          <button
-            type="button"
-            :aria-label="`Move to page ${page + nextPage._id}`"
-            @click="page = page + nextPage._id"
-            v-text="page + nextPage._id"
-          />
-        </li>
-      </template>
+    </template>
+    <li
+      class="text-regal-blue-500 transition-colors p-2 border border-b-regal-blue-500"
+    >
+      <button type="button" v-text="page" />
+    </li>
+    <template
+      v-for="nextPage in arrayCreate(nextShowCount)"
+      :key="`nextPage--${nextPage._id}}`"
+    >
       <li
-        v-if="page + 1 < total"
-        class="el__pagination_item el__pagination_item--forward"
+        v-if="page + nextPage._id <= total"
+        class="hover:bg-regal-blue-500 hover:text-white transition-colors p-2 rounded-full"
+        rounded-full
       >
         <button
           type="button"
-          aria-label="Move to next page"
-          @click="page = page + 1"
-        >
-          <Icon name="grommet-icons:form-next" />
-        </button>
+          :aria-label="`Move to page ${page + nextPage._id}`"
+          @click="page = page + nextPage._id"
+          v-text="page + nextPage._id"
+        />
       </li>
-      <li
-        v-if="page < total"
-        class="el__pagination_item el__pagination_item--last"
-      >
-        <button
-          type="button"
-          aria-label="Move to last page"
-          @click="page = total"
-        >
-          <Icon name="material-symbols:last-page" />
-        </button>
-      </li>
-    </ul>
-  </div>
+    </template>
+    <li
+      class="border border-regal-blue-500 p-5 rounded-full hover:bg-regal-blue-500 hover:text-white transition-colors cursor-pointer"
+      @click="page = page + 1"
+    >
+      <Icon name="grommet-icons:form-next" />
+    </li>
+  </ul>
 </template>
 
 <script lang="ts" setup>
@@ -321,30 +275,3 @@ if (props?.query) {
   });
 }
 </script>
-
-<style scoped>
-.navigation {
-  justify-content: space-between;
-  padding: 30px 0;
-  align-items: center;
-}
-.el__pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.el__pagination.default {
-  gap: 10px;
-}
-
-.el__pagination_item--current button {
-  color: #fff;
-  background-color: #0d6efd;
-  transition: all 0.25s ease;
-}
-.el__pagination_item--current button:hover,
-.el__pagination_item button:hover {
-  background-color: #020b18;
-  color: #fff;
-}
-</style>

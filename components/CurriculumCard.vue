@@ -1,23 +1,25 @@
 <template>
-  <div class="mb-4 border border-gray bg-gray text-dark rounded-lg shadow-sm">
+  <div
+    class="w-full mb-4 border border-gray-200 bg-gray-50 text-dark rounded-lg shadow-sm"
+  >
     <button
       @click.prevent="togglePanel"
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"
     >
       {{ curriculum?.title }}
-      <span class="material-icons" v-if="showPanel">
+      <span class="material-icons">
         <Icon
           name="ic:baseline-keyboard-arrow-down"
           class="text-black w-7 h-7"
+          :class="
+            showPanel == true ? 'rotate-180 transform transition-transform' : ''
+          "
         />
-      </span>
-      <span class="material-icons" v-else>
-        <Icon name="ic:baseline-arrow-forward-ios" class="text-black" />
       </span>
     </button>
 
     <div class="p-4 bg-white" v-if="showPanel">
-      <div class="w-full h-full rounded-lg">
+      <div class="w-full h-full rounded-lg" :class="showPanel ? 'ease-in' : ''">
         <p>
           {{
             curriculum?.description != null
@@ -36,14 +38,13 @@
               <span>Materi</span>
             </div>
 
-            <div>
-              <button
-                class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
-              >
-                <Icon name="material-symbols:download-2" class="w-4 h-4 mr-2" />
-                <span>Download</span>
-              </button>
-            </div>
+            <button
+              @click="openModal"
+              class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
+            >
+              <!-- <Icon name="material-symbols:download-2" class="w-4 h-4 mr-2" /> -->
+              <span>Lihat Materi</span>
+            </button>
           </div>
           <div class="flex justify-between my-4">
             <div>
@@ -53,7 +54,12 @@
               />
               <span>Kuis {{ quiz?.title }}</span>
             </div>
-            <NuxtLink :to="{ path : '/quiz', query: { id: `${quiz?.id}`, slug: `${slug}` } }">
+            <NuxtLink
+              :to="{
+                path: '/quiz',
+                query: { id: `${quiz?.id}`, slug: `${slug}` },
+              }"
+            >
               <button
                 class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
               >
@@ -90,23 +96,106 @@
       </div>
     </div>
   </div>
+
+  <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" @close="closeModal" class="relative z-10">
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/25" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
+        >
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+            >
+              <DialogTitle
+                as="h3"
+                class="text-lg font-medium text-center leading-6 text-gray-900"
+              >
+                Materi
+              </DialogTitle>
+              <template v-for="c in curriculum?.subjects.file_contents">
+                <div class="mt-2 flex justify-between">
+                  <p class="text-sm text-gray-500 max-w-sm">
+                    {{ c.title }}
+                  </p>
+
+                  <a
+                    :href="c.url"
+                    target="_blank"
+                    class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
+                  >
+                    <Icon
+                      name="material-symbols:download-2"
+                      class="w-4 h-4 mr-2"
+                    />
+                    <span>Download</span>
+                  </a>
+                </div>
+              </template>
+
+              <div class="mt-4 flex justify-center">
+                <button
+                  type="button"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-regal-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-regal-blue-600"
+                  @click="closeModal"
+                >
+                  Tutup
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 
 <script setup lang="ts">
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+
+const isOpen = ref(false);
+
 defineProps({
   curriculum: Object as PropType<Curriculum>,
   quiz: Object as PropType<Quiz>,
   slug: String,
 });
 
-// const { curriculum, quiz } = toRefs(data);
-// const quizParams = JSON.stringify(quiz)
-
-// console.log("curiculum", curriculum?.title)
-
 const showPanel = ref(false);
 
 const togglePanel = () => {
   showPanel.value = !showPanel.value;
+};
+const closeModal = () => {
+  isOpen.value = false;
+};
+const openModal = () => {
+  isOpen.value = true;
 };
 </script>

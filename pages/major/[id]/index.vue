@@ -47,20 +47,30 @@
       Mata Kuliah Terpopuler
     </h4>
     <div
-      class="mt-12 gap-x-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      class="mt-12 gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
     >
       <template v-for="course in courses">
         <NuxtLink
           :to="`/course/${course.slug}`"
-          class="mb-5 shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md hover:bg-gray-50 transition-colors"
+          class="shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md hover:bg-gray-50 transition-colors"
         >
-          <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
+          <img
+            v-if="course?.thumbnail == null"
+            src="~assets/images/course.png"
+            alt=""
+            class="w-full mb-2"
+          />
+          <img
+            v-else
+            :src="`${useRuntimeConfig().public.BASE_URL}/${course.thumbnail}`"
+            alt=""
+            class="w-full mb-2 max-h-40"
+          />
           <h4 class="font-semibold text-base mb-1">
             {{ course.name }}
           </h4>
           <h4 class="text-sm text-slate-gray-500 mb-1">Teknik Informatika</h4>
           <div class="flex text-sm gap-2 items-center mb-4">
-            <!-- <font-awesome-icon :icon="['fas', 'star']" class="text-school-bus-yellow-500" /> -->
             <p class="text-school-bus-yellow-500">3.4</p>
             <p class="text-alto-500">(12k)</p>
           </div>
