@@ -10,14 +10,14 @@
     </div>
 
     <div class="flex justify-start max-w-xl mt-6 mb-4 gap-16">
-      <div class="flex gap-2 items-center">
+      <!-- <div class="flex gap-2 items-center">
         <Icon
           name="material-symbols-light:kid-star-sharp"
           class="w-5 h-5 text-yellow-300"
         />
         <p class="text-white">4.3</p>
         <p class="text-white text-xs">(12.000+ Ulasan)</p>
-      </div>
+      </div> -->
       <div class="flex gap-2 items-center">
         <Icon name="mdi:account" class="text-white w-5 h-5" />
         <p class="text-white">{{ course?.max_students }} Mahasiswa</p>
@@ -32,7 +32,7 @@
     </div>
 
     <p class="text-white text-xs text-justify md:text-sm max-w-lg">
-      Dibuat Oleh {{ course?.user.name }}
+      Dibuat Oleh {{ course?.user?.name }}
     </p>
   </section>
 
@@ -106,6 +106,7 @@
           </div>
           <div v-else>
             <CurriculumCard
+              :course="course"
               :curriculum="c"
               :quiz="c.subjects.quizzes[0]"
               :slug="id"
@@ -169,39 +170,43 @@
             <button
               v-if="course?.is_free == true"
               @click="endrollCourse"
-              :class="course.is_enrolled == true ? 'bg-gray-500' : ''"
+              :class="
+                course?.is_enrolled == true
+                  ? 'bg-gray-500'
+                  : 'bg-regal-blue-500'
+              "
               :disabled="course.is_enrolled == true"
               class="w-full py-3 text-white bg-regal-blue-500 rounded-md text-center mb-4"
             >
-              {{
-                course.is_enrolled == true ? "Sudah Dimiliki" : "Dapatkan Kelas"
-              }}
+              <span v-if="isLoading">Loading...</span>
+              <span v-if="course?.is_enrolled">Sudah Dimiliki</span>
+              <span v-else>Dapatkan Kelas</span>
             </button>
-
-            <!-- <button
-              v-else-if="course?.is_active == true"
-              :disabled="course.is_active"
-              class="w-full py-3 text-white bg-regal-blue-500 rounded-md text-center mb-4"
-            >
-              Masuk Kelas
-            </button> -->
-            <div
+            <button
               v-else
-              class="w-full py-3 text-white bg-regal-blue-500 rounded-md text-center mb-4"
-              to="/payment"
+              class="w-full py-3 text-white rounded-md text-center mb-4"
+              @click="handlePayment"
+              :disabled="isLoading || course?.is_enrolled"
+              :class="
+                course?.is_enrolled == true
+                  ? 'bg-gray-500'
+                  : 'bg-regal-blue-500'
+              "
             >
-              Beli Kelas
-            </div>
+              <span v-if="isLoading">Loading...</span>
+              <span v-if="course?.is_enrolled">Sudah Dimiliki</span>
+              <span v-else>Beli Kelas</span>
+            </button>
 
             <h6 class="font-semibold text-base text-blue mb-6">Paket Kelas</h6>
 
             <div class="flex items-center text-gray-600 gap-5 mb-2">
               <Icon name="bi:camera-video-fill" />
-              <p>10 kelas online</p>
+              <p>{{ curriculum?.length }} Materi</p>
             </div>
             <div class="flex items-center text-gray-600 gap-5 mb-2">
-              <Icon name="mdi:note-edit" />
-              <p>5 Kuis</p>
+              <Icon name="material-symbols:check-box-rounded" />
+              <p>Konversi SKS</p>
             </div>
             <div class="flex items-center text-gray-600 gap-5 mb-2">
               <Icon name="mdi:file-document" />
@@ -224,11 +229,13 @@ import type { APIResponseDetail, APIResponseList } from "../../models/Data";
 import type { Course } from "../../models/Course";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { toast } from "vue3-toastify";
+import type { Payment } from "~/models/Payment";
 
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 
 const { id } = useRoute().params;
+const isLoading: Ref<boolean> = ref(false);
 
 const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
@@ -242,6 +249,7 @@ const course = computed(() => detailCourse?.value?.data);
 const curriculum = computed(() => detailCurriculum?.value?.data);
 
 const endrollCourse = async () => {
+  isLoading.value = true;
   const { data, error } = await useRestClient<APIResponseDetail<Course>>(
     `/courses/${id}/enroll`,
     {
@@ -249,7 +257,7 @@ const endrollCourse = async () => {
     }
   );
   if (data.value) {
-    toast.info("Selamat! Berjasil Enroll Mata Kuliah!", {
+    toast.info("Selamat! Berhasil Enroll Mata Kuliah!", {
       transition: "slide",
       autoClose: 5000,
     });
@@ -258,19 +266,56 @@ const endrollCourse = async () => {
   if (error.value?.statusCode == 401) {
     navigateTo("/auth/login");
   }
-  // .then((res) => {
-  //   toast.info("Selamat! Berjasil Enroll Mata Kuliah!", {
-  //     transition: "slide",
-  //     autoClose: 5000,
-  //   });
-  //   console.log(res);
-  // })
-  // .catch((err) => {
-  //   if (err.statusCode == 401) {
-  //     navigateTo("/auth/login");
-  //   }
-  // });
+  isLoading.value = false;
 };
+
+// const snapPay: Ref<any> = ref("");
+
+// const initModalPay = () => {
+//   const snapScript = document.createElement("script");
+
+//   snapScript.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+//   snapScript.type = "text/javascript";
+
+//   snapScript.onload = () => {
+//     if ("snap" in window) {
+//       const { snap } = window;
+//       snapPay.value = snap;
+//     }
+//   };
+//   snapScript.dataset.clientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
+//   document.head.appendChild(snapScript);
+// };
+
+// interface ModelPayment {
+//   id: string;
+//   expiry_date: Date;
+//   invoice_url: string;
+//   status: string;
+// }
+
+const handlePayment = async () => {
+  isLoading.value = true;
+  const { data, error } = await useRestClient<APIResponseDetail<Payment>>(
+    `/orders/${id}/order`,
+    {
+      method: "POST",
+    }
+  );
+  if (data.value) {
+    console.log(data.value);
+    window.location.href = data.value.data.payment.invoice_url;
+  }
+  if (error.value?.statusCode == 401) {
+    navigateTo("/auth/login");
+    console.log(error.value);
+  }
+  isLoading.value = false;
+};
+
+// onMounted(() => {
+//   initModalPay();
+// });
 </script>
 
 <style></style>

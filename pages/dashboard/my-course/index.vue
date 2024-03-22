@@ -34,6 +34,16 @@
         </div> -->
   </div>
 
+  <div
+    v-if="courses?.length == 0"
+    class="mt-10 flex flex-col justify-center items-center"
+  >
+    <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
+    <h2 class="text-xl font-semibold">
+      Anda masih belum mempunyai mata kuliah
+    </h2>
+  </div>
+
   <div class="mt-8 gap-8 grid grid-cols-1 md:grid-cols-3">
     <template v-for="course in courses">
       <NuxtLink

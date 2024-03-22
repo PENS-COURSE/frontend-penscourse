@@ -7,7 +7,7 @@
         label="Password lama"
         v-model:model-value="payload.password_old"
         :value="payload.password_old"
-        type="password"
+        :type="'password'"
         :required="true"
         name="password_old"
       />
@@ -15,7 +15,7 @@
         label="Password baru"
         v-model:model-value="payload.password_new"
         :value="payload.password_new"
-        type="password"
+        :type="'password'"
         :required="true"
         name="password_new"
       />
@@ -23,7 +23,7 @@
         label="Konfirmasi password baru"
         v-model:model-value="payload.password_new_confirm"
         :value="payload.password_new_confirm"
-        type="password"
+        :type="'password'"
         :required="true"
         name="password_new_confirm"
       />
@@ -58,6 +58,8 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from "vue3-toastify";
+
 definePageMeta({
   layout: "profile",
 });
@@ -76,22 +78,27 @@ const payload = reactive<{
 
 const handleSubmit = async () => {
   isLoading.value = true;
-  const { data, error } = await useRestClient<APIResponseDetail<User>>(
-    "/profile/change-password",
-    {
-      body: converterFormData({
-        password_old: payload.password_old,
-        password_new: payload.password_new,
-        password_new_confirm: payload.password_new_confirm,
-      }),
-      method: "PATCH",
-    }
-  );
+  const { data, error } = await useRestClient<
+    APIResponseDetail<Authentication>
+  >("/profile/change-password", {
+    body: converterFormData({
+      password_old: payload.password_old,
+      password_new: payload.password_new,
+      password_new_confirm: payload.password_new_confirm,
+    }),
+    method: "PATCH",
+  });
 
   if (data.value) {
     console.log(data.value);
-  } else {
-    console.log(error.value);
+  }
+  if (error.value) {
+    toast.error(error.value.message, {
+      transition: "slide",
+      autoClose: 5000,
+      position: "bottom-right",
+    });
+    console.log(error.value.cause);
   }
 
   isLoading.value = false;

@@ -4,17 +4,30 @@
   >
     <button
       @click.prevent="togglePanel"
+      :disabled="!course?.is_enrolled"
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"
     >
       {{ curriculum?.title }}
       <span class="material-icons">
         <Icon
-          name="ic:baseline-keyboard-arrow-down"
-          class="text-black w-7 h-7"
+          :name="
+            course?.is_enrolled
+              ? 'ic:baseline-keyboard-arrow-down'
+              : 'material-symbols:lock'
+          "
+          class="text-gray-600 w-7 h-7"
           :class="
             showPanel == true ? 'rotate-180 transform transition-transform' : ''
           "
         />
+        <!-- <Icon
+          v-else
+          name="material-symbols:lock"
+          class="text-black w-7 h-7"
+          :class="
+            showPanel == true ? 'rotate-180 transform transition-transform' : ''
+          "
+        /> -->
       </span>
     </button>
 
@@ -40,7 +53,7 @@
 
             <button
               @click="openModal"
-              class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
+              class="text-white py-1 px-4 rounded inline-flex items-center bg-regal-blue-500 hover:bg-regal-blue-600"
             >
               <!-- <Icon name="material-symbols:download-2" class="w-4 h-4 mr-2" /> -->
               <span>Lihat Materi</span>
@@ -85,13 +98,6 @@
               </button>
             </div>
           </div>
-
-          <button
-            type="button"
-            class="content-end items-end place-self-end w-full rounded text-white bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium text-[12px] py-2 px-4 text-center dark:focus:ring-gray-500 mx-auto"
-          >
-            Selesai
-          </button>
         </div>
       </div>
     </div>
@@ -178,6 +184,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+import type { Course } from "../models/Course";
 
 const isOpen = ref(false);
 
@@ -185,6 +192,7 @@ defineProps({
   curriculum: Object as PropType<Curriculum>,
   quiz: Object as PropType<Quiz>,
   slug: String,
+  course: Object as PropType<Course>,
 });
 
 const showPanel = ref(false);

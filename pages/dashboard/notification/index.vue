@@ -25,6 +25,16 @@
     </button>
   </div>
 
+  <div
+    v-if="returnData?.length == 0"
+    class="mt-10 flex flex-col justify-center items-center"
+  >
+    <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
+    <h2 class="text-xl font-semibold">
+      Anda tidak memiliki notifikasi yang masuk
+    </h2>
+  </div>
+
   <div v-if="loadingNotif" class="text-center">Loading...</div>
   <div class="mt-10 border border-alto-500 rounded-lg" v-else>
     <template v-for="notif in returnData">

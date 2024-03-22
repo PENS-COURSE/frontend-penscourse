@@ -31,56 +31,6 @@
     >
       Edit
     </button>
-    <!-- <Popup
-      text="Edit Profile"
-      :modal-active="isOpen"
-      @close-modal="togglePopUp"
-    >
-      <div class="flex justify-center">
-        <img
-          class="w-20 h-20 p-1 rounded-full ring-2 ring-gray2 dark:ring-gray-500"
-          :src="
-            profilePicture
-              ? profilePicture
-              : `${useRuntimeConfig().public.BASE_API_URL}/${profile?.avatar}`
-          "
-          alt="Bordered avatar"
-        />
-      </div>
-
-      <form>
-        <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray2" for="avatar"
-            >Upload file</label
-          >
-          <input
-            class="block w-full text-sm text-gray-900 border border-gray2 rounded-lg cursor-pointer bg-white"
-            type="file"
-            name="avatar"
-          />
-        </div>
-
-        <div class="mb-6">
-          <label class="block mb-2 text-sm font-medium text-gray2"
-            >Nama Lengkap</label
-          >
-          <input
-            name="name"
-            type="text"
-            v-model="profilePayload.name"
-            class="bg-white border border-gray2 text-gray-900 text-sm rounded-lg focus:ring-blue2 focus:border-blue block w-full p-2.5"
-          />
-        </div>
-        <div class="flex justify-center">
-          <button
-            type="submit"
-            class="bg-blue-100 text-blue-500 hover:bg-blue-100 hover:text-blue-600 py-2 px-6 rounded-md"
-          >
-            Simpan
-          </button>
-        </div>
-      </form>
-    </Popup> -->
   </div>
 
   <div
@@ -163,12 +113,15 @@
             >
               <div class="flex justify-center">
                 <img
+                  v-if="profile?.avatar == null"
+                  src="/images/profile.png"
+                  alt=""
                   class="w-20 h-20 p-1 rounded-full ring-2 ring-gray2 dark:ring-gray-500"
-                  :src="
-                    profilePicture
-                      ? profilePicture
-                      : `${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`
-                  "
+                />
+                <img
+                  v-else
+                  class="w-20 h-20 p-1 rounded-full ring-2 ring-gray2 dark:ring-gray-500"
+                  :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
                   alt="Bordered avatar"
                 />
               </div>
@@ -239,7 +192,6 @@ const authStore = useAuthStore();
 const { authenticated, user } = storeToRefs(authStore);
 
 const isOpen = ref(false);
-const profilePicture = ref(null);
 const isLoading = ref(false);
 
 const payload = reactive<{
