@@ -1,15 +1,10 @@
 <template>
   <h4 class="font-semibold text-2xl">Kursus Saya</h4>
 
-  <div class="flex items-center justify-between mt-8 gap-2">
+  <!-- <div class="flex items-center justify-between mt-8 gap-2">
     <form>
       <div class="relative text-alto-500 focus-within:text-alto-500">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <!-- <font-awesome-icon
-                :icon="['fas', 'magnifying-glass']"
-                class="text-dark-500"
-              /> -->
-        </span>
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2"> </span>
         <input
           type="search"
           name="q"
@@ -23,16 +18,7 @@
     <button class="bg-regal-blue-500 text-white py-2 px-6 rounded-lg">
       Search
     </button>
-
-    <!-- <div>
-          <select class="border border-regal-blue-500 py-2 px-4 rounded-lg">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
-          </select>
-        </div> -->
-  </div>
+  </div> -->
 
   <div
     v-if="courses?.length == 0"
@@ -50,20 +36,60 @@
         :to="`/course/${course.course.slug}`"
         class="border border-alto-500 p-4"
       >
-        <img src="~assets/images/course.png" alt="" class="w-full mb-2" />
-        <h4 class="font-semibold text-base mb-1 line-clamp-2">
+        <img
+          v-if="course.course.thumbnail == null"
+          src="~assets/images/course.png"
+          :alt="course.course.name"
+          class="w-full mb-2"
+        />
+        <img
+          v-else
+          :src="`${useRuntimeConfig().public.BASE_URL}/${
+            course.course.thumbnail
+          }`"
+          :alt="course.course.name"
+          class="w-full mb-2"
+        />
+        <h4 class="font-semibold text-base mb-1 line-clamp-1">
           {{ course.course.name }}
         </h4>
         <p class="text-slate-gray-500 mb-4">Teknik Informatika</p>
-
-        <div class="w-full bg-alto-500 rounded-full">
+        <div class="w-full bg-gray-200 rounded-full">
           <div
-            class="bg-regal-blue-500 text-white text-xs font-medium text-center p-0.5 leading-none rounded-full"
-            style="width: 80%"
+            class="text-xs font-medium text-center p-0.5 leading-none rounded-full"
+            :class="
+              course.progress_completed == null
+                ? 'bg-red-700 text-white'
+                : 'bg-regal-blue-500 text-gray-800'
+            "
+            :style="{
+              width:
+                course.progress_completed == null
+                  ? `100%`
+                  : `${course.progress_completed}`,
+            }"
+          >
+            {{
+              course.progress_completed == null
+                ? "kosong"
+                : `${course.progress_completed}%`
+            }}
+          </div>
+        </div>
+
+        <!-- <div class="w-full bg-alto-500 rounded-full h-2">
+          <div
+            class="bg-regal-blue-500 text-red-500 text-xs font-medium text-center p-0.5 leading-none rounded-full h-2"
+            :style="{
+              width:
+                course.progress_completed == null
+                  ? `100%`
+                  : `${course.progress_completed}`,
+            }"
           >
             {{ course.progress_completed }}
           </div>
-        </div>
+        </div> -->
       </NuxtLink>
     </template>
   </div>

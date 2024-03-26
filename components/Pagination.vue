@@ -216,7 +216,6 @@ const page = ref<number>(props?.modelValue);
 watch(
   () => props?.modelValue,
   async (val) => {
-    console.log("update");
     page.value = val;
   }
 );

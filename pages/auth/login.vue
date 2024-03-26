@@ -80,23 +80,6 @@
             >
           </div>
 
-          <!-- <button
-            class="absolute bottom-2 right-3 text-slate-gray-500"
-            type="button"
-            @click="isPasswordVisible = !isPasswordVisible"
-          >
-            <Icon
-              :name="
-                isPasswordVisible
-                  ? 'material-symbols:visibility-rounded'
-                  : 'material-symbols:visibility-off-rounded'
-              "
-            />
-          </button> -->
-          <div class="flex justify-center">
-            <GoogleLogin :callback="callback" />
-          </div>
-
           <button
             type="submit"
             :disabled="loading"
@@ -105,7 +88,11 @@
             {{ loading ? "Loading..." : "Masuk" }}
           </button>
 
-          <p class="text-center text-sm mb-6">Atau masuk melalui</p>
+          <!-- <p class="text-center text-sm mb-6">Atau masuk melalui</p>
+
+          <div class="flex justify-center">
+            <GoogleLogin :callback="callback" />
+          </div> -->
 
           <p class="text-sm text-center">
             Belum punya akun?

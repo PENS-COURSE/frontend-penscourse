@@ -72,7 +72,6 @@ export const useAuthStore = defineStore("auth", {
         }
       )
         .then((res) => {
-          console.log(res);
           navigateTo("/auth/login");
           this.loading = false;
         })

@@ -1,5 +1,6 @@
 <template>
-  <h1>ini detail notif {{ notification?.description }}</h1>
+  <h4 class="font-semibold text-2xl mb-5">Detail Notifikasi</h4>
+  <h1 class="font-medium">{{ notification?.description }}</h1>
 </template>
 
 <script setup lang="ts">

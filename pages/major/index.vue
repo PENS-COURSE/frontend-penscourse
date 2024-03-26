@@ -11,14 +11,14 @@
     </div>
   </section>
 
-  <div class="flex items-center justify-center gap-4 my-16">
+  <!-- <div class="flex items-center justify-center gap-4 my-16">
     <form>
       <div class="relative text-alto-500 focus-within:text-alto-500">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <!-- <font-awesome-icon
+          <font-awesome-icon
             :icon="['fas', 'magnifying-glass']"
             class="text-dark-500"
-          /> -->
+          />
           <Icon name="ic:baseline-search" class="text-dark-500" />
         </span>
         <input
@@ -34,7 +34,7 @@
     <button class="bg-regal-blue-500 text-white py-2 px-6 rounded-lg">
       Search
     </button>
-  </div>
+  </div> -->
 
   <div
     class="px-10 lg:px-16 md:py-16 xl:px-32 gap-6 justify-items-center grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4"

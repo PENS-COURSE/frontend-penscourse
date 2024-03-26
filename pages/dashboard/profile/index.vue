@@ -54,7 +54,7 @@
       </div>
 
       <div class="border-t border-alto-500 px-6 py-3">
-        <h5>4</h5>
+        <h5>{{ courses?.length }}</h5>
       </div>
     </div>
     <div class="border border-alto-500 rounded-lg">
@@ -65,7 +65,7 @@
       </div>
 
       <div class="border-t border-alto-500 px-6 py-3">
-        <h5>4</h5>
+        <h5>0</h5>
       </div>
     </div>
     <div class="border border-alto-500 rounded-lg">
@@ -76,7 +76,7 @@
       </div>
 
       <div class="border-t border-alto-500 px-6 py-3">
-        <h5>4</h5>
+        <h5>0</h5>
       </div>
     </div>
   </div>
@@ -201,6 +201,11 @@ const payload = reactive<{
   avatar: undefined,
   name: undefined,
 });
+
+const { data: enrollments } =
+  await useRestClient<APIResponsePagination<Enrollment>>("/enrollments");
+
+const courses = computed(() => enrollments.value?.data.data);
 
 const profile = computed(() => {
   return user.value;

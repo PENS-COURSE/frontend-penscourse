@@ -18,15 +18,11 @@
       Kuasai berbagai materi dari mentor berpengalaman
     </p>
 
-    <div class="flex justify-between items-center flex-col md:flex-row">
+    <!-- <div class="flex justify-between items-center flex-col md:flex-row">
       <div class="flex items-center justify-center gap-4 my-16">
         <form>
           <div class="relative text-alto-500 focus-within:text-alto-500">
             <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-              <!-- <font-awesome-icon
-                :icon="['fas', 'magnifying-glass']"
-                class="text-dark-500"
-              /> -->
             </span>
             <input
               type="search"
@@ -50,52 +46,6 @@
           <option value="audi">Audi</option>
         </select>
       </div>
-    </div>
-
-    <!-- <div
-      v-if="authenticated"
-      class="mt-12 gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-    >
-      <p v-if="loading">loading...</p>
-      <template v-for="course in authCourses.reverse()" v-else>
-        <NuxtLink
-          :to="`/course/${course.slug}`"
-          class="shadow-sm px-4 pt-4 pb-6 border border-alto-500 rounded-md hover:bg-gray-50 transition-colors"
-        >
-          <img
-            v-if="course?.thumbnail == null"
-            src="~assets/images/course.png"
-            alt=""
-            class="w-full mb-2"
-          />
-          <img
-            v-else
-            :src="`${useRuntimeConfig().public.BASE_URL}/${course.thumbnail}`"
-            alt=""
-            class="w-full mb-2 max-h-40"
-          />
-          <h4 class="font-semibold text-base mb-1">
-            {{ course.name }}
-          </h4>
-          <h4 class="text-sm text-slate-gray-500 mb-1">Teknik Informatika</h4>
-          <div class="flex text-sm gap-2 items-center mb-4">
-            <p class="text-school-bus-yellow-500">3.4</p>
-            <p class="text-alto-500">(12k)</p>
-          </div>
-          <div class="flex justify-between items-center">
-            <h5 class="text-regal-blue-500 font-semibold text-xl">
-              {{ course.is_free == true ? "Gratis" : `Rp ${course.price} ,-` }}
-            </h5>
-            <h5
-              :class="course.discount == null ? 'hidden' : ''"
-              class="line-through text-sm text-slate-gray-500 font-medium"
-            >
-              Rp 120000,=
-            </h5>
-          </div>
-          <div v-if="course.is_enrolled">sudah dimiliki</div>
-        </NuxtLink>
-      </template>
     </div> -->
 
     <div
@@ -119,17 +69,23 @@
             alt=""
             class="w-full mb-2 max-h-40"
           />
-          <h4 class="font-semibold text-base mb-1">
+          <h4 class="font-semibold text-base mb-1 line-clamp-1">
             {{ course.name }}
           </h4>
-          <h4 class="text-sm text-slate-gray-500 mb-1">Teknik Informatika</h4>
-          <div class="flex text-sm gap-2 items-center mb-4">
+          <h4 class="text-sm text-slate-gray-500 mb-1">{{ major?.name }}</h4>
+          <!-- <div class="flex text-sm gap-2 items-center mb-4">
             <p class="text-school-bus-yellow-500">3.4</p>
             <p class="text-alto-500">(12k)</p>
-          </div>
+          </div> -->
           <div class="flex justify-between items-center">
             <h5 class="text-regal-blue-500 font-semibold text-xl">
-              {{ course.is_free == true ? "Gratis" : `Rp ${course.price} ,-` }}
+              {{
+                course.is_free == true
+                  ? "Gratis"
+                  : `Rp ${new Intl.NumberFormat("id-ID").format(
+                      course.price as number
+                    )}`
+              }}
             </h5>
             <h5
               :class="course.discount == null ? 'hidden' : ''"
@@ -138,7 +94,6 @@
               Rp 120000,=
             </h5>
           </div>
-          <p v-if="course.is_enrolled">sudah dimiliki</p>
         </NuxtLink>
       </template>
     </div>
@@ -169,44 +124,6 @@ const { data: majorData } = await useRestClient<APIResponseDetail<Department>>(
 
 const major = computed(() => majorData?.value?.data);
 const courses = computed(() => courseData?.value?.data.data);
-
-// const getCourse = async () => {
-//   loading.value = true;
-//   const { data } = await useRestClient<APIResponsePagination<Course>>(
-//     `/departments/${route.id}/courses`
-//   );
-//   console.log(data);
-
-//   if (data.value) {
-//     courses.value = data.value.data.data;
-//   }
-//   loading.value = false;
-// };
-
-// const getCourse = async () => {
-//   loading.value = true;
-
-//   const { data, error } =
-//     await useRestClient<APIResponsePagination<Course>>("/courses/auth");
-//   console.log(data.value?.data.data);
-
-//   if (data.value) {
-//     authCourses.value = data.value.data.data;
-//   }
-
-//   if (error.value?.statusCode == 401) {
-//     const { data } = await useRestClient<APIResponsePagination<Course>>(
-//       `/departments/${id}/courses`
-//     );
-//     console.log(data.value?.data.data);
-
-//     if (data.value) {
-//       courses.value = data.value.data.data;
-//     }
-//   }
-
-//   loading.value = false;
-// };
 </script>
 
 <style></style>

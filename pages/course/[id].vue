@@ -10,14 +10,10 @@
     </div>
 
     <div class="flex justify-start max-w-xl mt-6 mb-4 gap-16">
-      <!-- <div class="flex gap-2 items-center">
-        <Icon
-          name="material-symbols-light:kid-star-sharp"
-          class="w-5 h-5 text-yellow-300"
-        />
-        <p class="text-white">4.3</p>
-        <p class="text-white text-xs">(12.000+ Ulasan)</p>
-      </div> -->
+      <div class="flex gap-2 items-center">
+        <Icon name="material-symbols-light:school" class="text-white w-5 h-5" />
+        <p class="text-white">{{ getMajorName(course?.department_id) }}</p>
+      </div>
       <div class="flex gap-2 items-center">
         <Icon name="mdi:account" class="text-white w-5 h-5" />
         <p class="text-white">{{ course?.max_students }} Mahasiswa</p>
@@ -101,10 +97,7 @@
               </transition>
             </Menu>
           </div>
-          <div v-if="curriculum == 0">
-            <h1>belum ada kurikulum</h1>
-          </div>
-          <div v-else>
+          <div v-if="curriculum?.length">
             <CurriculumCard
               :course="course"
               :curriculum="c"
@@ -112,6 +105,9 @@
               :slug="id"
               v-for="c in curriculum"
             />
+          </div>
+          <div v-else>
+            <h1>belum ada kurikulum</h1>
           </div>
         </div>
 
@@ -157,44 +153,36 @@
           />
 
           <div class="px-6">
-            <h4
-              v-if="course?.is_free == true"
-              class="font-extrabold text-lg mb-6 text-blue"
-            >
-              Gratis
-            </h4>
-            <h4 v-else class="font-extrabold text-lg mb-6 text-blue">
-              Rp {{ course?.price }}
+            <h4 class="font-extrabold text-lg mb-6 text-blue">
+              {{
+                course?.is_free
+                  ? "Gratis"
+                  : `Rp ${new Intl.NumberFormat("id-ID").format(
+                      course?.price as number
+                    )}`
+              }}
             </h4>
 
             <button
-              v-if="course?.is_free == true"
+              v-if="course?.is_free"
               @click="endrollCourse"
-              :class="
-                course?.is_enrolled == true
-                  ? 'bg-gray-500'
-                  : 'bg-regal-blue-500'
-              "
-              :disabled="course.is_enrolled == true"
+              :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
+              :disabled="course.is_enrolled"
               class="w-full py-3 text-white bg-regal-blue-500 rounded-md text-center mb-4"
             >
               <span v-if="isLoading">Loading...</span>
-              <span v-if="course?.is_enrolled">Sudah Dimiliki</span>
+              <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>
               <span v-else>Dapatkan Kelas</span>
             </button>
             <button
-              v-else
+              v-if="!course?.is_free"
               class="w-full py-3 text-white rounded-md text-center mb-4"
               @click="handlePayment"
               :disabled="isLoading || course?.is_enrolled"
-              :class="
-                course?.is_enrolled == true
-                  ? 'bg-gray-500'
-                  : 'bg-regal-blue-500'
-              "
+              :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
             >
               <span v-if="isLoading">Loading...</span>
-              <span v-if="course?.is_enrolled">Sudah Dimiliki</span>
+              <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>
               <span v-else>Beli Kelas</span>
             </button>
 
@@ -225,7 +213,11 @@
 
 <script setup lang="ts">
 import type { Curriculum } from "~/models/Curriculum";
-import type { APIResponseDetail, APIResponseList } from "../../models/Data";
+import type {
+  APIResponseDetail,
+  APIResponseList,
+  APIResponsePagination,
+} from "../../models/Data";
 import type { Course } from "../../models/Course";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { toast } from "vue3-toastify";
@@ -233,7 +225,6 @@ import type { Payment } from "~/models/Payment";
 
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
-
 const { id } = useRoute().params;
 const isLoading: Ref<boolean> = ref(false);
 
@@ -245,8 +236,12 @@ const { data: detailCurriculum } = await useRestClient<
   APIResponseList<Curriculum>
 >(`/courses/${id}/curriculums`);
 
+const { data: detailMajor } =
+  await useRestClient<APIResponsePagination<Department>>("/departments");
+
 const course = computed(() => detailCourse?.value?.data);
 const curriculum = computed(() => detailCurriculum?.value?.data);
+const major = computed(() => detailMajor?.value?.data);
 
 const endrollCourse = async () => {
   isLoading.value = true;
@@ -261,38 +256,12 @@ const endrollCourse = async () => {
       transition: "slide",
       autoClose: 5000,
     });
-    console.log(data.value.data);
   }
   if (error.value?.statusCode == 401) {
     navigateTo("/auth/login");
   }
   isLoading.value = false;
 };
-
-// const snapPay: Ref<any> = ref("");
-
-// const initModalPay = () => {
-//   const snapScript = document.createElement("script");
-
-//   snapScript.src = "https://app.sandbox.midtrans.com/snap/snap.js";
-//   snapScript.type = "text/javascript";
-
-//   snapScript.onload = () => {
-//     if ("snap" in window) {
-//       const { snap } = window;
-//       snapPay.value = snap;
-//     }
-//   };
-//   snapScript.dataset.clientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
-//   document.head.appendChild(snapScript);
-// };
-
-// interface ModelPayment {
-//   id: string;
-//   expiry_date: Date;
-//   invoice_url: string;
-//   status: string;
-// }
 
 const handlePayment = async () => {
   isLoading.value = true;
@@ -303,19 +272,18 @@ const handlePayment = async () => {
     }
   );
   if (data.value) {
-    console.log(data.value);
     window.location.href = data.value.data.payment.invoice_url;
   }
   if (error.value?.statusCode == 401) {
     navigateTo("/auth/login");
-    console.log(error.value);
   }
   isLoading.value = false;
 };
 
-// onMounted(() => {
-//   initModalPay();
-// });
+const getMajorName = (id: number | undefined) => {
+  const majorName = major.value?.data.find((major) => major.id === id);
+  return majorName ? majorName.name : "";
+};
 </script>
 
 <style></style>

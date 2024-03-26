@@ -74,7 +74,8 @@
               }"
             >
               <button
-                class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+                disabled
+                class="bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
               >
                 <span>Mulai</span>
               </button>
@@ -92,7 +93,8 @@
 
             <div>
               <button
-                class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+                disabled
+                class="bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
               >
                 <span>Masuk</span>
               </button>

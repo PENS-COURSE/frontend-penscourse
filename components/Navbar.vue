@@ -127,20 +127,22 @@
           </transition>
         </Popover>
 
-        <img
-          v-if="user?.avatar == null"
-          src="~assets/images/profile.png"
-          alt=""
-        />
-        <img
-          v-else
-          :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
-          class="rounded-full w-10 h-10"
-          alt="profile picture"
-        />
-        <p class="text-white font-light">
-          {{ user?.name }}
-        </p>
+        <div class="flex items-center gap-3">
+          <img
+            v-if="user?.avatar == null"
+            src="~assets/images/profile.png"
+            alt=""
+          />
+          <img
+            v-else
+            :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
+            class="rounded-full w-10 h-10"
+            alt="profile picture"
+          />
+          <p class="text-white font-light">
+            {{ user?.name }}
+          </p>
+        </div>
         <Icon
           name="ic:baseline-logout"
           class="w-6 h-6 text-white cursor-pointer hover:text-alto-500"

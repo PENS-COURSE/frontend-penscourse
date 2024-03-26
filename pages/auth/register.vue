@@ -125,7 +125,7 @@
             {{ loading ? "Loading..." : "Daftar" }}
           </button>
 
-          <p class="text-center text-sm mb-6">Atau daftar melalui</p>
+          <!-- <p class="text-center text-sm mb-6">Atau daftar melalui</p>
 
           <button
             class="py-3 mb-6 w-full rounded-lg border border-alto-500 flex justify-center items-center gap-4 text-sm hover:scale-105 duration-300 font-bold"
@@ -154,7 +154,7 @@
               />
             </svg>
             Google
-          </button>
+          </button> -->
 
           <p class="text-sm text-center">
             Sudah punya akun?

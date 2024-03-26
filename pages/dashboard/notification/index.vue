@@ -1,14 +1,10 @@
 <template>
   <h4 class="font-semibold text-2xl">Notifikasi</h4>
 
-  <div class="flex items-center justify-between mt-8 gap-2">
+  <!-- <div class="flex items-center justify-between mt-8 gap-2">
     <form>
       <div class="relative text-alto-500 focus-within:text-alto-500">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <!-- <font-awesome-icon
-                :icon="['fas', 'magnifying-glass']"
-                class="text-dark-500"
-              /> -->
         </span>
         <input
           type="search"
@@ -23,7 +19,7 @@
     <button class="bg-regal-blue-500 text-white py-2 px-6 rounded-lg">
       Search
     </button>
-  </div>
+  </div> -->
 
   <div
     v-if="returnData?.length == 0"

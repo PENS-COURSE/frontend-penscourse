@@ -1,14 +1,10 @@
 <template>
   <h4 class="font-semibold text-2xl">Sertifikat</h4>
 
-  <div class="flex items-center justify-between mt-8 gap-2">
+  <!-- <div class="flex items-center justify-between mt-8 gap-2">
     <form>
       <div class="relative text-alto-500 focus-within:text-alto-500">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <!-- <font-awesome-icon
-                :icon="['fas', 'magnifying-glass']"
-                class="text-dark-500"
-              /> -->
         </span>
         <input
           type="search"
@@ -24,15 +20,15 @@
       Search
     </button>
 
-    <!-- <div>
+    <div>
           <select class="border border-regal-blue-500 py-2 px-4 rounded-lg">
             <option value="volvo">Volvo</option>
             <option value="saab">Saab</option>
             <option value="opel">Opel</option>
             <option value="audi">Audi</option>
           </select>
-        </div> -->
-  </div>
+        </div>
+  </div> -->
 
   <div class="mt-10 flex flex-col justify-center items-center">
     <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />

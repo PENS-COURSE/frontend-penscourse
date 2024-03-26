@@ -8,7 +8,7 @@ export interface Order {
   total_price: number;
   total_discount: number;
   xendit_id: string;
-  status: "settlement" | "pending" | "expire" | "cancel" | "deny" | "refund";
+  status: "pending" | "expired" | "paid";
   created_at: Date;
   updated_at: Date;
   user: User;

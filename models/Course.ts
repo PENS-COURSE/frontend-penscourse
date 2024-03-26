@@ -3,7 +3,7 @@ export interface Course {
   name?: string;
   slug?: string;
   description?: string;
-  price?: string;
+  price?: number;
   is_free?: boolean;
   is_certified?: boolean;
   grade_level?: string;

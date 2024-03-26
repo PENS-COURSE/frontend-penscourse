@@ -66,17 +66,25 @@
             alt=""
             class="w-full mb-2 max-h-40"
           />
-          <h4 class="font-semibold text-base mb-1">
+          <h4 class="font-semibold text-base mb-1 line-clamp-1">
             {{ course.name }}
           </h4>
-          <h4 class="text-sm text-slate-gray-500 mb-1">Teknik Informatika</h4>
-          <div class="flex text-sm gap-2 items-center mb-4">
+          <h4 class="text-sm text-slate-gray-500 mb-1">
+            {{ major?.name }}
+          </h4>
+          <!-- <div class="flex text-sm gap-2 items-center mb-4">
             <p class="text-school-bus-yellow-500">3.4</p>
             <p class="text-alto-500">(12k)</p>
-          </div>
+          </div> -->
           <div class="flex justify-between items-center">
             <h5 class="text-regal-blue-500 font-semibold text-xl">
-              {{ course.is_free == true ? "Gratis" : `Rp ${course.price} ,-` }}
+              {{
+                course.is_free == true
+                  ? "Gratis"
+                  : `Rp ${new Intl.NumberFormat("id-ID").format(
+                      course.price as number
+                    )}`
+              }}
             </h5>
             <h5
               :class="course.discount == null ? 'hidden' : ''"
@@ -103,17 +111,22 @@ import type { APIResponseDetail } from "../../../models/Data";
 import type { Department } from "../../../models/Department";
 import type { Course } from "../../../models/Course";
 
-const route = useRoute().params;
+const { id } = useRoute().params;
 const { data } = await useRestClient<APIResponseDetail<Department>>(
-  `/departments/${route.id}`
+  `/departments/${id}`
 );
 
 const { data: coursesData } = await useRestClient<
   APIResponsePagination<Course>
->(`/departments/${route.id}/courses`);
+>(`/departments/${id}/courses`);
 
 const major = computed(() => data?.value?.data);
 const courses = computed(() => coursesData?.value?.data.data);
+
+// const getMajorName = (course_id: number | undefined) => {
+//   const majorName = major.value?.id;
+//   // return majorName ? majorName.name : "";
+// };
 </script>
 
 <style></style>

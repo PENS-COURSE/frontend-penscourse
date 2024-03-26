@@ -2,7 +2,13 @@
   <div class="p-4 h-[450px] shadow-sm rounded-xl border border-gray-50">
     <h4 class="font-semibold text-2xl mb-5">Ganti Password</h4>
 
-    <form @submit.prevent="handleSubmit">
+    <div class="mt-10 flex flex-col justify-center items-center">
+      <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
+      <h2 class="text-xl font-semibold">
+        Fitur ini masih belum bisa digunakan
+      </h2>
+    </div>
+    <!-- <form @submit.prevent="handleSubmit">
       <InputField
         label="Password lama"
         v-model:model-value="payload.password_old"
@@ -53,7 +59,7 @@
           <p v-else>Simpan</p>
         </button>
       </div>
-    </form>
+    </form> -->
   </div>
 </template>
 
@@ -93,7 +99,7 @@ const handleSubmit = async () => {
     console.log(data.value);
   }
   if (error.value) {
-    toast.error(error.value.message, {
+    toast.error("Error! Gagal mengganti password!", {
       transition: "slide",
       autoClose: 5000,
       position: "bottom-right",
