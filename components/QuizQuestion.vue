@@ -28,10 +28,11 @@
     
     const emit = defineEmits(['selectedAnswer']);
 
-    const selectedAnswer = (answer: string) => {
+    const selectedAnswer = (answer: []) => {
         console.log("Quiz Question Ans", answer);
         emit('selectedAnswer', answer);
     }
+    
 </script>
 
 <style scoped>

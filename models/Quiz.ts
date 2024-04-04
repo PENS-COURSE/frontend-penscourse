@@ -45,3 +45,8 @@ export interface QuizScoreResponse {
   score?: number;
   is_passed?: boolean;
 }
+
+export interface QuizPilihan {
+  question_type?: string;
+  pilihan?: [];
+}

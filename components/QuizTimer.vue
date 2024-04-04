@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
     <div
       class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]"
@@ -50,6 +50,7 @@ onMounted(() => {
 
   const duration = endQuizTime - currentTime; // Calculate remaining time in seconds
 
+
   if (duration > 0) {
     countdownTimer(duration, (timer: string) => {
       time.value = timer;
@@ -58,4 +59,4 @@ onMounted(() => {
     time.value = "00:00:00"; // Display 00:00:00 if time has already elapsed
   }
 });
-</script>
+</script> -->
