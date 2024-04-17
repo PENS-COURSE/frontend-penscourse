@@ -44,7 +44,12 @@
         <div
           class="px-6 w-64 h-64 border border-alto-500 flex flex-col justify-center items-center hover:bg-blue-200 transition-colors"
         >
-          <img :src="major.icon" alt="" width="80" class="max-h-20" />
+          <img
+            :src="`${useRuntimeConfig().public.BASE_URL}/${major.icon}`"
+            :alt="major.name"
+            width="80"
+            class="max-h-20"
+          />
           <h5>{{ major.name }}</h5>
         </div>
       </NuxtLink>

@@ -38,12 +38,6 @@
         <div class="mb-6">
           <div class="flex justify-between mb-5 items-center">
             <h4 class="font-semibold text-2xl text-blue">Kurikulum</h4>
-            <!-- <button
-              class="text-white bg-regal-blue-500 py-3 px-2 text-sm rounded-md hover:bg-regal-blue-600"
-            >
-              <span><Icon name="bi:plus-lg" class="w-5 h-5" /></span>
-              Tambah Kurikulum
-            </button> -->
             <Menu
               as="div"
               class="relative inline-block"
@@ -54,9 +48,8 @@
                   class="text-white bg-regal-blue-500 py-3 px-2 text-sm rounded-md hover:bg-regal-blue-600"
                 >
                   <span>
-                    <Icon name="bi:plus-lg" class="w-5 h-5" />
+                    <Icon name="material-symbols-light:edit" class="w-5 h-5" />
                   </span>
-                  Tambah
                 </MenuButton>
               </div>
 
@@ -73,24 +66,30 @@
                 >
                   <div class="px-1 py-1">
                     <MenuItem v-slot="{ active }">
-                      <button
+                      <NuxtLink
+                        :to="`/course/${course?.slug}/edit`"
                         :class="[
-                          active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                          active
+                            ? 'bg-regal-blue-500 text-white'
+                            : 'text-gray-900',
                           'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                         ]"
                       >
                         Edit
-                      </button>
+                      </NuxtLink>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
-                      <button
+                      <NuxtLink
+                        to="/"
                         :class="[
-                          active ? 'bg-violet-500 text-white' : 'text-gray-900',
+                          active
+                            ? 'bg-regal-blue-500 text-white'
+                            : 'text-gray-900',
                           'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                         ]"
                       >
-                        Duplicate
-                      </button>
+                        Kurikulum
+                      </NuxtLink>
                     </MenuItem>
                   </div>
                 </MenuItems>
@@ -217,8 +216,8 @@ import type {
   APIResponseDetail,
   APIResponseList,
   APIResponsePagination,
-} from "../../models/Data";
-import type { Course } from "../../models/Course";
+} from "../../../models/Data";
+import type { Course } from "../../../models/Course";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { toast } from "vue3-toastify";
 import type { Payment } from "~/models/Payment";

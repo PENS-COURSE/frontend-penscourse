@@ -152,14 +152,14 @@
                 <img
                   v-if="c.thumbnail == null"
                   src="~assets/images/course.png"
-                  alt=""
-                  class="w-full mb-2"
+                  :alt="c.name"
+                  class="w-full mb-2 max-h-44"
                 />
                 <img
                   v-else
                   :src="`${useRuntimeConfig().public.BASE_URL}/${c.thumbnail}`"
-                  alt=""
-                  class="w-full mb-2"
+                  :alt="c.name"
+                  class="w-full mb-2 max-h-44"
                 />
                 <h4 class="font-semibold text-base mb-1 line-clamp-1">
                   {{ c.name }}

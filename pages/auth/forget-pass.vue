@@ -33,19 +33,21 @@
         <form @submit.prevent="handleSubmit">
           <InputField
             label="Email"
-            :v-model="payload.email"
+            placeholder="Masukkan Email"
+            v-model:model-value="payload.email"
             :value="payload.email"
             :required="true"
-            name="email"
-            type="email"
           />
 
           <button
             type="submit"
-            :disabled="loading"
+            :disabled="isLoading"
             class="w-full rounded-lg bg-regal-blue-500 py-4 text-sm font-semibold text-white mb-6"
           >
-            {{ loading ? "Loading..." : "Kirim" }}
+            <div v-if="isLoading">
+              <LoadingSpinner />
+            </div>
+            <span v-if="!isLoading">Kirim</span>
           </button>
         </form>
       </div>
@@ -54,53 +56,47 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from "vue3-toastify";
+
 definePageMeta({
   layout: "auth",
   middleware: "guest",
 });
 
-const { sendOtp } = useAuthStore();
-const { loading } = storeToRefs(useAuthStore());
+interface Email {
+  email: string;
+}
 
-// const loading = ref(false);
-
-// const payload = reactive<{
-//   email: string | undefined;
-// }>({
-//   email: undefined,
-// });
-
-const payload = ref({
-  email: "",
+const isLoading: Ref<boolean> = ref(false);
+const payload = reactive<{
+  email: string | undefined;
+}>({
+  email: undefined,
 });
 
 const handleSubmit = async () => {
-  await sendOtp(payload.value);
+  isLoading.value = true;
+  const { data, error } = await useRestClient<APIResponseDetail<Email>>(
+    "/authentication/forgot-password/request",
+    {
+      method: "POST",
+      body: {
+        email: payload.email,
+      },
+    }
+  );
+  if (data.value) {
+    isLoading.value = false;
+    navigateTo("/auth/verify-otp");
+  }
+  if (error.value) {
+    isLoading.value = false;
+    toast.error("Error, terjadi kesalahan!", {
+      transition: "slide",
+      autoClose: 5000,
+      position: "bottom-right",
+    });
+  }
+  isLoading.value = false;
 };
-
-// const handleSubmit = async () => {
-//   loading.value = true;
-//   const { data } = await useRestClient<APIResponseDetail<Authentication>>(
-//     "/authentication/forgot-password/request",
-//     {
-//       method: "POST",
-//       body: converterFormData({
-//         email: payload.email,
-//       }),
-//     }
-//   );
-
-//   if (data.value) {
-//     navigateTo("/auth/verify-otp");
-//   }
-//   loading.value = false;
-// };
-
-// const handleLogin = async () => {
-//   await login(user.value);
-
-//   if (authenticated.value) {
-//     navigateTo("/");
-//   }
-// };
 </script>

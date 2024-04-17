@@ -101,23 +101,23 @@ export const useAuthStore = defineStore("auth", {
       navigateTo("/auth/login");
     },
 
-    async sendOtp({ email }: SendOtpPayloadInterface) {
-      this.loading = true;
-      const { data, pending } = await useRestClient<
-        APIResponseDetail<Authentication>
-      >("/authentication/forgot-password/request", {
-        method: "POST",
-        body: {
-          email,
-        },
-      });
+    // async sendOtp({ email }: SendOtpPayloadInterface) {
+    //   this.loading = true;
+    //   const { data, pending } = await useRestClient<
+    //     APIResponseDetail<Authentication>
+    //   >("/authentication/forgot-password/request", {
+    //     method: "POST",
+    //     body: {
+    //       email,
+    //     },
+    //   });
 
-      this.loading = pending.value;
+    //   this.loading = pending.value;
 
-      if (data.value) {
-        navigateTo("/auth/verify-otp");
-      }
-    },
+    //   if (data.value) {
+    //     navigateTo("/auth/verify-otp");
+    //   }
+    // },
 
     async setTokens({ access_token, refresh_token }: Token) {
       this.access_token = access_token;

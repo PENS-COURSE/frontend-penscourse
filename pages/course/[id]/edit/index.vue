@@ -177,13 +177,8 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  middleware: "authenticated",
-  layout: "admin",
-});
-
 const { user } = storeToRefs(useAuthStore());
-const { id } = useRoute().params;
+const route = useRoute().params;
 
 const inputSearchJurusan = ref("");
 const modal = reactive({
@@ -229,7 +224,7 @@ const payload = reactive<{
 });
 
 const { data } = await useRestClient<APIResponseDetail<Course>>(
-  `/courses/${id}`
+  `/courses/${route.id}`
 );
 
 const course = computed(() => data?.value?.data);
@@ -301,7 +296,7 @@ const handleCancel = () => {
 
 const handleSubmit = async () => {
   const { error } = await useRestClient<APIResponsePagination<Department>>(
-    `/courses/${id}/update`,
+    `/courses/${route.id}/update`,
     {
       method: "PATCH",
       body: !payload.thumbnail
@@ -362,10 +357,3 @@ onMounted(() => {
   payload.user_id = course.value?.user_id;
 });
 </script>
-
-<style scoped>
-.router-link-exact-active {
-  background-color: #14487a;
-  color: white;
-}
-</style>

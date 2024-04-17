@@ -40,7 +40,7 @@
           v-if="course.course.thumbnail == null"
           src="~assets/images/course.png"
           :alt="course.course.name"
-          class="w-full mb-2"
+          class="w-full mb-2 max-h-44"
         />
         <img
           v-else
@@ -48,7 +48,7 @@
             course.course.thumbnail
           }`"
           :alt="course.course.name"
-          class="w-full mb-2"
+          class="w-full mb-2 max-h-44"
         />
         <h4 class="font-semibold text-base mb-1 line-clamp-1">
           {{ course.course.name }}

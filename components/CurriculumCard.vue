@@ -65,7 +65,7 @@
                 name="material-symbols:edit-square-outline-rounded"
                 class="w-5 h-5 mr-2 my-2"
               />
-              <span>Kuis {{ quiz?.title }}</span>
+              <span>{{ quiz?.title }}</span>
             </div>
             <NuxtLink
               :to="{
