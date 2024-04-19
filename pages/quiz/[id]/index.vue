@@ -8,7 +8,7 @@
       <div class="w-full md:px-12 gap-8 pt-6">
         <div class="flex flex-row flex-wrap py-4">
           <aside
-            class="w-full sm:w-1/3 md:w-[140px] lg:w-[250px] px-2 flex-row sm:flex-col mb-8"
+            class="w-full sm:w-1/3 md:w-[160px] lg:w-[250px] px-2 flex-row sm:flex-col mb-8"
           >
             <!-- <QuizTimer :duration="quizzes?.quiz?.duration" /> -->
             <div class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
@@ -33,18 +33,21 @@
             >
               <QuizListNumber
                 @update-parent-variable="updateVariable"
-                :soalLength="soal.length"
+                :soalLength="soal.length" 
+                :quizSessionid="quizzes?.detail?.session_id"
+                :quizUuid="quizzes?.quiz?.id"
               />
             </div>
           </aside>
           <main
             role="main"
-            class="w-full sm:w-2/3 md:max-w-[80%] lg:max-w-[90%] xl:w-[75%] pl-2 md:mt-0"
+            class="w-full sm:w-2/1 md:max-w-[80%] lg:max-w-[90%] xl:w-[75%] pl-2 md:mt-0"
           >
             <QuizQuestion
               :soal="soal[selectedSoal]"
               :pilihan="pilihan"
               @selected-answer="selectedAnswer"
+              :data_questions="quizDetail"
             />
             <!-- <QuizSessionNext /> -->
           </main>
@@ -65,8 +68,10 @@ import { ref } from "vue";
 import QuizSessionNext from "~/components/QuizSessionNext.vue";
 import moment from 'moment';
 import { defineProps, defineEmits } from "vue";
+import { quizCookies } from "~/store/quiz";
 
 const router = useRouter();
+const isSelected = ref(false);
 
 const answerPicked = ref([]);
 const { id } = useRoute<never>().params;
@@ -80,8 +85,13 @@ const { data: quizDetail } = await useRestClient<
 
 const quizzes = computed(() => quizDetail?.value?.data);
 const soal = initQuiz(quizzes?.value?.questions ?? []);
+const { questions } = storeToRefs(quizCookies());
 
 function initQuiz(arr: any[]): any[] {
+  console.log("arr", arr)
+  if(arr.length === 0){
+    navigateTo(`/quiz/${id}/submit`);
+  }
   let randomizedArr = [...arr]; // Creating a copy of the input array
   const data: any = {
     question_type: "",
@@ -95,26 +105,34 @@ function initQuiz(arr: any[]): any[] {
   data.pilihan.push({
     option: "A",
     answer: randomizedArr[0].question.option_a,
+    checked: false
   });
   data.pilihan.push({
     option: "B",
     answer: randomizedArr[0].question.option_b,
+    checked: false
   });
   data.pilihan.push({
     option: "C",
     answer: randomizedArr[0].question.option_c,
+    checked: false
   });
   data.pilihan.push({
     option: "D",
     answer: randomizedArr[0].question.option_d,
+    checked: false
   });
-  data.pilihan.push({
-    option: "E",
-    answer: randomizedArr[0].question.option_e,
-  });
+  if( randomizedArr[0].question.option_e){
+    data.pilihan.push({
+      option: "E",
+      answer: randomizedArr[0].question.option_e,
+      checked: false
+    });
+  }
 
   data.pilihan = randomizeArray(data.pilihan);
   pilihan.value = data;
+  quizCookies().saveQuizCookies(randomizedArr);
   return randomizedArr;
 }
 
@@ -145,12 +163,15 @@ const updateVariable = async (newValue: number) => {
       body: JSON.stringify({
         session_id: quizzes.value?.detail?.session_id,
         question_id: soal[selectedSoal.value || 0].question.id.toString(),
-        answer: answerPicked.value,
+        answer: soal[selectedSoal.value].question.question_type === 'single_choice' ? [answerPicked.value] : answerPicked.value,
       }),
     }
   );
+
+  quizCookies().updateAnswer(answerPicked.value, selectedSoal.value);
   
-    console.log("Selected Soal Befire", selectedSoal.value);
+    console.log("Selected Soal Before", selectedSoal.value);
+    selectedAnswer([]);
 
   selectedSoal.value = newValue;
 
@@ -160,6 +181,7 @@ const updateVariable = async (newValue: number) => {
   data.pilihan.push({
     option: "A",
     answer: soal[newValue].question.option_a,
+    
   });
   data.pilihan.push({
     option: "B",
@@ -173,10 +195,12 @@ const updateVariable = async (newValue: number) => {
     option: "D",
     answer: soal[newValue].question.option_d,
   });
-  data.pilihan.push({
-    option: "E",
-    answer: soal[newValue].question.option_e,
-  });
+  if(soal[newValue].question.option_e){
+    data.pilihan.push({
+      option: "E",
+      answer: soal[newValue].question.option_e,
+    });
+  }
 
   pilihan.value = data;
 };
@@ -289,3 +313,15 @@ onMounted(() => {
   display: none;
 }
 </style>
+
+
+<!-- <script>
+
+let question_answered = [
+  {
+    question_id: 'hasidhisudhfi',
+    answer: ['a', 'b']
+  }
+]
+
+</script> -->

@@ -12,31 +12,64 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 import { defineProps, defineEmits, ref } from 'vue';
 import type { QuizPilihan } from "../models/Quiz";
-
 const props = defineProps({
   soal: Object as PropType<QuizPilihan>,
+  questions: Object as PropType<any>,
+  data_questions: Object as PropType<any>,
 });
 const selectedAnswer = ref(null);
+let answerArray: any[] = [];
+const emit = defineEmits(['selectedAnswer']);
 
 const handleClick = (event: any, item: any, question_type: string) => {
+  let answerList: any = [];
   if (question_type === 'checkbox') {
     selectedAnswer.value = true; // Set to true when a value is chosen
   } else {
     selectedAnswer.value = true; // For radio buttons, also set to true
+    answerList.push(item.option);
   }
-  emitSelectedAnswer(event, item);
+
+  let dataQuestions = localStorage.getItem('questions');
+  let dataQuestionsAnswered: any = [];
+
+  if (dataQuestions != undefined) {
+    dataQuestionsAnswered = JSON.parse(dataQuestions);
+    let newData: any = [];
+
+    dataQuestionsAnswered.map((item: any) => {
+      if (item.question.id == props.questions.question.id) {
+        newData.push({
+          ...item,
+          answer: answerList
+        })
+      } else {
+        newData.push(item)
+      }
+    })
+    localStorage.setItem("questions", JSON.stringify(newData));
+  } else {
+    localStorage.setItem("questions", JSON.stringify(props.data_questions));
+  }
+  emitSelectedAnswer(event, item, question_type);
 };
 
-const emitSelectedAnswer = (event: any, item: any) => {
+const emitSelectedAnswer = (event: any, item: any, question_type: string) => {
   const answer = (event.target as HTMLInputElement).value;
-  emit('selectedAnswer', answer);
+  if(question_type === 'checkbox'){
+    answerArray.push(answer)
+    emit('selectedAnswer', answerArray);
+    selectedAnswer.value = null;
+  }else {
+    emit('selectedAnswer', answer);
+    selectedAnswer.value = null;
+  }
 };
-
 const getInputType = (item: any): string => {
+  console.log('item', item)
   if (item.question_type === 'single_choice') {
     return 'radio';
   } else if (item.question_type === 'multiple_choice') {
@@ -45,4 +78,6 @@ const getInputType = (item: any): string => {
     return 'radio'; // Default to radio if question_type is not defined
   }
 };
+
+
 </script>

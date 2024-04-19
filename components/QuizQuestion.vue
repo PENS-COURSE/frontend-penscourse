@@ -15,7 +15,7 @@
             Pilihan Jawaban
         </div>
         <div class="row h-100vh items-left">
-            <QuizSingleChoice :soal="pilihan" @selected-answer="selectedAnswer"/>
+            <QuizSingleChoice :soal="pilihan" @selected-answer="selectedAnswer" :questions="soal" :data_questions="data_questions.data.questions" />
         </div>
     </div>
 </template>
@@ -23,7 +23,8 @@
 <script setup lang="ts">
     const props = defineProps({
         soal: Object as any,
-        pilihan: []
+        pilihan: [],
+        data_questions: Object as any
     });
     
     const emit = defineEmits(['selectedAnswer']);

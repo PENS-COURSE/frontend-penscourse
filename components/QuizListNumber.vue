@@ -5,7 +5,7 @@
     <div class="flex flex-col">
       <div class="flex flex-row sm:items-center flex-wrap gap-1">
         <div v-for="index in (props.soalLength || 0)" :key="index">
-            <button @click="notifyParent(index - 1)" :class="{ 'clicked': (index - 1) === selectedButton }" class=" mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-3 rounded-lg" :style="{ backgroundColor: index === selectedButton ? 'black' : '#14487A' }">  
+            <button @click="notifyParent(index - 1)" :class="{ 'clicked': (index - 1) === selectedButton }" class=" mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-3 rounded-lg" :style="{ backgroundColor: index === selectedButton ? '#14487A' : '#14487A' }">  
               {{ index  }}
             </button>
           </div>
@@ -74,19 +74,20 @@
                 </div> -->
 
                 <div class="row text-center mt-8 p-4">
-                  <NuxtLink
+                  <!-- <NuxtLink
                     :to="{
-                      path: `/sessionQuiz/${quizzes?.detail?.session_id}`,
-                      query: { slug: `${slug}` },
-                    }"
-                  >
+                      path: `/quiz/${quizSessionid}`,
+                      query: { slug: `${id}` },
+                    }"> -->
+                  <!-- <NuxtLink :to="{ path : `/quiz/${quizsession.id}`, query: { slug: `${slug}` }}"> -->
                     <button
+                      @click="submitQuiz"
                       type="button"
                       class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
                       Ya
                     </button>
-                  </NuxtLink>
+                  <!-- </NuxtLink> -->
                   <!-- <button
                     type="button"
                     class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -125,9 +126,12 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+import { toast } from "vue3-toastify";
 import { defineProps, defineEmits } from "vue";
+const { id, slug } = useRoute().query
 
 const isOpen = ref(false);
+const isLoading: Ref<boolean> = ref(false);
 
 function closeModal() {
   isOpen.value = false;
@@ -138,7 +142,30 @@ function openModal() {
 
 const props = defineProps({
   soalLength: Number,
+  quizSessionid: String,
+  quizUuid: String,
 });
+
+const submitQuiz = async () => {
+  isLoading.value = true;
+  const { data, error } = await useRestClient<APIResponseDetail<Quiz>>(
+    `/courses/quiz/${props.quizSessionid}/submit`,
+    {
+      method: "PATCH",
+    }
+  );
+  if (data.value) {
+    navigateTo(`/quiz/${props.quizUuid}/submit`);
+    // toast.info("Selamat! Anda Berhasil Mensubmit Quiz!", {
+    //   transition: "slide",
+    //   autoClose: 5000,
+    // });
+  }
+  if (error.value?.statusCode == 401) {
+    navigateTo("/auth/login");
+  }
+  isLoading.value = false;
+};
 
 const emit = defineEmits(["updateParentVariable"]);
 const selectedButton = ref(null);
@@ -184,5 +211,8 @@ const previousPage = () => {
 
 .clicked {
   background-color: #ffe000 !important;
+}
+.unhover {
+  pointer-events: none; /* Disables hover effect after button is clicked */
 }
 </style>
