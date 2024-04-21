@@ -65,20 +65,26 @@
                 name="material-symbols:edit-square-outline-rounded"
                 class="w-5 h-5 mr-2 my-2"
               />
-              <span>{{ quiz?.title }}</span>
+              <span>{{ quiz ? quiz.title : 'Kuis' }}</span>
             </div>
             <NuxtLink
-              :to="{
-                path: '/quiz',
-                query: { id: `${quiz?.id}`, slug: `${slug}` },
-              }"
+              v-if="quiz"
+              :to="{ path: '/quiz', query: { id: `${quiz?.id}`, slug: `${slug}` } }"
             >
               <button
-                class="bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+                :class="quiz ? 'bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center' : 'bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'"
+                :disabled="!quiz"
               >
                 <span>Mulai</span>
               </button>
             </NuxtLink>
+            <button
+              v-else
+              disabled
+              class="bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex-center"
+            >
+              <span>Mulai</span>
+            </button>
           </div>
 
           <div class="flex justify-between my-4">

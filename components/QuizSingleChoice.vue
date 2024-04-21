@@ -68,6 +68,7 @@ const emitSelectedAnswer = (event: any, item: any, question_type: string) => {
     selectedAnswer.value = null;
   }
 };
+
 const getInputType = (item: any): string => {
   console.log('item', item)
   if (item.question_type === 'single_choice') {
