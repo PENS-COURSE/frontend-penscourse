@@ -1,8 +1,11 @@
 <template>
   <div class="mx-10 mt-10 border border-alto-500/50 rounded p-4">
     <h1 class="text-2xl font-semibold mb-5">
-      Tambah Kurikulum {{ course?.name }}
+      Tambah File Materi {{ c?.title }}
     </h1>
+    <!-- <div v-for="co in clist">
+      <pre>{{ co.subjects.file_contents }}</pre>
+    </div> -->
     <form @submit.prevent="handleSubmit">
       <div class="mt-3">
         <InputField
@@ -19,13 +22,7 @@
           :required="true"
           name="description"
         />
-        <InputField
-          label="Minggu"
-          v-model:model-value="payload.week"
-          :value="payload.week?.toString()"
-          :required="true"
-          name="week"
-        />
+        <FileInput label="File" v-model:model-value="payload.file" />
       </div>
       <div class="mt-3 flex justify-center">
         <button
@@ -39,6 +36,7 @@
     </form>
   </div>
 </template>
+
 <script setup lang="ts">
 import { toast } from "vue3-toastify";
 
@@ -47,47 +45,46 @@ definePageMeta({
   middleware: "authenticated",
 });
 
-interface Curriculum {
-  title: string;
-  description: string;
-  week: number;
-}
-
 const { id, curriculum } = useRoute().params;
 const isLoading: Ref<boolean> = ref(false);
 
 const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
 );
+const { data: dataCurriculum } = await useRestClient<
+  APIResponseDetail<Curriculum>
+>(`/courses/${id}/curriculums/${curriculum}`);
+
+const c = computed(() => dataCurriculum?.value?.data);
 const course = computed(() => dataCourse?.value?.data);
 
 const payload = reactive<{
   title: string | undefined;
   description: string | undefined;
-  week: number | undefined;
+  file: File | undefined;
 }>({
   title: undefined,
   description: undefined,
-  week: undefined,
+  file: undefined,
 });
 
 const handleSubmit = async () => {
   isLoading.value = true;
   const { data, error } = await useRestClient<APIResponseDetail<Curriculum>>(
-    `/courses/${id}/curriculums/create`,
+    `/courses/${course.value?.slug}/curriculums/${curriculum}/subjects/file-content/add`,
     {
       method: "POST",
-      body: {
+      body: converterFormData({
         title: payload.title,
         description: payload.description,
-        week: payload.week,
-      },
+        file: payload.file,
+      }),
     }
   );
 
   if (data.value) {
     isLoading.value = false;
-    navigateTo(`/course/${course.value?.slug}/curriculum`);
+    navigateTo(`/course/${course.value?.slug}`);
   }
 
   if (error.value) {
@@ -98,10 +95,4 @@ const handleSubmit = async () => {
   }
   isLoading.value = false;
 };
-
-//   onMounted(() => {
-//     payload.title = c.value?.title;
-//     payload.description = c.value?.description;
-//     payload.week = c.value?.week;
-//   });
 </script>

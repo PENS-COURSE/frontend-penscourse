@@ -8,7 +8,7 @@
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"
     >
       {{ curriculum?.title }}
-      <span class="flex gap-3">
+      <span class="flex items-center gap-3">
         <Icon
           :name="
             course?.is_enrolled
@@ -20,12 +20,30 @@
             showPanel == true ? 'rotate-180 transform transition-transform' : ''
           "
         />
-        <button v-if="user.role == 'admin' || user.role == 'dosen'">
-          Edit
-        </button>
-        <button v-if="user.role == 'admin' || user.role == 'dosen'">
+        <NuxtLink
+          :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-files`"
+          v-if="user.role == 'admin' || user.role == 'dosen'"
+          class="text-regal-blue-500 hover:underline"
+        >
+          Tambah File
+        </NuxtLink>
+        <NuxtLink
+          :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-video`"
+          v-if="user.role == 'admin' || user.role == 'dosen'"
+          class="text-regal-blue-500 hover:underline"
+        >
+          Tambah Video
+        </NuxtLink>
+        <NuxtLink
+          :to="`/`"
+          v-if="user.role == 'admin' || user.role == 'dosen'"
+          class="text-regal-blue-500 hover:underline"
+        >
+          Tambah Kuis
+        </NuxtLink>
+        <!-- <button v-if="user.role == 'admin' || user.role == 'dosen'">
           Tambah Materi
-        </button>
+        </button> -->
         <!-- <Icon
           v-else
           name="material-symbols:lock"
@@ -71,14 +89,21 @@
                 name="material-symbols:edit-square-outline-rounded"
                 class="w-5 h-5 mr-2 my-2"
               />
-              <span>{{ quiz ? quiz.title : 'Kuis' }}</span>
+              <span>{{ quiz ? quiz.title : "Kuis" }}</span>
             </div>
             <NuxtLink
               v-if="quiz"
-              :to="{ path: '/quiz', query: { id: `${quiz?.id}`, slug: `${slug}` } }"
+              :to="{
+                path: '/quiz',
+                query: { id: `${quiz?.id}`, slug: `${slug}` },
+              }"
             >
               <button
-                :class="quiz ? 'bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center' : 'bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'"
+                :class="
+                  quiz
+                    ? 'bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'
+                    : 'bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'
+                "
                 :disabled="!quiz"
               >
                 <span>Mulai</span>
@@ -152,7 +177,29 @@
               >
                 Materi
               </DialogTitle>
+              <h1 class="font-semibold">Materi PDF</h1>
               <template v-for="c in curriculum?.subjects.file_contents">
+                <div class="mt-2 flex justify-between">
+                  <p class="text-sm text-gray-500 max-w-sm">
+                    {{ c.title }}
+                  </p>
+
+                  <a
+                    :href="`${useRuntimeConfig().public.BASE_URL}/${c.url}`"
+                    target="_blank"
+                    class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
+                  >
+                    <Icon
+                      name="material-symbols:download-2"
+                      class="w-4 h-4 mr-2"
+                    />
+                    <span>Download</span>
+                  </a>
+                </div>
+              </template>
+
+              <h1 class="font-semibold mt-5">Materi Video</h1>
+              <template v-for="c in curriculum?.subjects.video_contents">
                 <div class="mt-2 flex justify-between">
                   <p class="text-sm text-gray-500 max-w-sm">
                     {{ c.title }}
@@ -164,10 +211,10 @@
                     class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
                   >
                     <Icon
-                      name="material-symbols:download-2"
+                      name="material-symbols:play-arrow"
                       class="w-4 h-4 mr-2"
                     />
-                    <span>Download</span>
+                    <span>Putar</span>
                   </a>
                 </div>
               </template>

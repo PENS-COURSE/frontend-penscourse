@@ -166,8 +166,8 @@
               v-if="course?.is_free"
               @click="endrollCourse"
               :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
-              :disabled="course.is_enrolled"
-              class="w-full py-3 text-white bg-regal-blue-500 rounded-md text-center mb-4"
+              :disabled="isLoading && course.is_enrolled"
+              class="w-full py-3 text-white rounded-md text-center mb-4"
             >
               <span v-if="isLoading">Loading...</span>
               <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>
@@ -175,10 +175,10 @@
             </button>
             <button
               v-if="!course?.is_free"
-              class="w-full py-3 text-white rounded-md text-center mb-4"
               @click="handlePayment"
-              :disabled="isLoading || course?.is_enrolled"
               :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
+              :disabled="isLoading && course?.is_enrolled"
+              class="w-full py-3 text-white rounded-md text-center mb-4"
             >
               <span v-if="isLoading">Loading...</span>
               <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>

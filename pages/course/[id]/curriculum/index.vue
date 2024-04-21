@@ -146,6 +146,7 @@ import { toast } from "vue3-toastify";
 
 definePageMeta({
   layout: "livestream",
+  middleware: "authenticated",
 });
 
 const { id } = useRoute().params;
