@@ -8,7 +8,7 @@
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"
     >
       {{ curriculum?.title }}
-      <span class="material-icons">
+      <span class="flex gap-3">
         <Icon
           :name="
             course?.is_enrolled
@@ -20,6 +20,12 @@
             showPanel == true ? 'rotate-180 transform transition-transform' : ''
           "
         />
+        <button v-if="user.role == 'admin' || user.role == 'dosen'">
+          Edit
+        </button>
+        <button v-if="user.role == 'admin' || user.role == 'dosen'">
+          Tambah Materi
+        </button>
         <!-- <Icon
           v-else
           name="material-symbols:lock"
@@ -195,6 +201,9 @@ defineProps({
   slug: String,
   course: Object as PropType<Course>,
 });
+
+const auth = useAuthStore();
+const { user } = storeToRefs(auth);
 
 const showPanel = ref(false);
 

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { useRestClient } from "../composables/useRestClient";
 import type { Authentication, User } from "../models/Authentication";
 import type { APIResponseDetail } from "../models/Data";
+import { toast } from "vue3-toastify";
 
 interface AuthPayloadInterface {
   email: string;
@@ -32,7 +33,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login({ email, password }: AuthPayloadInterface) {
       this.loading = true;
-      const { data, pending } = await useRestClient<
+      const { data, pending, error } = await useRestClient<
         APIResponseDetail<Authentication>
       >("/authentication/login", {
         method: "POST",
@@ -49,6 +50,12 @@ export const useAuthStore = defineStore("auth", {
         this.access_token = data.value.data.token.access_token;
         this.refresh_token = data.value.data.token.refresh_token;
         this.user = data.value.data.user;
+      }
+      if (error.value?.statusCode == 403) {
+        toast.error("Error, terjadi kesalahan!", {
+          autoClose: 5000,
+          position: "bottom-right",
+        });
       }
     },
 

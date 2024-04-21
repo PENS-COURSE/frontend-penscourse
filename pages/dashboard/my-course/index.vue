@@ -40,7 +40,7 @@
           v-if="course.course.thumbnail == null"
           src="~assets/images/course.png"
           :alt="course.course.name"
-          class="w-full mb-2 max-h-44"
+          class="w-full mb-2 max-h-28"
         />
         <img
           v-else
@@ -48,14 +48,14 @@
             course.course.thumbnail
           }`"
           :alt="course.course.name"
-          class="w-full mb-2 max-h-44"
+          class="w-full mb-2 max-h-28"
         />
         <h4 class="font-semibold text-base mb-1 line-clamp-1">
           {{ course.course.name }}
         </h4>
         <p class="text-slate-gray-500 mb-4">Teknik Informatika</p>
         <div class="w-full bg-gray-200 rounded-full">
-          <div
+          <!-- <div
             class="text-xs font-medium text-center p-0.5 leading-none rounded-full"
             :class="
               course.progress_completed == null
@@ -74,6 +74,17 @@
                 ? "kosong"
                 : `${course.progress_completed}%`
             }}
+          </div> -->
+          <div
+            class="text-xs font-medium text-center p-0.5 leading-none rounded-full bg-regal-blue-500 text-gray-100"
+            :style="{
+              width:
+                course.progress_completed == null
+                  ? `100%`
+                  : `${course.progress_completed}`,
+            }"
+          >
+            {{ course.progress_completed }}%
           </div>
         </div>
 

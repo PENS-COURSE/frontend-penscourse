@@ -80,7 +80,7 @@
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
                       <NuxtLink
-                        to="/"
+                        :to="`/course/${course?.slug}/curriculum`"
                         :class="[
                           active
                             ? 'bg-regal-blue-500 text-white'
@@ -240,6 +240,8 @@ const { data: detailMajor } =
 
 const course = computed(() => detailCourse?.value?.data);
 const curriculum = computed(() => detailCurriculum?.value?.data);
+console.log(curriculum.value);
+
 const major = computed(() => detailMajor?.value?.data);
 
 const endrollCourse = async () => {
