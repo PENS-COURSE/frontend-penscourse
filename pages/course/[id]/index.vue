@@ -166,7 +166,7 @@
               v-if="course?.is_free"
               @click="endrollCourse"
               :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
-              :disabled="isLoading && course.is_enrolled"
+              :disabled="isLoading || course.is_enrolled"
               class="w-full py-3 text-white rounded-md text-center mb-4"
             >
               <span v-if="isLoading">Loading...</span>
@@ -177,7 +177,7 @@
               v-if="!course?.is_free"
               @click="handlePayment"
               :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
-              :disabled="isLoading && course?.is_enrolled"
+              :disabled="isLoading || course?.is_enrolled"
               class="w-full py-3 text-white rounded-md text-center mb-4"
             >
               <span v-if="isLoading">Loading...</span>
