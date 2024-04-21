@@ -104,7 +104,6 @@ const handleSubmit = async () => {
       autoClose: 5000,
       position: "bottom-right",
     });
-    console.log(error.value.cause);
   }
 
   isLoading.value = false;

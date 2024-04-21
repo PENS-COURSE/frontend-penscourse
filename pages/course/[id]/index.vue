@@ -240,7 +240,6 @@ const { data: detailMajor } =
 
 const course = computed(() => detailCourse?.value?.data);
 const curriculum = computed(() => detailCurriculum?.value?.data);
-console.log(curriculum.value);
 
 const major = computed(() => detailMajor?.value?.data);
 

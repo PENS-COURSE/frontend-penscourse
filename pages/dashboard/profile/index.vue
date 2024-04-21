@@ -227,7 +227,6 @@ const handleSubmit = async () => {
   if (data.value) {
     closeModal();
     await authStore.getProfile();
-    console.log(data);
   }
 
   isLoading.value = false;
