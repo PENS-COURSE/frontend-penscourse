@@ -4,7 +4,6 @@
   >
     <button
       @click.prevent="togglePanel"
-      :disabled="!course?.is_enrolled"
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"
     >
       {{ curriculum?.title }}
@@ -44,13 +43,6 @@
           class="text-regal-blue-500 hover:underline"
         >
           {{ curriculum?.subjects.quizzes == 0 ? "Tambah Kuis" : "Edit Kuis" }}
-        </NuxtLink>
-        <NuxtLink
-          :to="`/course/${course?.slug}/quiz/${quiz?.id}`"
-          v-if="quiz || user.role == 'admin' || user.role == 'dosen'"
-          class="text-regal-blue-500 hover:underline"
-        >
-          Lihat Soal
         </NuxtLink>
         <!-- <button v-if="user.role == 'admin' || user.role == 'dosen'">
           Tambah Materi
@@ -103,6 +95,13 @@
               />
               <span>{{ quiz ? quiz.title : "Kuis" }}</span>
             </div>
+            <NuxtLink
+              :to="`/course/${course?.slug}/quiz/${quiz.id}`"
+              v-if="user.role == 'admin' || user.role == 'dosen'"
+              class="text-regal-blue-500 hover:underline"
+            >
+              Lihat Soal
+            </NuxtLink>
             <NuxtLink
               v-if="quiz"
               :to="{
