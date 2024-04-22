@@ -285,7 +285,9 @@ const { user } = storeToRefs(auth);
 // Streaming Request Token
 const streamingRequestToken = async ({ roomSlug }: { roomSlug: string }) => {
   const { data, error } = await useRestClient<APIResponseDetail<StreamingJoin>>(
-    `/streaming/${roomSlug}/join-url`,
+    user?.value?.role === "user"
+      ? `/streaming/${roomSlug}/join-url`
+      : `/streaming/${roomSlug}/open-room`,
     {
       method: "GET",
     }
