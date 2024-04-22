@@ -35,11 +35,22 @@
           Tambah Video
         </NuxtLink>
         <NuxtLink
-          :to="`/`"
+          :to="
+            curriculum?.subjects.quizzes == 0
+              ? `/course/${course?.slug}/quiz/${curriculum?.id}/create-quiz`
+              : `/course/${course?.slug}/quiz/${curriculum.id}/${quiz?.id}/edit-quiz`
+          "
           v-if="user.role == 'admin' || user.role == 'dosen'"
           class="text-regal-blue-500 hover:underline"
         >
-          Tambah Kuis
+          {{ curriculum?.subjects.quizzes == 0 ? "Tambah Kuis" : "Edit Kuis" }}
+        </NuxtLink>
+        <NuxtLink
+          :to="`/course/${course?.slug}/quiz/${quiz?.id}`"
+          v-if="quiz || user.role == 'admin' || user.role == 'dosen'"
+          class="text-regal-blue-500 hover:underline"
+        >
+          Lihat Soal
         </NuxtLink>
         <!-- <button v-if="user.role == 'admin' || user.role == 'dosen'">
           Tambah Materi

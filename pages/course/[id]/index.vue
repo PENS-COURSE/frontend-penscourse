@@ -110,7 +110,7 @@
           </div>
         </div>
 
-        <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
+        <!-- <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
         <div class="flex flex-col md:flex-row gap-5">
           <template v-for="i in 3" :key="i">
             <div class="bg-white border border-gray rounded-lg p-6">
@@ -133,7 +133,7 @@
               </p>
             </div>
           </template>
-        </div>
+        </div> -->
       </div>
 
       <div class="md:w-1/4 md:-mt-44 lg:-mt-48 xl:-mt-56 2xl:-mt-72">

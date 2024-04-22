@@ -50,3 +50,28 @@ export interface QuizPilihan {
   question_type?: string;
   pilihan?: [];
 }
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  option_e: string;
+  question_type: string;
+  quiz_id: string;
+  level: string;
+  curriculum_id: string;
+  created_at: string;
+  updated_at: string;
+  answer: Answer[];
+}
+
+export interface Answer {
+  id: string;
+  question_id: string;
+  answer: string;
+  created_at: string;
+  updated_at: string;
+}
