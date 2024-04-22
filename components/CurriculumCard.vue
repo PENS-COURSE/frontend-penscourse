@@ -61,7 +61,7 @@
           {{
             curriculum?.description != null
               ? curriculum?.description
-              : "belum ada deskripsi"
+              : "Tidak Ada Deskripsi"
           }}
         </p>
 
@@ -83,7 +83,8 @@
               <span>Lihat Materi</span>
             </button>
           </div>
-          <div class="flex justify-between my-4">
+
+          <div class="flex justify-between my-4" v-for="quiz in quizzes">
             <div>
               <Icon
                 name="material-symbols:edit-square-outline-rounded"
@@ -118,19 +119,36 @@
             </button>
           </div>
 
-          <div class="flex justify-between my-4">
+          <div
+            class="flex justify-between my-4"
+            v-for="streaming in streamings"
+          >
             <div>
               <Icon
                 name="material-symbols:play-circle-outline-rounded"
                 class="w-5 h-5 mr-2 my-2"
               />
-              <span>Kelas Online</span>
+              <span v-text="`Kelas Online - ${streaming.title}`"></span>
             </div>
 
             <div>
               <button
-                disabled
-                class="bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+                @click="
+                  async () =>
+                    await streamingRequestToken({ roomSlug: streaming?.slug })
+                "
+                :disabled="streaming.is_open == false"
+                :class="
+                  clsx(
+                    'text-white py-1 px-4 rounded inline-flex items-center',
+                    {
+                      'bg-gray-400': streaming.is_open == false,
+                    },
+                    {
+                      'bg-[#14487A]': streaming.is_open == true,
+                    }
+                  )
+                "
               >
                 <span>Masuk</span>
               </button>
@@ -141,7 +159,7 @@
     </div>
   </div>
 
-  <TransitionRoot appear :show="isOpen" as="template">
+  <TransitionRoot appear :show="isModalOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
         as="template"
@@ -178,14 +196,16 @@
                 Materi
               </DialogTitle>
               <h1 class="font-semibold">Materi PDF</h1>
-              <template v-for="c in curriculum?.subjects.file_contents">
+              <template v-for="material in materials">
                 <div class="mt-2 flex justify-between">
                   <p class="text-sm text-gray-500 max-w-sm">
-                    {{ c.title }}
+                    {{ material.title }}
                   </p>
 
                   <a
-                    :href="`${useRuntimeConfig().public.BASE_URL}/${c.url}`"
+                    :href="`${useRuntimeConfig().public.BASE_URL}/${
+                      material.url
+                    }`"
                     target="_blank"
                     class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
                   >
@@ -199,14 +219,14 @@
               </template>
 
               <h1 class="font-semibold mt-5">Materi Video</h1>
-              <template v-for="c in curriculum?.subjects.video_contents">
+              <template v-for="video in videos">
                 <div class="mt-2 flex justify-between">
                   <p class="text-sm text-gray-500 max-w-sm">
-                    {{ c.title }}
+                    {{ video.title }}
                   </p>
 
                   <a
-                    :href="c.url"
+                    :href="video.url"
                     target="_blank"
                     class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
                   >
@@ -245,28 +265,47 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 import type { Course } from "../models/Course";
+import type { APIResponseDetail } from "../models/Data";
+import type { StreamingJoin } from "../models/Streaming";
 
-const isOpen = ref(false);
-
-defineProps({
+const props = defineProps({
   curriculum: Object as PropType<Curriculum>,
-  quiz: Object as PropType<Quiz>,
   slug: String,
   course: Object as PropType<Course>,
 });
 
+const quizzes = computed(() => props.curriculum?.subjects.quizzes);
+const materials = computed(() => props.curriculum?.subjects.file_contents);
+const videos = computed(() => props.curriculum?.subjects.video_contents);
+const streamings = computed(() => props.curriculum?.subjects.live_classes);
+
 const auth = useAuthStore();
 const { user } = storeToRefs(auth);
 
-const showPanel = ref(false);
+// Streaming Request Token
+const streamingRequestToken = async ({ roomSlug }: { roomSlug: string }) => {
+  const { data, error } = await useRestClient<APIResponseDetail<StreamingJoin>>(
+    `/streaming/${roomSlug}/join-url`,
+    {
+      method: "GET",
+    }
+  );
 
-const togglePanel = () => {
-  showPanel.value = !showPanel.value;
+  if (data.value) {
+    window.open(data.value.data.url, "_blank");
+  }
+
+  if (error.value) {
+    console.log("ERROR : ", error.value);
+  }
 };
-const closeModal = () => {
-  isOpen.value = false;
-};
-const openModal = () => {
-  isOpen.value = true;
-};
+
+// Panel
+const showPanel = ref(false);
+const togglePanel = () => (showPanel.value = !showPanel.value);
+
+// Modal
+const isModalOpen = ref(false);
+const closeModal = () => (isModalOpen.value = false);
+const openModal = () => (isModalOpen.value = true);
 </script>

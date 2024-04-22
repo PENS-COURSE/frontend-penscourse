@@ -96,13 +96,12 @@
               </transition>
             </Menu>
           </div>
-          <div v-if="curriculum?.length">
+          <div v-if="curriculums?.length">
             <CurriculumCard
               :course="course"
-              :curriculum="c"
-              :quiz="c.subjects.quizzes[0]"
+              :curriculum="curriculum"
               :slug="id"
-              v-for="c in curriculum"
+              v-for="curriculum in curriculums"
             />
           </div>
           <div v-else>
@@ -189,7 +188,7 @@
 
             <div class="flex items-center text-gray-600 gap-5 mb-2">
               <Icon name="bi:camera-video-fill" />
-              <p>{{ curriculum?.length }} Materi</p>
+              <p>{{ curriculums?.length }} Materi</p>
             </div>
             <div class="flex items-center text-gray-600 gap-5 mb-2">
               <Icon name="material-symbols:check-box-rounded" />
@@ -224,7 +223,7 @@ import type { Payment } from "~/models/Payment";
 
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
-const { id } = useRoute().params;
+const { id } = useRoute().params as { id: string };
 const isLoading: Ref<boolean> = ref(false);
 
 const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
@@ -235,11 +234,12 @@ const { data: detailCurriculum } = await useRestClient<
   APIResponseList<Curriculum>
 >(`/courses/${id}/curriculums`);
 
-const { data: detailMajor } =
-  await useRestClient<APIResponsePagination<Department>>("/departments");
+const { data: detailMajor } = await useRestClient<
+  APIResponsePagination<Department>
+>("/departments");
 
 const course = computed(() => detailCourse?.value?.data);
-const curriculum = computed(() => detailCurriculum?.value?.data);
+const curriculums = computed(() => detailCurriculum?.value?.data);
 
 const major = computed(() => detailMajor?.value?.data);
 

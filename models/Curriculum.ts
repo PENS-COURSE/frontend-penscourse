@@ -34,13 +34,12 @@ export interface LiveClass {
   id: string;
   title: string;
   description: string;
-  url: string;
-  start_date: null;
-  end_date: null;
+  slug: string;
   is_open: boolean;
   curriculum_id: string;
   created_at: Date;
   updated_at: Date;
+  room_moderator_id: null;
   is_completed: boolean;
 }
 
