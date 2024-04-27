@@ -8,7 +8,7 @@
       </a>
 
       <div class="flex flex-col gap-5">
-        <h4 class="font-bold text-lg">Our Links</h4>
+        <h4 class="font-bold text-lg">Link Kami</h4>
         <ul>
           <li>
             <a
@@ -66,7 +66,7 @@
       </div>
 
       <div class="flex flex-col gap-5">
-        <h4 class="font-bold text-lg">Our Links</h4>
+        <h4 class="font-bold text-lg">Link Kami</h4>
         <ul>
           <li>
             <a

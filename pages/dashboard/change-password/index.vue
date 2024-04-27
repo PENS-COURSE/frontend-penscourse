@@ -1,14 +1,7 @@
 <template>
   <div class="p-4 h-[450px] shadow-sm rounded-xl border border-gray-50">
     <h4 class="font-semibold text-2xl mb-5">Ganti Password</h4>
-
-    <div class="mt-10 flex flex-col justify-center items-center">
-      <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
-      <h2 class="text-xl font-semibold">
-        Fitur ini masih belum bisa digunakan
-      </h2>
-    </div>
-    <!-- <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <InputField
         label="Password lama"
         v-model:model-value="payload.password_old"
@@ -59,7 +52,7 @@
           <p v-else>Simpan</p>
         </button>
       </div>
-    </form> -->
+    </form>
   </div>
 </template>
 
@@ -87,16 +80,20 @@ const handleSubmit = async () => {
   const { data, error } = await useRestClient<
     APIResponseDetail<Authentication>
   >("/profile/change-password", {
-    body: converterFormData({
+    body: {
       password_old: payload.password_old,
       password_new: payload.password_new,
       password_new_confirm: payload.password_new_confirm,
-    }),
+    },
     method: "PATCH",
   });
 
   if (data.value) {
-    console.log(data.value);
+    toast.success("Sukses mengganti Password!", {
+      transition: "slide",
+      autoClose: 5000,
+      position: "bottom-right",
+    });
   }
   if (error.value) {
     toast.error("Error! Gagal mengganti password!", {

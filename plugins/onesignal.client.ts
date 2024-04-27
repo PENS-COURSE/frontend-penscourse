@@ -1,21 +1,17 @@
 import { useOneSignal } from "@onesignal/onesignal-vue3";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const appID = useRuntimeConfig().public.oneSignalAppId;
+  const appId = useRuntimeConfig().public.oneSignalAppId;
 
-  if (!appID) {
+  if (!appId) {
     return;
   }
 
   const OneSignal = useOneSignal();
 
   OneSignal.init({
-    appId: "c19aa267-4682-4913-98c0-ff4d32aa76c7",
-    notifyButton: {
-      enable: true,
-    },
+    appId,
     allowLocalhostAsSecureOrigin: true,
-    serviceWorkerPath: "/worker/OneSignalSDKWorker.js",
   });
 
   return {

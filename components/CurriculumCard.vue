@@ -4,13 +4,39 @@
   >
     <button
       @click.prevent="togglePanel"
+      :disabled="user.role !== 'admin' && !course?.is_enrolled"
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"
     >
       {{ curriculum?.title }}
-      <span class="flex items-center gap-3">
+      <span class="flex items-center gap-3 justify-between">
+        <NuxtLink
+          v-if="user.role == 'admin' || user.role == 'dosen'"
+          :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-files`"
+          class="text-regal-blue-500 hover:underline"
+        >
+          Tambah File
+        </NuxtLink>
+        <NuxtLink
+          v-if="user.role == 'admin' || user.role == 'dosen'"
+          :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-video`"
+          class="text-regal-blue-500 hover:underline"
+        >
+          Tambah Video
+        </NuxtLink>
+        <NuxtLink
+          v-if="user.role == 'admin' || user.role == 'dosen'"
+          :to="
+            curriculum?.subjects.quizzes == 0
+              ? `/course/${course?.slug}/quiz/${curriculum?.id}/create-quiz`
+              : ``
+          "
+          class="text-regal-blue-500 hover:underline"
+        >
+          {{ curriculum?.subjects.quizzes == 0 ? "Tambah Kuis" : "" }}
+        </NuxtLink>
         <Icon
           :name="
-            course?.is_enrolled
+            course?.is_enrolled || user.role == 'admin' || user.role == 'dosen'
               ? 'ic:baseline-keyboard-arrow-down'
               : 'material-symbols:lock'
           "
@@ -19,31 +45,6 @@
             showPanel == true ? 'rotate-180 transform transition-transform' : ''
           "
         />
-        <NuxtLink
-          :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-files`"
-          v-if="user.role == 'admin' || user.role == 'dosen'"
-          class="text-regal-blue-500 hover:underline"
-        >
-          Tambah File
-        </NuxtLink>
-        <NuxtLink
-          :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-video`"
-          v-if="user.role == 'admin' || user.role == 'dosen'"
-          class="text-regal-blue-500 hover:underline"
-        >
-          Tambah Video
-        </NuxtLink>
-        <NuxtLink
-          :to="
-            curriculum?.subjects.quizzes == 0
-              ? `/course/${course?.slug}/quiz/${curriculum?.id}/create-quiz`
-              : `/course/${course?.slug}/quiz/${curriculum.id}/${quiz?.id}/edit-quiz`
-          "
-          v-if="user.role == 'admin' || user.role == 'dosen'"
-          class="text-regal-blue-500 hover:underline"
-        >
-          {{ curriculum?.subjects.quizzes == 0 ? "Tambah Kuis" : "Edit Kuis" }}
-        </NuxtLink>
         <!-- <button v-if="user.role == 'admin' || user.role == 'dosen'">
           Tambah Materi
         </button> -->
@@ -93,40 +94,59 @@
                 name="material-symbols:edit-square-outline-rounded"
                 class="w-5 h-5 mr-2 my-2"
               />
-              <span>{{ quiz ? quiz.title : "Kuis" }}</span>
+              <span>{{ quiz ? `Kuis ${quiz.title}` : "Kuis" }}</span>
             </div>
-            <NuxtLink
-              :to="`/course/${course?.slug}/quiz/${quiz.id}`"
-              v-if="user.role == 'admin' || user.role == 'dosen'"
-              class="text-regal-blue-500 hover:underline"
-            >
-              Lihat Soal
-            </NuxtLink>
-            <NuxtLink
-              v-if="quiz"
-              :to="{
-                path: '/quiz',
-                query: { id: `${quiz?.id}`, slug: `${slug}` },
-              }"
-            >
-              <button
-                :class="
-                  quiz
-                    ? 'bg-[#14487A] hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'
-                    : 'bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'
-                "
-                :disabled="!quiz"
+            <div class="flex gap-3">
+              <NuxtLink
+                v-if="quiz"
+                :to="{
+                  path: '/quiz',
+                  query: { id: `${quiz?.id}`, slug: `${slug}` },
+                }"
+              >
+                <button
+                  :class="[
+                    quiz
+                      ? 'bg-regal-blue-500 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'
+                      : 'bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center',
+                    user.role == 'admin' || user.role == 'dosen'
+                      ? 'hidden'
+                      : '',
+                  ]"
+                  :disabled="!quiz"
+                >
+                  Mulai
+                </button>
+              </NuxtLink>
+              <NuxtLink
+                :to="`/course/${course?.slug}/quiz/${quiz.id}`"
+                v-if="user.role == 'admin' || user.role == 'dosen'"
+                class="bg-regal-blue-500 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+              >
+                List Soal
+              </NuxtLink>
+              <NuxtLink
+                :to="`/course/${course?.slug}/quiz/${curriculum?.id}/${quiz.id}/edit-quiz`"
+                v-if="user.role == 'admin' || user.role == 'dosen'"
+                class="bg-regal-blue-500 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+              >
+                Edit Kuis
+              </NuxtLink>
+              <NuxtLink
+                :to="`/course/${course?.slug}/quiz/${curriculum?.id}/${quiz.id}/enrolled`"
+                v-if="user.role == 'admin' || user.role == 'dosen'"
+                class="bg-regal-blue-500 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center"
+              >
+                Enrolled
+              </NuxtLink>
+              <!-- <button
+                v-else
+                disabled
+                class="bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex-center"
               >
                 <span>Mulai</span>
-              </button>
-            </NuxtLink>
-            <button
-              v-else
-              disabled
-              class="bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex-center"
-            >
-              <span>Mulai</span>
-            </button>
+              </button> -->
+            </div>
           </div>
 
           <div

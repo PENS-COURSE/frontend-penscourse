@@ -1,11 +1,9 @@
 <template>
-  <div class="mb-3">
+  <div class="mb-4">
     <div class="flex items-center">
-      <label
-        :for="label"
-        class="block text-sm font-medium text-gray-700 leading-6 mb-2"
-        >{{ label }}</label
-      >
+      <label :for="label" class="mb-2 block text-gray-800 leading-6">{{
+        label
+      }}</label>
       <span class="text-red-500 ml-1" v-if="required">*</span>
     </div>
     <textarea
@@ -13,7 +11,7 @@
       :id="label"
       :name="name"
       :type="type"
-      class="block w-full rounded-md border focus:border-blue-500 focus:ring-blue-500 text-gray-900 p-1.5 text-sm"
+      class="w-full rounded border-2 border-gray-200 bg-transparent py-2 px-5 font-medium outline-none transition focus:border-blue-900 active:border-regal-blue-500 disabled:bg-sky-50"
       :required="required"
       :readonly="readonly"
       :placeholder="placeholder"

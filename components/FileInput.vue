@@ -10,7 +10,7 @@
     </div>
 
     <input
-      class="w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+      class="w-full cursor-pointer rounded-lg border-[1.5px] border-gray-100 bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-gray-100 file:bg-white file:py-3 file:px-5 file:hover:bg-regal-blue-500 file:hover:bg-opacity-10 focus:border-blue-900 active:border-regal-blue-500 disabled:cursor-default"
       type="file"
       :id="label"
       :value="value"

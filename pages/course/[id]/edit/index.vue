@@ -1,12 +1,31 @@
 <template>
-  <div class="mx-auto">
-    <div class="border border-alto-500/50 rounded w-full p-4">
-      <h1 class="text-2xl font-medium mb-5">
+  <div
+    class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <h2 class="text-title-md2 font-bold text-black">Edit Mata Kuliah</h2>
+    <nav>
+      <ol class="flex items-center gap-2">
+        <li>
+          <NuxtLink :to="`/course/${course?.slug}`" class="font-medium"
+            >{{ course?.name }} /</NuxtLink
+          >
+        </li>
+        <li class="font-medium text-regal-blue-500">Edit Mata Kuliah</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div
+    class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 rounded-sm border border-gray-200 bg-gray-50 shadow-lg"
+  >
+    <div class="border-b border-stroke py-4 px-6">
+      <h3 class="font-semibold text-black">
         Edit Mata Kuliah {{ course?.name }}
-      </h1>
-      <hr class="border border-alto-500/40 mt-2" />
+      </h3>
+    </div>
+    <div class="p-6">
       <form @submit.prevent="handleSubmit">
-        <div class="mt-3">
+        <div class="p-6">
           <FileInput
             label="Thumbnail"
             v-model:model-value="payload.thumbnail"
@@ -113,13 +132,12 @@
               v-model:model-value="payload.user_id"
             />
           </div>
-        </div>
-        <div class="mt-3 flex justify-end">
           <button
-            class="bg-regal-blue-500 text-white rounded-lg text-sm font-medium gap-2 px-6 py-2"
-            type="submit"
+            class="flex w-full justify-center rounded bg-regal-blue-500 p-3 font-medium text-gray-100"
+            type="button"
           >
-            Simpan
+            <span v-if="isLoading"><LoadingSpinner /></span>
+            <span v-if="!isLoading">Simpan</span>
           </button>
         </div>
       </form>
@@ -177,8 +195,15 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: "livestream",
+  middleware: "authenticated",
+});
+
 const { user } = storeToRefs(useAuthStore());
 const route = useRoute().params;
+
+const isLoading: Ref<boolean> = ref(false);
 
 const inputSearchJurusan = ref("");
 const modal = reactive({
@@ -295,6 +320,7 @@ const handleCancel = () => {
 };
 
 const handleSubmit = async () => {
+  isLoading.value = true;
   const { error } = await useRestClient<APIResponsePagination<Department>>(
     `/courses/${route.id}/update`,
     {
@@ -333,8 +359,10 @@ const handleSubmit = async () => {
   );
 
   if (!error.value) {
+    isLoading.value = false;
     navigateTo("/dosen/course");
   }
+  isLoading.value = false;
 };
 
 const setOpenModalJurusan = () => {

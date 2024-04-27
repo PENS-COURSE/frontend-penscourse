@@ -1,5 +1,21 @@
 <template>
-  <section class="p-20">
+  <div
+    class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <h2 class="text-title-md2 font-bold text-black">List Soal</h2>
+    <nav>
+      <ol class="flex items-center gap-2">
+        <li>
+          <NuxtLink :to="`/course/${course?.slug}`" class="font-medium"
+            >{{ course?.name }} /</NuxtLink
+          >
+        </li>
+        <li class="font-medium text-regal-blue-500">List Soal Kuis</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52">
     <div class="flex justify-between mb-8">
       <h1 class="font-bold text-xl">Kuis ID: {{ quiz }}</h1>
       <Menu as="div" class="relative inline-block">
@@ -218,6 +234,11 @@ const { data: dataQuestion } = await useRestClient<
   APIResponseList<QuizQuestion>
 >(`/quizzes/${quiz}/questions`);
 
+const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
+  `/courses/${id}`
+);
+
+const course = computed(() => dataCourse?.value?.data);
 const q = computed(() => dataQuestion.value?.data);
 
 const closeModal = () => {

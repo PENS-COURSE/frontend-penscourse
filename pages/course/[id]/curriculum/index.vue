@@ -1,5 +1,21 @@
 <template>
-  <section class="p-20">
+  <div
+    class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <h2 class="text-title-md2 font-bold text-black">Kurikulum</h2>
+    <nav>
+      <ol class="flex items-center gap-2">
+        <li>
+          <NuxtLink :to="`/course/${course?.slug}`" class="font-medium"
+            >{{ course?.name }} /</NuxtLink
+          >
+        </li>
+        <li class="font-medium text-regal-blue-500">Kurikulum</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52">
     <div class="flex justify-between mb-8">
       <h1 class="font-bold text-xl">Kurikulum {{ course?.name }}</h1>
       <NuxtLink
@@ -99,7 +115,7 @@
                           </DialogTitle>
                           <div class="mt-2">
                             <p class="mb-4 text-center text-gray-500">
-                              Apakah anda yakin akan menghapus mata kuliah ini?
+                              Apakah anda yakin akan menghapus kurikulum ini?
                             </p>
                             <div
                               class="flex justify-center items-center space-x-4"

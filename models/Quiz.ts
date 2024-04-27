@@ -75,3 +75,14 @@ export interface Answer {
   created_at: string;
   updated_at: string;
 }
+
+export interface EnrolledQuiz {
+  id: string;
+  user_id: number;
+  quiz_id: string;
+  score: number;
+  is_ended: boolean;
+  created_at: string;
+  updated_at: string;
+  user: User;
+}
