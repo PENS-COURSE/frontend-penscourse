@@ -159,7 +159,7 @@
                   v-else
                   :src="`${useRuntimeConfig().public.BASE_URL}/${c.thumbnail}`"
                   :alt="c.name"
-                  class="w-full mb-2 max-h-28"
+                  class="w-full mb-2 max-h-28 object-cover"
                 />
                 <h4 class="font-semibold text-base mb-1 line-clamp-1">
                   {{ c.name }}

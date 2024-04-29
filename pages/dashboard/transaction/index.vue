@@ -56,7 +56,7 @@
             order.course.thumbnail
           }`"
           :alt="order.course.name"
-          class="w-full mb-2"
+          class="w-full mb-2 max-h-28 object-cover"
         />
         <h4 class="font-semibold text-base mb-1">{{ order.course.name }}</h4>
         <p class="text-slate-gray-500 mb-4">Teknik Informatika</p>
@@ -92,7 +92,7 @@
     </template>
   </div>
   <div
-    v-if="filteredOrder.length == 0 || null"
+    v-if="filteredOrder.length == null"
     class="mt-10 flex flex-col justify-center items-center"
   >
     <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />

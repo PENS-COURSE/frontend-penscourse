@@ -8,13 +8,14 @@
     <div class="flex flex-col items-center md:flex-row md:gap-4">
       <img
         v-if="profile?.avatar == null"
-        src="~assets/images/profile.png"
-        alt=""
+        src="/images/profile.png"
+        class="rounded-full w-16 h-16 object-cover"
+        :alt="profile.name"
       />
       <img
         v-else
         :src="`${useRuntimeConfig().public.BASE_URL}/${profile?.avatar}`"
-        class="rounded-full w-16 h-1w-16"
+        class="rounded-full w-16 h-16 object-cover"
         alt="profile picture"
       />
       <div class="flex flex-col text-center md:text-start">

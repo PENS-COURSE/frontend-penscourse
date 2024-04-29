@@ -163,7 +163,7 @@
 
             <button
               v-if="course?.is_free"
-              @click="endrollCourse"
+              @click="openModal()"
               :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
               :disabled="isLoading || course.is_enrolled"
               class="w-full py-3 text-white rounded-md text-center mb-4"
@@ -174,7 +174,7 @@
             </button>
             <button
               v-if="!course?.is_free"
-              @click="handlePayment"
+              @click="openModal()"
               :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
               :disabled="isLoading || course?.is_enrolled"
               class="w-full py-3 text-white rounded-md text-center mb-4"
@@ -207,6 +207,72 @@
       </div>
     </div>
   </section>
+
+  <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" @close="closeModal" class="relative z-10">
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/25" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
+        >
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
+          >
+            <DialogPanel
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+            >
+              <p class="mb-4 text-center text-gray-800 font-semibold">
+                Apakah anda yakin ingin Memiliki Mata Kuliah ini?
+              </p>
+              <div class="flex justify-center items-center space-x-4">
+                <button
+                  @click="closeModal"
+                  class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
+                >
+                  Tidak
+                </button>
+                <button
+                  v-if="course?.is_free"
+                  @click="endrollCourse"
+                  class="py-2 px-3 text-sm font-medium text-center text-white bg-regal-blue-500 rounded-lg hover:bg-regal-blue-500 focus:ring-4 focus:outline-none focus:ring-regal-blue-300"
+                  :disabled="isLoading"
+                >
+                  <span v-if="isLoading"><LoadingSpinner /></span>
+                  <span v-else>Ya</span>
+                </button>
+                <button
+                  v-if="!course?.is_free"
+                  @click="handlePayment"
+                  class="py-2 px-3 text-sm font-medium text-center text-white bg-regal-blue-500 rounded-lg hover:bg-regal-blue-500 focus:ring-4 focus:outline-none focus:ring-regal-blue-300"
+                  :disabled="isLoading"
+                >
+                  <span v-if="isLoading"><LoadingSpinner /></span>
+                  <span v-else>Ya</span>
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>
 
 <script setup lang="ts">
@@ -220,11 +286,18 @@ import type { Course } from "../../../models/Course";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { toast } from "vue3-toastify";
 import type { Payment } from "~/models/Payment";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+} from "@headlessui/vue";
 
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 const { id } = useRoute().params as { id: string };
 const isLoading: Ref<boolean> = ref(false);
+const isOpen: Ref<boolean> = ref(false);
 
 const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
@@ -234,14 +307,17 @@ const { data: detailCurriculum } = await useRestClient<
   APIResponseList<Curriculum>
 >(`/courses/${id}/curriculums`);
 
-const { data: detailMajor } = await useRestClient<
-  APIResponsePagination<Department>
->("/departments");
+const { data: detailMajor } =
+  await useRestClient<APIResponsePagination<Department>>("/departments");
 
 const course = computed(() => detailCourse?.value?.data);
 const curriculums = computed(() => detailCurriculum?.value?.data);
 
 const major = computed(() => detailMajor?.value?.data);
+
+const getetailCourse = async () => {
+  await useRestClient<APIResponseDetail<Course>>(`/courses/${id}`);
+};
 
 const endrollCourse = async () => {
   isLoading.value = true;
@@ -255,7 +331,10 @@ const endrollCourse = async () => {
     toast.info("Selamat! Berhasil Enroll Mata Kuliah!", {
       transition: "slide",
       autoClose: 5000,
+      position: "bottom-right",
     });
+    await getetailCourse();
+    closeModal();
   }
   if (error.value?.statusCode == 401) {
     navigateTo("/auth/login");
@@ -283,6 +362,13 @@ const handlePayment = async () => {
 const getMajorName = (id: number | undefined) => {
   const majorName = major.value?.data.find((major) => major.id === id);
   return majorName ? majorName.name : "";
+};
+
+const closeModal = () => {
+  isOpen.value = false;
+};
+const openModal = () => {
+  isOpen.value = true;
 };
 </script>
 

@@ -128,17 +128,20 @@
         </Popover>
 
         <div class="flex items-center gap-3">
-          <img
-            v-if="user?.avatar == null"
-            src="~assets/images/profile.png"
-            alt=""
-          />
-          <img
-            v-else
-            :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
-            class="rounded-full w-10 h-10"
-            alt="profile picture"
-          />
+          <NuxtLink v-if="user?.avatar == null" to="/dashboard/profile">
+            <img
+              src="/images/profile.png"
+              class="w-10 h-10 rounded-full object-cover"
+              :alt="user.name"
+            />
+          </NuxtLink>
+          <NuxtLink v-else to="/dashboard/profile">
+            <img
+              :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
+              class="w-10 h-10 rounded-full object-cover"
+              alt="profile picture"
+            />
+          </NuxtLink>
           <p class="text-white font-light">
             {{ user?.name }}
           </p>

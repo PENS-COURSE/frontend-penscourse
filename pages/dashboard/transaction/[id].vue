@@ -16,7 +16,7 @@
               order.course.thumbnail
             }`"
             :alt="order.course.name"
-            class="w-full mb-2 max-h-72"
+            class="w-full mb-2 max-h-72 object-cover"
           />
           <h4 class="font-semibold mb-2">{{ order?.course.name }}</h4>
           <p class="text-sm lg:text-base">
