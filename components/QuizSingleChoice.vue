@@ -1,11 +1,12 @@
 <template>
-  <div class="flex flex-col max-w-[820px]">
+  <div class="flex flex-col flex-wrap">
     <div class="relative w-full flex items-center bg-[#14487a] rounded-md py-2 px-3 my-1" v-for="(item, index) in soal.pilihan" :key="index">
       <div class="flex items-center">
         <input @change="event => handleClick(event, item, getInputType(soal))" :type="getInputType(soal)" :value="item.option" name="select" :id="`option-${index + 1}`" class="w-4 h-4" ref="rolesSelected" />
         <label :for="`option-${index + 1}`" :class="`option-${index + 1}`" class="ml-2">
-          <div class="text-white text">
+          <div class="text-white text-left">
             {{ item.answer }}
+
           </div>
         </label>
       </div>

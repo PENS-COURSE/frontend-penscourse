@@ -1,27 +1,20 @@
 <template>
   <div
-    class="w-full h-full flex flex-wrap bg-gradient-to-r from-[#F4F7FA] via-[#F4F7FA] to-[#F4F7FA] pt-5 pb-5 text-center"
+    class="w-full h-full flex bg-gradient-to-r from-[#F4F7FA] via-[#F4F7FA] to-[#F4F7FA] pt-5 pb-5 text-center"
   >
     <div
       class="w-full top-24 flex items-center justify-center px-8 md:px-10 lg:px-16 2xl:px-32 mx-auto"
     >
-      <div class="w-full md:px-12 gap-8 pt-6">
-        <div class="flex flex-row flex-wrap py-4">
+      <div class="w-full md:px-12  pt-6">
+        <div class="flex flex-wrap md:relative py-4">
           <aside
-            class="w-full sm:w-1/3 md:w-[160px] lg:w-[250px] px-2 flex-row sm:flex-col mb-8"
+            class="w-full sm:row sm:w-1/3 md:w-max-[160px] lg:w-[245px] px-2 flex-row mb-8"
           >
-            <!-- <QuizTimer :duration="quizzes?.quiz?.duration" /> -->
             <div class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
-              <div
-                class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]"
-              >
+              <div class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]">
                 Sisa Waktu
               </div>
-
-              <div
-                id="demo"
-                class="pt-3 text-center font-semibold antialiased text-2xl text-[#23262F]"
-              >
+              <div id="demo" class="pt-3 text-center font-semibold antialiased text-2xl text-[#23262F]">
                 {{ formattedTimer }}
               </div>
             </div>
@@ -41,7 +34,7 @@
           </aside>
           <main
             role="main"
-            class="w-full sm:w-2/1 md:max-w-[80%] lg:max-w-[90%] xl:w-[75%] pl-2 md:mt-0"
+            class="w-full sm:w-2/3 pl-2 md:mt-0"
           >
             <QuizQuestion
               :soal="soal[selectedSoal]"
@@ -64,7 +57,7 @@ import type {
   APIResponsePagination,
 } from "../../../models/Data";
 import type { QuizResponse, QuizScoreResponse } from "../../../models/Quiz";
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import QuizSessionNext from "~/components/QuizSessionNext.vue";
 import moment from 'moment';
 import { defineProps, defineEmits } from "vue";
@@ -151,58 +144,73 @@ function randomizeArray(arr: string[]): string[] {
 }
 
 const updateVariable = async (newValue: number) => {
-  const data: any = {
-    question_type: "",
-    pilihan: []
-  };
+  try {
+    const data: any = {
+      question_type: "",
+      pilihan: []
+    };
 
-  const response = await useRestClient<APIResponseList<any>>(
-    `/courses/quiz/update-answer`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({
-        session_id: quizzes.value?.detail?.session_id,
-        question_id: soal[selectedSoal.value || 0].question.id.toString(),
-        answer: soal[selectedSoal.value].question.question_type === 'single_choice' ? [answerPicked.value] : answerPicked.value,
-      }),
-    }
-  );
+    const response = await useRestClient<APIResponseList<any>>(
+      `/courses/quiz/update-answer`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          session_id: quizzes.value?.detail?.session_id,
+          question_id: soal[selectedSoal.value || 0]?.question?.id.toString(),
+          answer: soal[selectedSoal.value]?.question?.question_type === 'single_choice' ? [answerPicked.value] : answerPicked.value,
+        }),
+      }
+    );
 
-  quizCookies().updateAnswer(answerPicked.value, selectedSoal.value);
-  
+    quizCookies().updateAnswer(answerPicked.value, selectedSoal.value);
+
     console.log("Selected Soal Before", selectedSoal.value);
     selectedAnswer([]);
 
-  selectedSoal.value = newValue;
+    selectedSoal.value = newValue;
 
-  console.log("Selected Soal After", selectedSoal.value);
+    console.log("Selected Soal After", selectedSoal.value);
 
-  data.question_type = soal[newValue].question.question_type
-  data.pilihan.push({
-    option: "A",
-    answer: soal[newValue].question.option_a,
-    
-  });
-  data.pilihan.push({
-    option: "B",
-    answer: soal[newValue].question.option_b,
-  });
-  data.pilihan.push({
-    option: "C",
-    answer: soal[newValue].question.option_c,
-  });
-  data.pilihan.push({
-    option: "D",
-    answer: soal[newValue].question.option_d,
-  });
-  if(soal[newValue].question.option_e){
-    data.pilihan.push({
-      option: "E",
-      answer: soal[newValue].question.option_e,
-    });
+    if (soal[newValue]?.question) {
+      data.question_type = soal[newValue].question.question_type;
+      data.pilihan.push({
+        option: "A",
+        answer: soal[newValue].question.option_a,
+      });
+      data.pilihan.push({
+        option: "B",
+        answer: soal[newValue].question.option_b,
+      });
+      data.pilihan.push({
+        option: "C",
+        answer: soal[newValue].question.option_c,
+      });
+      data.pilihan.push({
+        option: "D",
+        answer: soal[newValue].question.option_d,
+      });
+      if (soal[newValue].question.option_e) {
+        data.pilihan.push({
+          option: "E",
+          answer: soal[newValue].question.option_e,
+        });
+      }
+
+      pilihan.value = data;
+    } else {
+      throw new Error("Cannot read properties of undefined (reading 'question')");
+    }
+  } catch (error) {
+    console.error(error);
+    const response = await useRestClient<APIResponseDetail<QuizScoreResponse>>(
+    `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
+    {
+      method: "PATCH",
+    }
+  );
+
+  router.push(`/quiz/${id}/nilai`);
   }
-
-  pilihan.value = data;
 };
 
 const handleSubmit = async () => {
@@ -282,6 +290,22 @@ onMounted(() => {
 //   clearInterval(state.intervalId);
 //   state.intervalId = null;
 // };
+
+// screen mobile
+const isMobile = ref(false);
+
+const checkScreenSize = () => {
+  isMobile.value = window.innerWidth <= 640; // Atur breakpoint sesuai kebutuhan Anda
+};
+
+onMounted(() => {
+  checkScreenSize(); // Pengecekan saat komponen dimuat
+  window.addEventListener('resize', checkScreenSize); // Pengecekan ukuran layar berubah
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkScreenSize); // Hapus event listener saat komponen di-unmount
+});
 </script>
 
 <style scoped>

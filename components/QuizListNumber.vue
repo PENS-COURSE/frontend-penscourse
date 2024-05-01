@@ -1,114 +1,107 @@
 <template>
-  <div class="border-b-2 border-opacity-30 border-[#14487A] p-2 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]">
-        Nomor Soal 
+  <div :class="isMobile ? 'w-full  border-[#14487A]  text-dark border-b-2 border-opacity-30' : 'border-b-2 border-opacity-30 border-[#14487A] p-2 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]'">
+    <div class=" w-full items-center">
+      <button v-if="isMobile" @click.prevent="togglePanel" class="p-4 w-full font-semibold flex items-center justify-between ">
+        <span class="font-semibold ">Nomor Soal</span>
+        <Icon
+          :name="'ic:baseline-keyboard-arrow-down'"
+          class="text-gray-600 w-7 h-7 items-right"
+          :class="{'rotate-180 transform transform': showPanel}"
+        />
+      </button>
+      <span v-else class="font-semibold">Nomor Soal</span>
     </div>
-    <div class="flex flex-col">
-      <div class="flex flex-row sm:items-center flex-wrap gap-1">
-        <div v-for="index in (props.soalLength || 0)" :key="index">
-            <button @click="notifyParent(index - 1)" :class="{ 'clicked': (index - 1) === selectedButton }" class=" mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-3 rounded-lg" :style="{ backgroundColor: index === selectedButton ? '#14487A' : '#14487A' }">  
-              {{ index  }}
-            </button>
-          </div>
-      </div>
-
-      <div class="mt-8 w-full flex justify-between gap-0.5">
-        <a @click="previousPage"
-          class="bg-[#E0E8F3] hover:bg-[#14487A] mt-4  text-black text-center  rounded-full h-[30px] w-[30px] inline-flex items-center">
-            <Icon name="material-symbols:arrow-back-ios-new-rounded" class="text-white w-5 h-5 p-0" />
-        </a>
-        <button
-          @click="openModal"
-          type="button"
-          class="mt-4 mb-0 w-full text-[#23262F] text-opacity-50 hover:text-white bg-[#E0E8F3] hover:bg-[#ffe000] focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
-        >
-          Selesaikan pengerjaan
+  </div>
+  
+  <div class="flex flex-col">
+    <div class="flex flex-row sm:items-center flex-wrap gap-1 mx-auto sm:mx-auto">
+      <div v-for="index in (props.soalLength || 0)" :key="index">
+        <button @click="notifyParent(index - 1)"
+          :class="{ 'clicked': (index - 1) === selectedButton }"
+          class="mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-3 rounded-lg"
+          :style="{ backgroundColor: index === selectedButton ? '#14487A' : '#14487A' }"  
+          v-if="(isMobile && showPanel) || !isMobile">
+          {{ index }}
         </button>
-        <a @click="nextPage"
-          class="bg-[#E0E8F3] hover:bg-[#14487A] mt-4 text-black text-center rounded-full h-[30px] w-[30px] inline-flex items-center">
-            <Icon name="material-symbols:arrow-forward-ios-rounded" class="text-white ml-0.5 w-5 h-5 p-0" />
-        </a>
       </div>
     </div>
-    
-    <TransitionRoot appear :show="isOpen" as="template">
-      <Dialog as="div" @close="closeModal" class="relative z-10">
-        <TransitionChild
-          as="template"
-          enter="duration-300 ease-out"
-          enter-from="opacity-0"
-          enter-to="opacity-100"
-          leave="duration-200 ease-in"
-          leave-from="opacity-100"
-          leave-to="opacity-0"
+
+    <div :class="isMobile ? 'w-full flex justify-between gap-0.5' : 'mt-8 w-full flex justify-between gap-0.5'">
+      <a @click="previousPage"
+        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+          <Icon name="material-symbols:arrow-back-ios-new-rounded" class="text-[#6A8BFF] hover:text-white w-5 h-5 p-0" />
+      </a>
+      <button
+        @click="openModal"
+        type="button"
+        class="mt-4 mb-0 w-full text-[#6A8BFF] font-semibold hover:text-white border-2 border-[#6A8BFF] hover:bg-[#6A8BFF] focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
+      >
+        Selesaikan Ujian
+      </button>
+      <a @click="nextPage"
+        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+          <Icon name="material-symbols:arrow-forward-ios-rounded" class="text-[#6A8BFF] hover:text-white ml-0.5 w-5 h-5 p-0" />
+      </a>
+    </div>
+  </div>
+  
+  <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" @close="closeModal" class="relative z-10">
+      <TransitionChild
+        as="template"
+        enter="duration-300 ease-out"
+        enter-from="opacity-0"
+        enter-to="opacity-100"
+        leave="duration-200 ease-in"
+        leave-from="opacity-100"
+        leave-to="opacity-0"
+      >
+        <div class="fixed inset-0 bg-black/25" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div
+          class="flex min-h-full items-center justify-center p-4 text-center"
         >
-          <div class="fixed inset-0 bg-black/25" />
-        </TransitionChild>
-
-        <div class="fixed inset-0 overflow-y-auto">
-          <div
-            class="flex min-h-full items-center justify-center p-4 text-center"
+          <TransitionChild
+            as="template"
+            enter="duration-300 ease-out"
+            enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100"
+            leave="duration-200 ease-in"
+            leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95"
           >
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0 scale-95"
-              enter-to="opacity-100 scale-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100 scale-100"
-              leave-to="opacity-0 scale-95"
+            <DialogPanel
+              class="w-full max-w-sm sm:max-w-lg transform overflow-hidden rounded-2xl bg-white p-7 sm:p-12 text-left align-middle shadow-xl transition-all"
             >
-              <DialogPanel
-                class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-12 text-left align-middle shadow-xl transition-all"
+              <DialogTitle
+                as="h3"
+                class=" text-xl sm:text-3xl font-semibold text-center leading-6 sm:leading-10 text-gray-900"
               >
-                <DialogTitle
-                  as="h3"
-                  class="text-3xl font-semibold text-center leading-10 text-gray-900"
-                >
-                  Apakah anda yakin untuk mengakhiri ujian?
-                </DialogTitle>
-                <!-- <div class="mt-2">
-                  <p class="text-sm text-gray-500">
-                    Your payment has been successfully submitted. We’ve sent you
-                    an email with all of the details of your order.
-                  </p>
-                </div> -->
+                Apakah anda yakin untuk mengakhiri ujian?
+              </DialogTitle>
 
-                <div class="row text-center mt-8 p-4">
-                  <!-- <NuxtLink
-                    :to="{
-                      path: `/quiz/${quizSessionid}`,
-                      query: { slug: `${id}` },
-                    }"> -->
-                  <!-- <NuxtLink :to="{ path : `/quiz/${quizsession.id}`, query: { slug: `${slug}` }}"> -->
-                    <button
-                      @click="submitQuiz"
-                      type="button"
-                      class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    >
-                      Ya
-                    </button>
-                  <!-- </NuxtLink> -->
-                  <!-- <button
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    @click="closeModal"
-                  >
+              <div class="row text-center mt-4 sm:mt-8 p-1.5 sm:p-4">
+                <button
+                  @click="submitQuiz"
+                  type="button"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] sm:w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
                     Ya
-                  </button> -->
-                  <button
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-[#ED3028] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#ED3028]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    @click="closeModal"
-                  >
+                </button>
+                <button
+                  type="button"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-[#ED3028] sm:w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#ED3028]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  @click="closeModal">
                     Tidak
-                  </button>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
         </div>
-      </Dialog>
-    </TransitionRoot>
+      </div>
+    </Dialog>
+  </TransitionRoot>
     <!-- <transition name="fade">
         <div v-if="loading" class="loading-overlay">
             <div class="loading-popup">
@@ -118,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import {
   TransitionRoot,
   TransitionChild,
@@ -196,6 +189,29 @@ const previousPage = () => {
     currentIndex > 0 ? currentIndex - 1 : props.soalLength - 1;
   notifyParent(previousIndex);
 };
+
+
+const isMobile = ref(false);
+
+const showPanel = ref(false);
+
+const togglePanel = () => {
+  showPanel.value = !showPanel.value;
+};
+
+const checkScreenSize = () => {
+  isMobile.value = window.innerWidth <= 640; // Atur breakpoint sesuai kebutuhan Anda
+};
+
+onMounted(() => {
+  checkScreenSize(); // Pengecekan saat komponen dimuat
+  window.addEventListener('resize', checkScreenSize); // Pengecekan ukuran layar berubah
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkScreenSize); // Hapus event listener saat komponen di-unmount
+});
+
 </script>
 
 <style scoped>

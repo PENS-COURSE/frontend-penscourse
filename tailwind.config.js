@@ -87,6 +87,9 @@ module.exports = {
           950: "#0a142b",
         },
       },
+      screens: {
+        'mb': '320px',
+      },
     },
   },
 

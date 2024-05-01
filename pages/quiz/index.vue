@@ -1,25 +1,25 @@
 <template>
-  <div class="mx-auto w-1/2 rounded-lg shadow-lg border overflow-hidden mt-20 bg-white">
+  <div class="sm:mx-auto mx-10 sm:w-1/2 rounded-lg shadow-lg border overflow-hidden mt-20 bg-white">
     <div class="relative p-12">
       <div class="">
-        <h1 class="text-3xl font-bold text-center mb-4 cursor-pointer">
+        <h1 class="sm:text-3xl text-xl font-bold text-center mb-4 cursor-pointer">
           Petunjuk Kuis
         </h1>
         <p
-          class="w-80 text-left text-sm mt-8 mb-2 font-semibold text-alto-500-700 tracking-wide cursor-pointer"
+          class="w-80 text-left text-xs sm:text-sm mt-8 mb-2 font-semibold text-alto-500-700 tracking-wide cursor-pointer"
         >
           Aturan Ujian:
         </p>
-        <p class="mt-2 text-sm">
+        <p class="mt-2 text-xs sm:text-sm">
           Kuis ini bertujuan untuk menguji pengetahuan Anda tentang materi yang
           telah dipelajari di kelas ini.
         </p>
-        <p class="mt-4 text-sm">
+        <p class="mt-4 text-xs sm:text-sm">
           Terdapat 5 Pertanyaan yang harus dikerjakan dalam ujian ini. Beberapa
           ketentuannya sebagai berikut:
         </p>
-        <p class="mt-2 ml-4 text-sm">1. Syarat nilai kelulusan: 60%</p>
-        <p class="mt-2 ml-4 text-sm">2. Durasi ujian: 20 menit</p>
+        <p class="mt-2 ml-4 text-xs sm:text-sm">1. Syarat nilai kelulusan: 60%</p>
+        <p class="mt-2 ml-4 text-xs sm:text-sm">2. Durasi ujian: 20 menit</p>
       </div>
       <div class="text-center mt-6">
 
@@ -64,41 +64,28 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-12 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-sm sm:max-w-lg transform overflow-hidden rounded-2xl bg-white p-9 sm:p-12 text-left align-middle shadow-xl transition-all"
             >
               <DialogTitle
                 as="h3"
-                class="text-3xl font-semibold  text-center leading-10 text-gray-900"
+                class="text-xl sm:text-3xl font-semibold  text-center leading-6 sm:leading-10 text-gray-900"
               >
               Apakah anda yakin untuk memulai ujian?
               </DialogTitle>
-              <!-- <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                  Your payment has been successfully submitted. We’ve sent you
-                  an email with all of the details of your order.
-                </p>
-              </div> -->
 
-              <div class="row text-center mt-8 p-4">
+              <div class="row text-center mt-4 sm:mt-8 p-1.5 sm:p-4">
                 <NuxtLink :to="{ path : `/quiz/${id}`, query: { slug: `${slug}` } }">
                   <button
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] sm:w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   @click="closeModal"
                   >
                     Ya
                   </button>
                 </NuxtLink>
-                <!-- <button
-                  type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="closeModal"
-                >
-                  Ya
-                </button> -->
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-[#ED3028] w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#ED3028]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-[#ED3028] sm:w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#ED3028]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   @click="closeModal"
                 >
                   Tidak
@@ -110,6 +97,7 @@
       </div>
     </Dialog>
   </TransitionRoot>
+  
 </template>
 
 <script setup lang="ts">
@@ -127,7 +115,8 @@
     DialogTitle,
   } from '@headlessui/vue'
 
-  
+  const showPanel = ref(false);
+  const togglePanel = () => (showPanel.value = !showPanel.value);
 
   const isOpen = ref(false)
 
