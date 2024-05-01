@@ -324,6 +324,8 @@ const streamingRequestToken = async ({ roomSlug }: { roomSlug: string }) => {
   );
 
   if (data.value) {
+    console.log(roomSlug);
+
     window.open(data.value.data.url, "_blank");
   }
 

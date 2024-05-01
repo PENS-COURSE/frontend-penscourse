@@ -45,7 +45,6 @@
 
           <input
             v-model="user.email"
-            id="email"
             name="email"
             placeholder="Masukkan email anda"
             type="email"
@@ -65,7 +64,6 @@
 
           <input
             v-model="user.password"
-            id="password"
             name="password"
             :type="isPasswordVisible ? 'text' : 'password'"
             placeholder="Masukkan password anda"
@@ -85,7 +83,8 @@
             :disabled="loading"
             class="w-full rounded-lg bg-regal-blue-500 py-4 text-sm font-semibold text-white mb-6"
           >
-            {{ loading ? "Loading..." : "Masuk" }}
+            <span v-if="loading"><LoadingSpinner /></span>
+            <span v-if="!loading">Masuk</span>
           </button>
 
           <!-- <p class="text-center text-sm mb-6">Atau masuk melalui</p>

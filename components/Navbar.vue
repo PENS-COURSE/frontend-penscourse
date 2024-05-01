@@ -143,7 +143,7 @@
             />
           </NuxtLink>
           <p class="text-white font-light">
-            {{ user?.name }}
+            {{ user.name.substring(0, 10) }}
           </p>
         </div>
         <Icon

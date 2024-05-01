@@ -4,7 +4,7 @@
       class="mx-5 md:container md:mx-auto grid grid-cols-4 justify-items-center"
     >
       <a href="https://www.pens.ac.id/" target="_blank">
-        <img src="~assets/images/logo.png" alt="" class="w-20 h-20" />
+        <img src="/images/logo_color.png" alt="" class="w-20 h-20" />
       </a>
 
       <div class="flex flex-col gap-5">

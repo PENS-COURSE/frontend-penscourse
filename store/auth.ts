@@ -33,7 +33,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login({ email, password }: AuthPayloadInterface) {
       this.loading = true;
-      const { data, pending, error } = await useRestClient<
+      const { data, error } = await useRestClient<
         APIResponseDetail<Authentication>
       >("/authentication/login", {
         method: "POST",
@@ -43,20 +43,21 @@ export const useAuthStore = defineStore("auth", {
         },
       });
 
-      this.loading = pending.value;
-
       if (data.value) {
+        this.loading = false;
         this.authenticated = true;
         this.access_token = data.value.data.token.access_token;
         this.refresh_token = data.value.data.token.refresh_token;
         this.user = data.value.data.user;
       }
       if (error.value?.statusCode == 403) {
-        toast.error("Error, terjadi kesalahan!", {
+        this.loading = false;
+        toast.error("Terdapat kesalahan di Email atau Password anda!", {
           autoClose: 5000,
           position: "bottom-right",
         });
       }
+      this.loading = false;
     },
 
     async register({
@@ -66,31 +67,42 @@ export const useAuthStore = defineStore("auth", {
       password_confirmation,
     }: RegisterPayloadInterface) {
       this.loading = true;
-      await useRestClient<APIResponseDetail<Authentication>>(
-        "/authentication/register",
-        {
-          method: "POST",
-          body: {
-            name,
-            email,
-            password,
-            password_confirmation,
-          },
-        }
-      )
-        .then((res) => {
-          navigateTo("/auth/login");
-          this.loading = false;
-        })
-        .catch((err) => {
-          console.log(err);
+      const { data, error } = await useRestClient<
+        APIResponseDetail<Authentication>
+      >("/authentication/register", {
+        method: "POST",
+        body: {
+          name,
+          email,
+          password,
+          password_confirmation,
+        },
+      });
+      if (data.value) {
+        this.loading = false;
+        navigateTo("/auth/login");
+      }
+      if (error.value?.statusCode == 409) {
+        this.loading = false;
+        toast.error("Akun yang anda daftarkan sudah ada!", {
+          autoClose: 5000,
+          position: "bottom-right",
         });
+      }
+      if (error.value?.statusCode == 400) {
+        this.loading = false;
+        toast.error("Password harus memliki 8 karakter atau lebih!", {
+          autoClose: 5000,
+          position: "bottom-right",
+        });
+      }
+      this.loading = false;
     },
 
     logOut() {
       navigateTo("/", { replace: true });
 
-      const { pending } = useRestClient<APIResponseDetail<null>>(
+      const { data, error } = useRestClient<APIResponseDetail<null>>(
         "/authentication/logout",
         {
           method: "POST",

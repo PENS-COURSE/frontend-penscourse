@@ -22,7 +22,7 @@
   </div> -->
 
   <div
-    v-if="returnData?.length == 0"
+    v-if="displayedNotif?.length == 0"
     class="mt-10 flex flex-col justify-center items-center"
   >
     <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
@@ -33,7 +33,7 @@
 
   <div v-if="loadingNotif" class="text-center">Loading...</div>
   <div class="mt-10 border border-alto-500 rounded-lg" v-else>
-    <template v-for="notif in returnData">
+    <template v-for="notif in displayedNotif">
       <NuxtLink
         :to="`/dashboard/notification/${notif.id}`"
         class="flex justify-between items-center gap-4 p-4 cursor-pointer transition-colors"
@@ -62,61 +62,83 @@
     </template>
   </div>
 
-  <div class="mt-10">
-    <Pagination
-      v-model.number="page"
-      :query="true"
-      :total="getTotalPages(notifications?.length as number, limit)"
-      :prev-show-count="3"
-      :next-show-count="3"
+  <div class="mt-10 flex justify-center">
+    <vue-awesome-paginate
+      :total-items="totalNotif"
+      :items-per-page="itemsPerPage"
+      :max-pages-shown="3"
+      v-model="currentPage"
+      :on-click="onClickHandler"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import usePagination from "~/composables/usePagination";
-
 definePageMeta({
   layout: "profile",
 });
 
-const { getCurrentPage, getTotalPages, query } = usePagination();
-const page = ref(getCurrentPage(true, 1));
-const limit: number = 6;
+const itemsPerPage = 5;
+const currentPage = ref(1);
 
-const route = useRoute();
-const cacheEnabled = true; // Enables/Disabled cache
-
-// Cache key has to be unique key across all the pages
-const cacheKey = computed(() => {
-  return route.path;
-});
-
-// Cache key has to be unique key to store correct page data
-const cacheKeyPage = computed(() => {
-  return route.fullPath;
-});
-
-const { data: dataNotif, pending: loadingNotif } = useRestClient<
-  APIResponsePagination<Notif>
->(`/notifications?page=${page.value}&filter_read=unread`);
+const { data: dataNotif, pending: loadingNotif } =
+  useRestClient<APIResponsePagination<Notif>>(`/notifications`);
 
 const notifications = computed(() => dataNotif.value?.data.data);
 
-watch(
-  () => query.value.page,
-  async (value) => {
-    if (!value) {
-      page.value = 1;
-    }
-    // On page change refresh data
-    await refreshNuxtData();
-  }
-);
+const onClickHandler = (page: number) => {
+  currentPage.value = page;
+  scrollToTop();
+};
 
-const returnData = computed(() => {
-  return dataNotif?.value?.data.data;
+const totalNotif = computed(() => {
+  if (Array.isArray(notifications.value)) {
+    return notifications.value.length;
+  } else {
+    return 0;
+  }
+});
+
+const displayedNotif = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return Array.isArray(notifications.value)
+    ? notifications.value.slice(startIndex, endIndex)
+    : [];
+});
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+onMounted(() => {
+  scrollToTop();
 });
 </script>
 
-<style></style>
+<style>
+.pagination-container {
+  display: flex;
+  column-gap: 10px;
+}
+.paginate-buttons {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: rgb(242, 242, 242);
+  border: 1px solid rgb(217, 217, 217);
+  color: black;
+}
+.paginate-buttons:hover {
+  background-color: #d8d8d8;
+}
+.active-page {
+  background-color: #0f497a;
+  border: 1px solid grey;
+  color: white;
+}
+.active-page:hover {
+  background-color: #0c3e6e;
+}
+</style>

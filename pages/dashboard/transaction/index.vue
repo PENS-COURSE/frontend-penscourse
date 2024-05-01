@@ -59,7 +59,9 @@
           class="w-full mb-2 max-h-28 object-cover"
         />
         <h4 class="font-semibold text-base mb-1">{{ order.course.name }}</h4>
-        <p class="text-slate-gray-500 mb-4">Teknik Informatika</p>
+        <p class="text-slate-gray-500 mb-4">
+          {{ getMajorName(order.course.department_id) }}
+        </p>
         <p class="text-slate-gray-500 text-sm mb-1">Total</p>
         <div class="flex justify-between items-center">
           <h4 class="font-semibold text-base text-regal-blue-500">
@@ -92,7 +94,7 @@
     </template>
   </div>
   <div
-    v-if="filteredOrder.length == null"
+    v-if="filteredOrder.length == 0"
     class="mt-10 flex flex-col justify-center items-center"
   >
     <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
@@ -125,6 +127,16 @@ const filteredOrder = computed(() => {
   }
   return orders.value?.filter((item) => item.status === selectedStatus.value);
 });
+
+const { data: detailMajor } =
+  await useRestClient<APIResponsePagination<Department>>("/departments");
+
+const major = computed(() => detailMajor?.value?.data);
+
+const getMajorName = (id: number | undefined) => {
+  const majorName = major.value?.data.find((major) => major.id === id);
+  return majorName ? majorName.name : "";
+};
 
 onMounted(() => {
   getOrder();

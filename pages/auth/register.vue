@@ -42,11 +42,10 @@
 
           <input
             v-model="registerPayload.name"
-            id="name"
             name="name"
             placeholder="masukkan nama anda"
             type="text"
-            autoComplete="name"
+            required
             class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
           />
 
@@ -58,11 +57,10 @@
 
           <input
             v-model="registerPayload.email"
-            id="email"
             name="email"
             placeholder="masukkan email anda"
             type="email"
-            autoComplete="email"
+            required
             class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
           />
 
@@ -75,11 +73,10 @@
           <div class="relative">
             <input
               v-model="registerPayload.password"
-              id="password"
               name="password"
               type="password"
               placeholder="masukkan password anda"
-              autoComplete="password"
+              required
               class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
             />
 
@@ -102,11 +99,10 @@
           <div class="relative mb-16">
             <input
               v-model="registerPayload.password_confirmation"
-              id="password_confirmation"
               name="password_confirmation"
               type="password"
               placeholder="masukkan password anda"
-              autoComplete="password_confirmation"
+              required
               class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
             />
 
@@ -122,7 +118,8 @@
             :disabled="loading"
             class="w-full rounded-lg bg-regal-blue-500 py-4 text-sm font-semibold text-white mb-6"
           >
-            {{ loading ? "Loading..." : "Daftar" }}
+            <span v-if="loading"><LoadingSpinner /></span>
+            <span v-if="!loading">Masuk</span>
           </button>
 
           <!-- <p class="text-center text-sm mb-6">Atau daftar melalui</p>

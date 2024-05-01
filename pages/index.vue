@@ -26,6 +26,7 @@
           <NuxtLink
             to="/auth/register"
             class="bg-school-bus-yellow-500 hover:bg-school-bus-yellow-600 text-white py-2 px-6 rounded-lg"
+            :class="authenticated ? 'hidden' : ''"
           >
             Daftar Sekarang
           </NuxtLink>
@@ -253,6 +254,9 @@
 
 <script setup lang="ts">
 import type { Course } from "~/models/Course";
+
+const authStore = useAuthStore();
+const { authenticated } = storeToRefs(authStore);
 
 const openTab = ref();
 const course = ref<Course[]>();

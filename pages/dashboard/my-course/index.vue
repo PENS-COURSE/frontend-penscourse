@@ -53,7 +53,9 @@
         <h4 class="font-semibold text-base mb-1 line-clamp-1">
           {{ course.course.name }}
         </h4>
-        <p class="text-slate-gray-500 mb-4">Teknik Informatika</p>
+        <p class="text-slate-gray-500 mb-4">
+          {{ getMajorName(course.course.department_id) }}
+        </p>
         <div class="w-full bg-gray-200 rounded-full">
           <!-- <div
             class="text-xs font-medium text-center p-0.5 leading-none rounded-full"
@@ -121,8 +123,16 @@ definePageMeta({
 
 const { data: enrollments } =
   await useRestClient<APIResponsePagination<Enrollment>>("/enrollments");
+const { data: detailMajor } =
+  await useRestClient<APIResponsePagination<Department>>("/departments");
 
 const courses = computed(() => enrollments.value?.data.data);
+const major = computed(() => detailMajor?.value?.data);
+
+const getMajorName = (id: number | undefined) => {
+  const majorName = major.value?.data.find((major) => major.id === id);
+  return majorName ? majorName.name : "";
+};
 
 // const { data: progress } = await useRestClient<APIResponseDetail<Progress>>(
 //   `/enrollments/${enrollments.value?.data.data}/progress`

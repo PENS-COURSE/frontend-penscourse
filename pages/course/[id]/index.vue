@@ -168,7 +168,7 @@
               :disabled="isLoading || course.is_enrolled"
               class="w-full py-3 text-white rounded-md text-center mb-4"
             >
-              <span v-if="isLoading">Loading...</span>
+              <span v-if="isLoading"><LoadingSpinner /></span>
               <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>
               <span v-else>Dapatkan Kelas</span>
             </button>
@@ -179,7 +179,7 @@
               :disabled="isLoading || course?.is_enrolled"
               class="w-full py-3 text-white rounded-md text-center mb-4"
             >
-              <span v-if="isLoading">Loading...</span>
+              <span v-if="isLoading"><LoadingSpinner /></span>
               <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>
               <span v-else>Beli Kelas</span>
             </button>
@@ -333,7 +333,8 @@ const endrollCourse = async () => {
       autoClose: 5000,
       position: "bottom-right",
     });
-    await getetailCourse();
+    location.reload();
+    // await getetailCourse();
     closeModal();
   }
   if (error.value?.statusCode == 401) {
