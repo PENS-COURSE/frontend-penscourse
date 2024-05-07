@@ -35,6 +35,66 @@
     </div>
   </section>
 
+  <!-- <section class="mt-16 mx-10 lg:mx-16 xl:mx-32">
+    <h4 class="font-semibold text-2xl text-regal-blue-500 text-center">
+      Promo bulan ini
+    </h4>
+    <p class="md:text-base text-center">
+      dapatkan promo menarik yang ada di bulan ini!
+    </p>
+
+    <div class="navigation-wrapper mt-16">
+      <div v-for="banner in banners" :key="banner.id" ref="container">
+        <div
+          class="keen-slider__slide number-slide h-[200px] lg:h-[300px] xl:h-[400px] 2xl:h-[450px]"
+        >
+          <NuxtLink :to="banner.url">
+            <img
+              :src="`${useRuntimeConfig().public.BASE_URL}/${banner.image_url}`"
+              class="w-full h-full object-fill lg:object-cover"
+            />
+          </NuxtLink>
+        </div>
+      </div>
+      <svg
+        @click="slider?.prev"
+        :class="{
+          arrow: true,
+          'arrow--left': true,
+          'arrow--disabled': current === 0,
+        }"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z"
+        ></path>
+      </svg>
+      <svg
+        v-if="slider"
+        @click="slider?.next"
+        :class="{
+          arrow: true,
+          'arrow--right': true,
+          'arrow--disabled': current === slider.track.details.slides.length - 1,
+        }"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path d="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z"></path>
+      </svg>
+    </div>
+
+    <div v-if="slider" class="dots">
+      <button
+        v-for="(_slide, idx) in dotHelper"
+        @click="slider?.moveToIdx(idx)"
+        :class="{ dot: true, active: current === idx }"
+        :key="idx"
+      ></button>
+    </div>
+  </section> -->
+
   <section class="mt-16 mx-10 lg:mx-16 xl:mx-32">
     <h4 class="font-semibold text-2xl text-regal-blue-500 text-center">
       Benefit yang di dapat
@@ -254,12 +314,15 @@
 
 <script setup lang="ts">
 import type { Course } from "~/models/Course";
+import { useKeenSlider } from "keen-slider/vue.es";
+import "keen-slider/keen-slider.min.css";
 
 const authStore = useAuthStore();
 const { authenticated } = storeToRefs(authStore);
 
 const openTab = ref();
 const course = ref<Course[]>();
+const current = ref(1);
 
 const { data: dataMajor } =
   await useRestClient<APIResponsePagination<Department>>("/departments");
@@ -267,6 +330,9 @@ const { data: dataMajor } =
 const majors = computed(() => {
   return dataMajor.value?.data.data;
 });
+
+const { data: dataBanner } = useRestClient<APIResponseList<Banner>>("/banners");
+const banners = computed(() => dataBanner.value?.data);
 
 // const getAllCourses = async () => {
 //   const { data: dataAllCourse, pending: allCourseLoading } =
@@ -298,6 +364,20 @@ const getMajorName = (id: number | undefined) => {
   return majorName ? majorName.name : "";
 };
 
+const [container, slider] = useKeenSlider({
+  initial: current.value,
+  slideChanged: (s) => {
+    current.value = s.track.details.rel;
+  },
+});
+
+const dotHelper = computed(() =>
+  slider.value
+    ? [...Array(slider.value.track.details.slides.length).keys()]
+    : []
+);
+console.log(slider);
+
 onMounted(() => {
   openTab.value = dataMajor.value?.data.data[0].slug;
   course.value = dataCourse.value?.data.data;
@@ -307,5 +387,69 @@ onMounted(() => {
 <style>
 .ease-custom {
   transition-timing-function: cubic-bezier(0.61, -0.53, 0.43, 1.43);
+}
+
+[class^="number-slide"],
+[class*=" number-slide"] {
+  background: grey;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  font-size: 50px;
+  color: #fff;
+  font-weight: 500;
+  width: 100%;
+}
+.number-slide1 {
+  background: rgb(64, 175, 255);
+  background: linear-gradient(
+    128deg,
+    rgba(64, 175, 255, 1) 0%,
+    rgba(63, 97, 255, 1) 100%
+  );
+}
+.navigation-wrapper {
+  position: relative;
+}
+.dots {
+  display: flex;
+  padding: 10px 0;
+  justify-content: center;
+}
+.dot {
+  border: none;
+  width: 10px;
+  height: 10px;
+  background: #c5c5c5;
+  border-radius: 50%;
+  margin: 0 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+.dot:focus {
+  outline: none;
+}
+.dot.active {
+  background: #000;
+}
+.arrow {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  fill: #fff;
+  cursor: pointer;
+}
+.arrow--left {
+  left: 5px;
+}
+.arrow--right {
+  left: auto;
+  right: 5px;
+}
+.arrow--disabled {
+  fill: rgba(255, 255, 255, 0.5);
 }
 </style>

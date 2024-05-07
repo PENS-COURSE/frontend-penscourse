@@ -34,7 +34,7 @@
     <template v-for="course in courses">
       <NuxtLink
         :to="`/course/${course.course.slug}`"
-        class="border border-alto-500 p-4"
+        class="border border-alto-500 p-4 hover:bg-gray-50 transition-colors"
       >
         <img
           v-if="course.course.thumbnail == null"
@@ -57,11 +57,11 @@
           {{ getMajorName(course.course.department_id) }}
         </p>
         <div class="w-full bg-gray-200 rounded-full">
-          <!-- <div
+          <div
             class="text-xs font-medium text-center p-0.5 leading-none rounded-full"
             :class="
               course.progress_completed == null
-                ? 'bg-red-700 text-white'
+                ? 'bg-gray-200 text-gray-800'
                 : 'bg-regal-blue-500 text-gray-800'
             "
             :style="{
@@ -76,8 +76,8 @@
                 ? "kosong"
                 : `${course.progress_completed}%`
             }}
-          </div> -->
-          <div
+          </div>
+          <!-- <div
             class="text-xs font-medium text-center p-0.5 leading-none rounded-full bg-regal-blue-500 text-gray-100"
             :style="{
               width:
@@ -87,7 +87,15 @@
             }"
           >
             {{ course.progress_completed }}%
-          </div>
+          </div> -->
+          <!-- <div
+            class="text-xs font-medium text-center p-1 leading-none rounded-full bg-regal-blue-500 text-gray-800"
+            :style="{
+              width: course.progress_completed,
+            }"
+          >
+            {{ course.progress_completed }}%
+          </div> -->
         </div>
 
         <!-- <div class="w-full bg-alto-500 rounded-full h-2">
