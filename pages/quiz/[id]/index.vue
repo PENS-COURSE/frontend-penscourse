@@ -5,37 +5,37 @@
     <div
       class="w-full top-24 flex items-center justify-center px-8 md:px-10 lg:px-16 2xl:px-32 mx-auto"
     >
-      <div class="w-full md:px-12  pt-6">
+      <div class="w-full md:px-12 pt-6">
         <div class="flex flex-wrap md:relative py-4">
           <aside
             class="w-full sm:row sm:w-1/3 md:w-max-[160px] lg:w-[245px] px-2 flex-row mb-8"
           >
             <div class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
-              <div class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]">
+              <div
+                class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]"
+              >
                 Sisa Waktu
               </div>
-              <div id="demo" class="pt-3 text-center font-semibold antialiased text-2xl text-[#23262F]">
+              <div
+                id="demo"
+                class="pt-3 text-center font-semibold antialiased text-2xl text-[#23262F]"
+              >
                 {{ formattedTimer }}
               </div>
             </div>
             <!-- <div v-if="formattedTimer == '00:00:00'">
               <h1>waktu habis!!!</h1>
             </div> -->
-            <div
-              class="flex-row p-2 bg-white rounded-xl w-full px-4 mx-auto"
-            >
+            <div class="flex-row p-2 bg-white rounded-xl w-full px-4 mx-auto">
               <QuizListNumber
                 @update-parent-variable="updateVariable"
-                :soalLength="soal.length" 
+                :soalLength="soal.length"
                 :quizSessionid="quizzes?.detail?.session_id"
                 :quizUuid="quizzes?.quiz?.id"
               />
             </div>
           </aside>
-          <main
-            role="main"
-            class="w-full sm:w-2/3 pl-2 md:mt-0"
-          >
+          <main role="main" class="w-full sm:w-2/3 pl-2 md:mt-0">
             <QuizQuestion
               :soal="soal[selectedSoal]"
               :pilihan="pilihan"
@@ -59,8 +59,7 @@ import type {
 import type { QuizResponse, QuizScoreResponse } from "../../../models/Quiz";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import QuizSessionNext from "~/components/QuizSessionNext.vue";
-import moment from 'moment';
-import { defineProps, defineEmits } from "vue";
+import moment from "moment";
 import { quizCookies } from "~/store/quiz";
 
 const router = useRouter();
@@ -81,45 +80,45 @@ const soal = initQuiz(quizzes?.value?.questions ?? []);
 const { questions } = storeToRefs(quizCookies());
 
 function initQuiz(arr: any[]): any[] {
-  console.log("arr", arr)
-  if(arr.length === 0){
+  console.log("arr", arr);
+  if (arr.length === 0) {
     navigateTo(`/quiz/${id}/submit`);
   }
   let randomizedArr = [...arr]; // Creating a copy of the input array
   const data: any = {
     question_type: "",
-    pilihan: []
+    pilihan: [],
   };
   // for (let i = randomizedArr.length - 1; i > 0; i--) {
   //   const j = Math.floor(Math.random() * (i + 1));
   //   [randomizedArr[i], randomizedArr[j]] = [randomizedArr[j], randomizedArr[i]]; // Swap elements
   // }
-  data.question_type = randomizedArr[0].question.question_type
+  data.question_type = randomizedArr[0].question.question_type;
   data.pilihan.push({
     option: "A",
     answer: randomizedArr[0].question.option_a,
-    checked: false
+    checked: false,
   });
   data.pilihan.push({
     option: "B",
     answer: randomizedArr[0].question.option_b,
-    checked: false
+    checked: false,
   });
   data.pilihan.push({
     option: "C",
     answer: randomizedArr[0].question.option_c,
-    checked: false
+    checked: false,
   });
   data.pilihan.push({
     option: "D",
     answer: randomizedArr[0].question.option_d,
-    checked: false
+    checked: false,
   });
-  if( randomizedArr[0].question.option_e){
+  if (randomizedArr[0].question.option_e) {
     data.pilihan.push({
       option: "E",
       answer: randomizedArr[0].question.option_e,
-      checked: false
+      checked: false,
     });
   }
 
@@ -147,7 +146,7 @@ const updateVariable = async (newValue: number) => {
   try {
     const data: any = {
       question_type: "",
-      pilihan: []
+      pilihan: [],
     };
 
     const response = await useRestClient<APIResponseList<any>>(
@@ -157,7 +156,11 @@ const updateVariable = async (newValue: number) => {
         body: JSON.stringify({
           session_id: quizzes.value?.detail?.session_id,
           question_id: soal[selectedSoal.value || 0]?.question?.id.toString(),
-          answer: soal[selectedSoal.value]?.question?.question_type === 'single_choice' ? [answerPicked.value] : answerPicked.value,
+          answer:
+            soal[selectedSoal.value]?.question?.question_type ===
+            "single_choice"
+              ? [answerPicked.value]
+              : answerPicked.value,
         }),
       }
     );
@@ -198,18 +201,20 @@ const updateVariable = async (newValue: number) => {
 
       pilihan.value = data;
     } else {
-      throw new Error("Cannot read properties of undefined (reading 'question')");
+      throw new Error(
+        "Cannot read properties of undefined (reading 'question')"
+      );
     }
   } catch (error) {
     console.error(error);
     const response = await useRestClient<APIResponseDetail<QuizScoreResponse>>(
-    `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
-    {
-      method: "PATCH",
-    }
-  );
+      `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
+      {
+        method: "PATCH",
+      }
+    );
 
-  router.push(`/quiz/${id}/nilai`);
+    router.push(`/quiz/${id}/nilai`);
   }
 };
 
@@ -223,7 +228,6 @@ const handleSubmit = async () => {
 
   router.push(`/quiz/${id}/nilai`);
 };
-
 
 const props = defineProps({
   soalLength: Number,
@@ -259,7 +263,7 @@ const state: TimerState = reactive({
 const startTimer = () => {
   if (state.intervalId) return;
 
-  state.timer = moment(quizzes.value?.detail?.end_quiz).diff(moment(), 's');
+  state.timer = moment(quizzes.value?.detail?.end_quiz).diff(moment(), "s");
 
   state.intervalId = setInterval(() => {
     if (state.timer === 0) {
@@ -300,11 +304,11 @@ const checkScreenSize = () => {
 
 onMounted(() => {
   checkScreenSize(); // Pengecekan saat komponen dimuat
-  window.addEventListener('resize', checkScreenSize); // Pengecekan ukuran layar berubah
+  window.addEventListener("resize", checkScreenSize); // Pengecekan ukuran layar berubah
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', checkScreenSize); // Hapus event listener saat komponen di-unmount
+  window.removeEventListener("resize", checkScreenSize); // Hapus event listener saat komponen di-unmount
 });
 </script>
 
@@ -337,7 +341,6 @@ onBeforeUnmount(() => {
   display: none;
 }
 </style>
-
 
 <!-- <script>
 

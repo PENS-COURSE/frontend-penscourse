@@ -11,7 +11,7 @@ export interface Curriculum {
 }
 
 export interface Subjects {
-  quizzes: Quiz[];
+  quizzes: CurriculumQuiz[];
   file_contents: Content[];
   live_classes: LiveClass[];
   video_contents: Content[];
@@ -43,7 +43,7 @@ export interface LiveClass {
   is_completed: boolean;
 }
 
-export interface Quiz {
+export interface CurriculumQuiz {
   id: string;
   title: string;
   description: string;

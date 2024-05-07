@@ -1,35 +1,62 @@
 <template>
-  <div :class="isMobile ? 'w-full  border-[#14487A]  text-dark border-b-2 border-opacity-30' : 'border-b-2 border-opacity-30 border-[#14487A] p-2 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]'">
-    <div class=" w-full items-center">
-      <button v-if="isMobile" @click.prevent="togglePanel" class="p-4 w-full font-semibold flex items-center justify-between ">
-        <span class="font-semibold ">Nomor Soal</span>
+  <div
+    :class="
+      isMobile
+        ? 'w-full  border-[#14487A]  text-dark border-b-2 border-opacity-30'
+        : 'border-b-2 border-opacity-30 border-[#14487A] p-2 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]'
+    "
+  >
+    <div class="w-full items-center">
+      <button
+        v-if="isMobile"
+        @click.prevent="togglePanel"
+        class="p-4 w-full font-semibold flex items-center justify-between"
+      >
+        <span class="font-semibold">Nomor Soal</span>
         <Icon
           :name="'ic:baseline-keyboard-arrow-down'"
           class="text-gray-600 w-7 h-7 items-right"
-          :class="{'rotate-180 transform transform': showPanel}"
+          :class="{ 'rotate-180 transform transform': showPanel }"
         />
       </button>
       <span v-else class="font-semibold">Nomor Soal</span>
     </div>
   </div>
-  
+
   <div class="flex flex-col">
-    <div class="flex flex-row sm:items-center flex-wrap gap-1 mx-auto sm:mx-auto">
-      <div v-for="index in (props.soalLength || 0)" :key="index">
-        <button @click="notifyParent(index - 1)"
-          :class="{ 'clicked': (index - 1) === selectedButton }"
+    <div
+      class="flex flex-row sm:items-center flex-wrap gap-1 mx-auto sm:mx-auto"
+    >
+      <div v-for="index in props.soalLength || 0" :key="index">
+        <button
+          @click="notifyParent(index - 1)"
+          :class="{ clicked: index - 1 === selectedButton }"
           class="mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-3 rounded-lg"
-          :style="{ backgroundColor: index === selectedButton ? '#14487A' : '#14487A' }"  
-          v-if="(isMobile && showPanel) || !isMobile">
+          :style="{
+            backgroundColor: index === selectedButton ? '#14487A' : '#14487A',
+          }"
+          v-if="(isMobile && showPanel) || !isMobile"
+        >
           {{ index }}
         </button>
       </div>
     </div>
 
-    <div :class="isMobile ? 'w-full flex justify-between gap-0.5' : 'mt-8 w-full flex justify-between gap-0.5'">
-      <a @click="previousPage"
-        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
-          <Icon name="material-symbols:arrow-back-ios-new-rounded" class="text-[#6A8BFF] hover:text-white w-5 h-5 p-0" />
+    <div
+      :class="
+        isMobile
+          ? 'w-full flex justify-between gap-0.5'
+          : 'mt-8 w-full flex justify-between gap-0.5'
+      "
+    >
+      <a
+        @click="previousPage"
+        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white rounded-full h-[30px] w-[30px] inline-flex items-center"
+      >
+        <Icon
+          name="material-symbols:arrow-back-ios-new-rounded"
+          class="text-[#6A8BFF] hover:text-white w-5 h-5 p-0"
+        />
       </a>
       <button
         @click="openModal"
@@ -38,13 +65,18 @@
       >
         Selesaikan Ujian
       </button>
-      <a @click="nextPage"
-        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
-          <Icon name="material-symbols:arrow-forward-ios-rounded" class="text-[#6A8BFF] hover:text-white ml-0.5 w-5 h-5 p-0" />
+      <a
+        @click="nextPage"
+        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white rounded-full h-[30px] w-[30px] inline-flex items-center"
+      >
+        <Icon
+          name="material-symbols:arrow-forward-ios-rounded"
+          class="text-[#6A8BFF] hover:text-white ml-0.5 w-5 h-5 p-0"
+        />
       </a>
     </div>
   </div>
-  
+
   <TransitionRoot appear :show="isOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
@@ -77,7 +109,7 @@
             >
               <DialogTitle
                 as="h3"
-                class=" text-xl sm:text-3xl font-semibold text-center leading-6 sm:leading-10 text-gray-900"
+                class="text-xl sm:text-3xl font-semibold text-center leading-6 sm:leading-10 text-gray-900"
               >
                 Apakah anda yakin untuk mengakhiri ujian?
               </DialogTitle>
@@ -86,14 +118,16 @@
                 <button
                   @click="submitQuiz"
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] sm:w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-                    Ya
+                  class="inline-flex justify-center rounded-md border border-transparent bg-[#00F076] sm:w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#00F076]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                >
+                  Ya
                 </button>
                 <button
                   type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-[#ED3028] sm:w-[150px] mx-2 px-4 py-2 text-sm font-medium text-white hover:bg-[#ED3028]/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="closeModal">
-                    Tidak
+                  @click="closeModal"
+                >
+                  Tidak
                 </button>
               </div>
             </DialogPanel>
@@ -102,7 +136,7 @@
       </div>
     </Dialog>
   </TransitionRoot>
-    <!-- <transition name="fade">
+  <!-- <transition name="fade">
         <div v-if="loading" class="loading-overlay">
             <div class="loading-popup">
                 <i class="fas fa-spinner fa-spin"></i>
@@ -120,8 +154,7 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 import { toast } from "vue3-toastify";
-import { defineProps, defineEmits } from "vue";
-const { id, slug } = useRoute().query
+const { id, slug } = useRoute().query;
 
 const isOpen = ref(false);
 const isLoading: Ref<boolean> = ref(false);
@@ -190,7 +223,6 @@ const previousPage = () => {
   notifyParent(previousIndex);
 };
 
-
 const isMobile = ref(false);
 
 const showPanel = ref(false);
@@ -205,13 +237,12 @@ const checkScreenSize = () => {
 
 onMounted(() => {
   checkScreenSize(); // Pengecekan saat komponen dimuat
-  window.addEventListener('resize', checkScreenSize); // Pengecekan ukuran layar berubah
+  window.addEventListener("resize", checkScreenSize); // Pengecekan ukuran layar berubah
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', checkScreenSize); // Hapus event listener saat komponen di-unmount
+  window.removeEventListener("resize", checkScreenSize); // Hapus event listener saat komponen di-unmount
 });
-
 </script>
 
 <style scoped>

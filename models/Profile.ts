@@ -1,10 +1,10 @@
 export interface Profile {
   message: string;
   statusCode: number;
-  data: Data;
+  data: ProfileData;
 }
 
-export interface Data {
+export interface ProfileData {
   id: number;
   name: string;
   email: string;
