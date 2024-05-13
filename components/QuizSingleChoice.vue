@@ -2,7 +2,14 @@
   <div class="flex flex-col flex-wrap">
     <div class="relative w-full flex items-center bg-[#14487a] rounded-md py-2 px-3 my-1" v-for="(item, index) in soal.pilihan" :key="index">
       <div class="flex items-center">
-        <input @change="event => handleClick(event, item, getInputType(soal))" :type="getInputType(soal)" :value="item.option" name="select" :id="`option-${index + 1}`" class="w-4 h-4" ref="rolesSelected" />
+        <input 
+            @change="event => handleClick(event, item, getInputType(soal))" 
+            :checked="isChecked(item.option)"
+            :type="getInputType(soal)" 
+            :value="item.option" 
+            :id="`option-${index + 1}`" class="w-4 h-4" ref="inputElements"
+            name="select" 
+          />
         <label :for="`option-${index + 1}`" :class="`option-${index + 1}`" class="ml-2">
           <div class="text-white text-left">
             {{ item.answer }}
@@ -14,64 +21,67 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from 'vue';
 import type { QuizPilihan } from "../models/Quiz";
+
 const props = defineProps({
   soal: Object as PropType<QuizPilihan>,
   questions: Object as PropType<any>,
   data_questions: Object as PropType<any>,
+  jawaban: Array
 });
-const selectedAnswer = ref(null);
+
+const selectedAnswer = ref([...props.jawaban]);
+const inputElements = ref([]);
 let answerArray: any[] = [];
 const emit = defineEmits(['selectedAnswer']);
 
+watch(() => props.soal, () => {
+  selectedAnswer.value = [...props.jawaban];
+  emit('selectedAnswer', selectedAnswer.value);
+}, {deep: true})
+
 const handleClick = (event: any, item: any, question_type: string) => {
-  let answerList: any = [];
-  if (question_type === 'checkbox') {
-    selectedAnswer.value = true; // Set to true when a value is chosen
-  } else {
-    selectedAnswer.value = true; // For radio buttons, also set to true
-    answerList.push(item.option);
+  if(question_type === 'checkbox'){
+    const index = selectedAnswer.value.findIndex(value => item.option.toLowerCase() === value.toLowerCase());
+    console.log('BEFORE', selectedAnswer.value)
+    if(index >= 0) {
+      console.log('index', index)
+      selectedAnswer.value.splice(index, 1) // Remove Option
+    } else {
+      selectedAnswer.value.push(item.option);
+    }
+  }else {
+    selectedAnswer.value = [item.option]
   }
 
-  let dataQuestions = localStorage.getItem('questions');
-  let dataQuestionsAnswered: any = [];
+  console.log('After', selectedAnswer.value)
 
-  if (dataQuestions != undefined) {
-    dataQuestionsAnswered = JSON.parse(dataQuestions);
-    let newData: any = [];
 
-    dataQuestionsAnswered.map((item: any) => {
-      if (item.question.id == props.questions.question.id) {
-        newData.push({
-          ...item,
-          answer: answerList
-        })
-      } else {
-        newData.push(item)
-      }
-    })
-    localStorage.setItem("questions", JSON.stringify(newData));
-  } else {
-    localStorage.setItem("questions", JSON.stringify(props.data_questions));
-  }
-  emitSelectedAnswer(event, item, question_type);
+  emit('selectedAnswer', selectedAnswer.value)
 };
+
+const isChecked = (option: string) => {
+  // console.log("slected answer", selectedAnswer.value);
+  if(selectedAnswer.value.findIndex(value => option.toLowerCase() === value.toLowerCase()) >= 0){
+    return true;
+  } else {
+    return false;
+  }
+}
 
 const emitSelectedAnswer = (event: any, item: any, question_type: string) => {
   const answer = (event.target as HTMLInputElement).value;
   if(question_type === 'checkbox'){
     answerArray.push(answer)
     emit('selectedAnswer', answerArray);
-    selectedAnswer.value = null;
+    selectedAnswer.value = false;
   }else {
     emit('selectedAnswer', answer);
-    selectedAnswer.value = null;
+    selectedAnswer.value = false;
   }
 };
 
 const getInputType = (item: any): string => {
-  console.log('item', item)
   if (item.question_type === 'single_choice') {
     return 'radio';
   } else if (item.question_type === 'multiple_choice') {

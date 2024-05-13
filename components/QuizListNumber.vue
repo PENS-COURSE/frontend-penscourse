@@ -28,19 +28,19 @@
 
     <div :class="isMobile ? 'w-full flex justify-between gap-0.5' : 'mt-8 w-full flex justify-between gap-0.5'">
       <a @click="previousPage"
-        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
-          <Icon name="material-symbols:arrow-back-ios-new-rounded" class="text-[#6A8BFF] hover:text-white w-5 h-5 p-0" />
+        class="hover:bg-[#14487A] mt-4 border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+          <Icon name="material-symbols:arrow-back-ios-new-rounded" class="text-[#14487A] hover:text-white w-5 h-5 p-0" />
       </a>
       <button
         @click="openModal"
         type="button"
-        class="mt-4 mb-0 w-full text-[#6A8BFF] font-semibold hover:text-white border-2 border-[#6A8BFF] hover:bg-[#6A8BFF] focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
+        class="mt-4 mb-0 w-full text-[#14487A] font-semibold hover:text-white border-2 border-[#14487A] hover:bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
       >
         Selesaikan Ujian
       </button>
       <a @click="nextPage"
-        class="hover:bg-[#6A8BFF] mt-4 border-2 border-[#6A8BFF] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
-          <Icon name="material-symbols:arrow-forward-ios-rounded" class="text-[#6A8BFF] hover:text-white ml-0.5 w-5 h-5 p-0" />
+        class="hover:bg-[#14487A] mt-4 border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+          <Icon name="material-symbols:arrow-forward-ios-rounded" class="text-[#14487A] hover:text-white ml-0.5 w-5 h-5 p-0" />
       </a>
     </div>
   </div>

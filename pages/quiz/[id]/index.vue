@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div v-if="!error"
     class="w-full h-full flex bg-gradient-to-r from-[#F4F7FA] via-[#F4F7FA] to-[#F4F7FA] pt-5 pb-5 text-center"
   >
     <div
@@ -48,6 +48,9 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <h1>TETS</h1>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -58,27 +61,37 @@ import type {
 } from "../../../models/Data";
 import type { QuizResponse, QuizScoreResponse } from "../../../models/Quiz";
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import QuizSessionNext from "~/components/QuizSessionNext.vue";
+// import QuizSessionNext from "~/components/QuizSessionNext.vue";
 import moment from 'moment';
 import { defineProps, defineEmits } from "vue";
 import { quizCookies } from "~/store/quiz";
 
 const router = useRouter();
-const isSelected = ref(false);
 
 const answerPicked = ref([]);
-const { id } = useRoute<never>().params;
+const { id } = useRoute<any>().params;
 const { slug } = useRoute().query;
 const selectedSoal = ref(0);
 const pilihan = ref([] as any);
 
-const { data: quizDetail } = await useRestClient<
+const { data: quizDetail, error } = await useRestClient<
   APIResponseDetail<QuizResponse>
 >(`/courses/${slug}/quiz/${id}/enroll`);
 
-const quizzes = computed(() => quizDetail?.value?.data);
-const soal = initQuiz(quizzes?.value?.questions ?? []);
-const { questions } = storeToRefs(quizCookies());
+
+onMounted(async () => {
+  const { data: quizDetail,  error} = await useRestClient<
+  APIResponseDetail<QuizResponse>
+>(`/courses/${slug}/quiz/${id}/enroll`);
+
+  quizzes = computed(() => quizDetail?.value?.data) ? computed(() => quizDetail?.value?.data) : null;
+
+  soal = initQuiz(quizzes?.value?.questions ?? []);
+})
+
+let quizzes = computed(() => quizDetail?.value?.data) ? computed(() => quizDetail?.value?.data) : null;
+let soal = initQuiz(quizzes?.value?.questions ?? []);
+// const { questions } = storeToRefs(quizCookies());
 
 function initQuiz(arr: any[]): any[] {
   console.log("arr", arr)
@@ -157,7 +170,7 @@ const updateVariable = async (newValue: number) => {
         body: JSON.stringify({
           session_id: quizzes.value?.detail?.session_id,
           question_id: soal[selectedSoal.value || 0]?.question?.id.toString(),
-          answer: soal[selectedSoal.value]?.question?.question_type === 'single_choice' ? [answerPicked.value] : answerPicked.value,
+          answer: answerPicked.value,
         }),
       }
     );

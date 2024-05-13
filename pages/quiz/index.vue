@@ -15,11 +15,11 @@
           telah dipelajari di kelas ini.
         </p>
         <p class="mt-4 text-xs sm:text-sm">
-          Terdapat 5 Pertanyaan yang harus dikerjakan dalam ujian ini. Beberapa
+          Terdapat (belum ada api) Pertanyaan yang harus dikerjakan dalam ujian ini. Beberapa
           ketentuannya sebagai berikut:
         </p>
-        <p class="mt-2 ml-4 text-xs sm:text-sm">1. Syarat nilai kelulusan: 60%</p>
-        <p class="mt-2 ml-4 text-xs sm:text-sm">2. Durasi ujian: 20 menit</p>
+        <p v-if="response" class="mt-2 ml-4 text-xs sm:text-sm">1. Syarat nilai kelulusan: {{ response.data.pass_grade }}%</p>
+        <p v-if="response" class="mt-2 ml-4 text-xs sm:text-sm">2. Durasi ujian: {{ response.data.duration }} menit</p>
       </div>
       <div class="text-center mt-6">
 
@@ -102,9 +102,23 @@
 
 <script setup lang="ts">
 
-  const { id, slug } = useRoute().query
+  interface responseModel {
+    id:            string;
+    title:         string;
+    description:   string;
+    duration:      number;
+    start_date:    Date;
+    end_date:      Date;
+    is_ended:      boolean;
+    is_active:     boolean;
+    show_result:   boolean;
+    pass_grade:    number;
+    curriculum_id: string;
+    created_at:    Date;
+    updated_at:    Date;
+  }
 
-  console.log("id", id)
+  const { id, slug } = useRoute().query
 
   import { ref } from 'vue'
   import {
@@ -114,6 +128,11 @@
     DialogPanel,
     DialogTitle,
   } from '@headlessui/vue'
+
+  const { data: response, error: err } = await useRestClient<APIResponseDetail<responseModel>>(
+  `/courses/quiz/${id}`, {
+    method: 'GET'
+  });
 
   const showPanel = ref(false);
   const togglePanel = () => (showPanel.value = !showPanel.value);

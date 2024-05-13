@@ -16,6 +16,7 @@
         </div>
         <div class="row h-100vh items-left">
             <QuizSingleChoice 
+                :jawaban="soal.answer"
                 :soal="pilihan" 
                 @selected-answer="selectedAnswer" 
                 :questions="soal" 
