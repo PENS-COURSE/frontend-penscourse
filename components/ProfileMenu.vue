@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-alto-500 h-96 md:h-[450px] rounded-lg md:w-1/4">
+  <div class="border border-alto-500 h-96 md:h-[480px] rounded-lg md:w-1/4">
     <div class="px-6 py-4">
       <h5 class="font-medium text-base md:text-xl text-slate-gray-500">
         Dashboard
@@ -39,18 +39,24 @@ const menus = [
   },
   {
     id: 4,
+    route: "/dashboard/quiz",
+    icon: "material-symbols:edit-square-outline-rounded",
+    title: "Kuis Saya",
+  },
+  {
+    id: 5,
     route: "/dashboard/certificate",
     icon: "ic:outline-credit-card",
     title: "Sertifikat",
   },
   {
-    id: 5,
+    id: 6,
     route: "/dashboard/transaction",
     icon: "ic:sharp-shopping-cart",
     title: "Transaksi",
   },
   {
-    id: 5,
+    id: 6,
     route: "/dashboard/change-password",
     icon: "mdi:key",
     title: "Ganti Password",

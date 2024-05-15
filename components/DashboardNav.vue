@@ -25,6 +25,10 @@
     </div>
     <div class="text-slate-gray-500 px-6 py-4 flex items-center gap-4">
       <!-- <font-awesome-icon :icon="['fas', 'file']" /> -->
+      <h5 class="font-medium text-sm md:text-lg">Kuis Saya</h5>
+    </div>
+    <div class="text-slate-gray-500 px-6 py-4 flex items-center gap-4">
+      <!-- <font-awesome-icon :icon="['fas', 'file']" /> -->
       <h5 class="font-medium text-sm md:text-lg">Sertifikat</h5>
     </div>
     <div class="text-slate-gray-500 px-6 py-4 flex items-center gap-4">

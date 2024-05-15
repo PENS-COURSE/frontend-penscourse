@@ -86,3 +86,29 @@ export interface EnrolledQuiz {
   updated_at: string;
   user: User;
 }
+
+export interface QuizHistory {
+  id: string
+  title: string
+  description: string
+  duration: number
+  start_date: string
+  end_date: string
+  is_ended: boolean
+  is_active: boolean
+  show_result: boolean
+  pass_grade: number
+  curriculum_id: string
+  created_at: string
+  updated_at: string
+  curriculum: Curriculum
+  detail_score: DetailScore
+  is_taken: boolean
+  status: "ongoing" | "late" | "finished";
+  course: Course;
+}
+
+export interface DetailScore {
+  score: any
+  is_passed: boolean
+}

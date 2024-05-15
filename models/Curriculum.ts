@@ -8,6 +8,7 @@ export interface Curriculum {
   created_at: Date;
   updated_at: Date;
   subjects: Subjects;
+  course? : Course;
 }
 
 export interface Subjects {
