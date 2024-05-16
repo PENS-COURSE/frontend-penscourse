@@ -69,14 +69,14 @@
             placeholder="Masukkan password anda"
             autoComplete="password"
             required
-            class="w-full mb-2 rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            class="w-full mb-10 rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
           />
 
-          <div class="mb-10 flex justify-end text-sm text-regal-blue-500">
+          <!-- <div class="mb-10 flex justify-end text-sm text-regal-blue-500">
             <NuxtLink to="/auth/forget-pass" class="hover:underline"
               >Lupa Password?</NuxtLink
             >
-          </div>
+          </div> -->
 
           <button
             type="submit"

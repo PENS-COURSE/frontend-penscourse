@@ -58,7 +58,7 @@
         </p>
         <div class="w-full bg-gray-200 rounded-full">
           <div
-            class="text-xs font-medium text-center p-0.5 leading-none rounded-full"
+            class="text-xs font-medium text-center p-1 leading-none rounded-full"
             :class="
               course.progress_completed == null
                 ? 'bg-gray-200 text-gray-800'
@@ -73,7 +73,7 @@
           >
             {{
               course.progress_completed == null
-                ? "kosong"
+                ? ""
                 : `${course.progress_completed}%`
             }}
           </div>

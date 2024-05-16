@@ -132,6 +132,7 @@
                   label="Upload File"
                   v-model:model-value="payload.avatar"
                   name="avatar"
+                  accept="image/*"
                 />
 
                 <InputField
@@ -171,6 +172,7 @@ import {
   Dialog,
   DialogPanel,
 } from "@headlessui/vue";
+import { toast } from "vue3-toastify";
 import type { User } from "~/models/Authentication";
 
 const authStore = useAuthStore();
@@ -213,6 +215,17 @@ const handleSubmit = async () => {
     isLoading.value = false;
     closeModal();
     await authStore.getProfile();
+    toast.success("Sukses mengupdate profile!", {
+      autoClose: 5000,
+      position: "top-right",
+    });
+  }
+
+  if (error.value?.statusCode === 400) {
+    toast.error("Nama harus lebih pendek dari atau sama dengan 100 karakter!", {
+      autoClose: 5000,
+      position: "top-right",
+    });
   }
 
   isLoading.value = false;

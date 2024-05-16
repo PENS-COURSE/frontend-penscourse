@@ -92,14 +92,14 @@ const handleSubmit = async () => {
     toast.success("Sukses mengganti Password!", {
       transition: "slide",
       autoClose: 5000,
-      position: "bottom-right",
+      position: "top-right",
     });
   }
   if (error.value) {
     toast.error("Error! Gagal mengganti password!", {
       transition: "slide",
       autoClose: 5000,
-      position: "bottom-right",
+      position: "top-right",
     });
   }
 

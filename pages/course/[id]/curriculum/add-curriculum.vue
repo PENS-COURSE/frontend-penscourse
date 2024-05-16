@@ -56,7 +56,7 @@
 
         <button
           class="flex w-full justify-center rounded bg-regal-blue-500 p-3 font-medium text-gray-100"
-          type="button"
+          type="submit"
         >
           <span v-if="isLoading"><LoadingSpinner /></span>
           <span v-if="!isLoading">Simpan</span>

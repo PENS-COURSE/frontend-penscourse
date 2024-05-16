@@ -376,7 +376,6 @@ const dotHelper = computed(() =>
     ? [...Array(slider.value.track.details.slides.length).keys()]
     : []
 );
-console.log(slider);
 
 onMounted(() => {
   openTab.value = dataMajor.value?.data.data[0].slug;

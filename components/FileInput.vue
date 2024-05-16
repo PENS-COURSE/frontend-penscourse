@@ -15,6 +15,7 @@
       :id="label"
       :value="value"
       :name="name"
+      :accept="accept"
       @change="handleFile"
     />
     <p class="text-xs text-gray-500 dark:text-gray-400" v-if="!file.fileExist">
@@ -87,6 +88,10 @@ defineProps({
     required: false,
   },
   name: {
+    type: String,
+    required: false,
+  },
+  accept: {
     type: String,
     required: false,
   },

@@ -328,10 +328,10 @@ const endrollCourse = async () => {
     }
   );
   if (data.value) {
-    toast.info("Selamat! Berhasil Enroll Mata Kuliah!", {
+    toast.success("Selamat! Berhasil Enroll Mata Kuliah!", {
       transition: "slide",
       autoClose: 5000,
-      position: "bottom-right",
+      position: "top-right",
     });
     location.reload();
     // await getetailCourse();
