@@ -108,12 +108,12 @@ const handleSubmit = async () => {
     `/courses/${course.value?.slug}/curriculums/${curriculum}/subjects/video-content/add`,
     {
       method: "POST",
-      body: converterFormData({
+      body: {
         title: payload.title,
         description: payload.description,
         video_url: payload.video_url,
         duration: payload.duration,
-      }),
+      },
     }
   );
 
@@ -123,6 +123,7 @@ const handleSubmit = async () => {
   }
 
   if (error.value) {
+    isLoading.value = false;
     toast.error("Error, terjadi kesalahan!", {
       autoClose: 5000,
       position: "bottom-right",

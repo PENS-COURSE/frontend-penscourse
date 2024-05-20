@@ -46,7 +46,15 @@
         v-if="authenticated"
         to="/dashboard/profile"
         class="text-white hover:text-gray-200"
+        :class="user.role == 'admin' ? 'hidden' : ''"
         >Dashboard</NuxtLink
+      >
+
+      <NuxtLink
+        v-if="authenticated && user.role == 'admin'"
+        to="/dosen"
+        class="text-white hover:text-gray-200"
+        >Dashboard Admin</NuxtLink
       >
     </ul>
 
@@ -128,14 +136,20 @@
         </Popover>
 
         <div class="flex items-center gap-3">
-          <NuxtLink v-if="user?.avatar == null" to="/dashboard/profile">
+          <NuxtLink
+            v-if="user?.avatar == null"
+            :to="user.role == 'admin' ? '/dosen' : '/dashboard/profile'"
+          >
             <img
               src="/images/profile.png"
               class="w-10 h-10 rounded-full object-cover"
               :alt="user.name"
             />
           </NuxtLink>
-          <NuxtLink v-else to="/dashboard/profile">
+          <NuxtLink
+            v-else
+            :to="user.role == 'admin' ? '/dosen' : '/dashboard/profile'"
+          >
             <img
               :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
               class="w-10 h-10 rounded-full object-cover"

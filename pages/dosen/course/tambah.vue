@@ -96,7 +96,7 @@
               label="Jurusan"
               required
               readonly
-              :on-click="setOpenModalJurusan"
+              @click="setOpenModalJurusan"
               :value="payload.department_selected?.name"
               placeholder="Pilih Jurusan"
             />
