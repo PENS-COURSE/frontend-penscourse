@@ -20,11 +20,13 @@
     "nuxt-icon": "latest",
     "nuxt-typed-router": "latest",
     "postcss": "^8.4.27",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "vite-plugin-vuetify": "^2.0.3"
   },
   "dependencies": {
     "@headlessui/tailwindcss": "^0.2.0",
     "@headlessui/vue": "^1.7.18",
+    "@mdi/font": "^7.4.47",
     "@nuxtjs/moment": "^1.6.1",
     "@onesignal/onesignal-vue3": "^2.0.1",
     "@pinia/nuxt": "^0.5.0",

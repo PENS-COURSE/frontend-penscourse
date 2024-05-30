@@ -40,18 +40,18 @@ const menus = [
   },
   {
     id: 3,
+    route: "/dosen/user",
+    icon: "mdi:account",
+    title: "User",
+  },
+  {
+    id: 4,
     route: "/dosen/course",
     icon: "mdi:book-open-variant",
     title: "Mata Kuliah",
   },
   {
-    id: 4,
-    route: "/dosen/quiz",
-    icon: "mdi:text-box-edit",
-    title: "Kuis",
-  },
-  {
-    id: 5,
+    id: 6,
     route: "/",
     icon: "mdi:home",
     title: "Back to Home",

@@ -39,6 +39,7 @@ export interface Quiz {
   curriculum_id?: string;
   created_at?: Date;
   updated_at?: Date;
+  is_taken: boolean;
 }
 
 export interface QuizScoreResponse {
