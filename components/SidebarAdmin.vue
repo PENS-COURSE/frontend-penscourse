@@ -51,6 +51,12 @@ const menus = [
     title: "Mata Kuliah",
   },
   {
+    id: 5,
+    route: "/dosen/banner",
+    icon: "mdi:diving-scuba-flag",
+    title: "Banner",
+  },
+  {
     id: 6,
     route: "/",
     icon: "mdi:home",

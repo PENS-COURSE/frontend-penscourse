@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     "@pinia-plugin-persistedstate/nuxt",
     "nuxt-typed-router",
     "nuxt-vue3-google-signin",
+    "nuxt-rating",
   ],
   googleSignIn: {
     clientId:

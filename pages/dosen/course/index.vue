@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between px-10 lg:px-16 xl:px-32">
     <h1 class="text-2xl font-medium">Mata Kuliah Anda</h1>
     <NuxtLink
       to="/dosen/course/tambah"
