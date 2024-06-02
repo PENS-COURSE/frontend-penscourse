@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
+import { toast } from "vue3-toastify";
 import { useRestClient } from "../composables/useRestClient";
 import type { Authentication, User } from "../models/Authentication";
 import type { APIResponseDetail } from "../models/Data";
-import { toast } from "vue3-toastify";
 
 interface AuthPayloadInterface {
   email: string;
@@ -14,6 +14,10 @@ interface RegisterPayloadInterface {
   email: string;
   password: string;
   password_confirmation: string;
+}
+
+interface LoginWithGoogle {
+  accessToken: string;
 }
 
 interface SendOtpPayloadInterface {
@@ -120,6 +124,28 @@ export const useAuthStore = defineStore("auth", {
       this.refresh_token = "";
       this.user = {} as User;
       navigateTo("/auth/login");
+    },
+
+    async loginWithGoogle({ accessToken }: LoginWithGoogle) {
+      this.loading = true;
+      const { data, error } = await useRestClient<
+        APIResponseDetail<Authentication>
+      >("/authentication/login/google/token", {
+        method: "GET",
+        query: {
+          access_token: accessToken,
+        },
+      });
+
+      if (data.value) {
+        this.loading = false;
+        this.authenticated = true;
+        this.access_token = data.value.data.token.access_token;
+        this.refresh_token = data.value.data.token.refresh_token;
+        this.user = data.value.data.user;
+      }
+
+      this.loading = false;
     },
 
     // async sendOtp({ email }: SendOtpPayloadInterface) {

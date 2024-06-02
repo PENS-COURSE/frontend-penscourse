@@ -55,9 +55,7 @@ export const useRestClient: typeof useFetch = (path, options = {}) => {
         }
       }
     },
-    onResponseError: (({response}) => {
-      console.log(response)
-    })
+    onResponseError: ({ response }) => {},
     // onResponseError: async ({ response }) => {
     //   if (response.status == 401) {
     //     await authStore.logOut();

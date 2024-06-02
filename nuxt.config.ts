@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     "nuxt-typed-router",
     "nuxt-vue3-google-signin",
     "nuxt-rating",
+    "nuxt-vuefire",
   ],
   googleSignIn: {
     clientId:
@@ -36,5 +37,16 @@ export default defineNuxtConfig({
   piniaPersistedstate: {},
   imports: {
     dirs: ["models/**"],
+  },
+  vuefire: {
+    config: {
+      apiKey: "AIzaSyAnqqvxmnb-z-XCHEhj2J_KaWqciywJ41c",
+      authDomain: "online-classroom-pens-2753b.firebaseapp.com",
+      projectId: "online-classroom-pens-2753b",
+      storageBucket: "online-classroom-pens-2753b.appspot.com",
+      messagingSenderId: "739018703622",
+      appId: "1:739018703622:web:b5443f29335afbfe581487",
+      measurementId: "G-L62QVPC1T5",
+    },
   },
 });
