@@ -125,7 +125,9 @@
         <div class="flex justify-between items-center">
           <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
           <button
-            v-if="course?.is_enrolled"
+            v-if="
+              course?.is_enrolled && course?.is_completed && user.role == 'user'
+            "
             @click="openModalReviews"
             class="text-white bg-regal-blue-500 py-3 px-2 text-sm rounded-md hover:bg-regal-blue-600"
           >
@@ -134,24 +136,36 @@
           </button>
         </div>
         <div class="flex flex-col md:flex-row gap-5 mt-8">
-          <template v-for="i in 3" :key="i">
+          <template v-for="review in reviews" :key="review.id">
             <div class="bg-white border border-gray rounded-lg p-6">
               <div class="flex gap-3 mb-3">
-                <img src="~assets/images/profile.png" alt="" />
+                <img
+                  v-if="review.user.avatar == null"
+                  src="/images/profile.png"
+                  :alt="review.user.name"
+                  class="w-12 h-12 rounded-full"
+                />
+                <img
+                  v-else
+                  :src="`${useRuntimeConfig().public.BASE_URL}/${
+                    review.user.avatar
+                  }`"
+                  :alt="review.user.name"
+                  class="w-12 h-12 rounded-full"
+                />
                 <div class="flex-col">
-                  <h5>Ghifari Ramadhan</h5>
+                  <h5>{{ review.user.name }}</h5>
                   <div class="flex items-center">
                     <Icon
                       name="material-symbols-light:kid-star-sharp"
                       class="w-5 h-5 text-yellow-300"
                     />
-                    <p class="text-yellow">4.3</p>
+                    <p class="text-yellow">{{ review.rating }}</p>
                   </div>
                 </div>
               </div>
               <p class="text-sm lg:text-base">
-                “Worth it banget belajar disini! Materi sangat lengkap, dapet
-                sertifikat juga”
+                {{ review.review }}
               </p>
             </div>
           </template>
@@ -385,7 +399,7 @@ import {
   Dialog,
   DialogPanel,
 } from "@headlessui/vue";
-
+import type { Review } from "~/models/Review";
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 const { id } = useRoute().params as { id: string };
@@ -413,10 +427,14 @@ const { data: detailCurriculum } = await useRestClient<
 const { data: detailMajor } =
   await useRestClient<APIResponsePagination<Department>>("/departments");
 
+const { data: dataReview } = await useRestClient<APIResponsePagination<Review>>(
+  `/courses/${id}/reviews`
+);
+
 const course = computed(() => detailCourse?.value?.data);
 const curriculums = computed(() => detailCurriculum?.value?.data);
-
 const major = computed(() => detailMajor?.value?.data);
+const reviews = computed(() => dataReview?.value?.data.data);
 
 const getetailCourse = async () => {
   await useRestClient<APIResponseDetail<Course>>(`/courses/${id}`);
@@ -464,8 +482,6 @@ const handlePayment = async () => {
 };
 
 const handleReview = async () => {
-  console.log(payload);
-
   const { data, error } = useRestClient<APIResponseDetail<null>>(
     `/courses/${id}/reviews/add-review`,
     {
@@ -479,7 +495,6 @@ const handleReview = async () => {
 
   if (data.value) {
     console.log(data.value);
-
     toast.success("Berhasil memberikan testimoni", {
       position: "top-right",
       autoClose: 5000,
@@ -488,13 +503,10 @@ const handleReview = async () => {
   }
 
   if (error.value?.statusCode == 403) {
-    toast.error(
-      "Course belum selesai, tidak dapat memberikan review, mohon menunggu hingga course selesai",
-      {
-        position: "top-right",
-        autoClose: 5000,
-      }
-    );
+    toast.error("Anda tidak bisa memberikan testimoni!", {
+      position: "top-right",
+      autoClose: 5000,
+    });
   }
 };
 
@@ -521,6 +533,7 @@ const closeModalReviews = () => {
   payload.comment = "";
   setRating(0);
 };
+
 const openModalReviews = () => {
   setRating(0);
   isOpenReviews.value = true;

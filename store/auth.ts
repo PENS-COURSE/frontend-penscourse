@@ -28,6 +28,8 @@ export const useAuthStore = defineStore("auth", {
     authenticated: false,
     loading: false,
     isOpenModal: false,
+    email: "",
+    otp: "",
   }),
   persist: true,
   actions: {

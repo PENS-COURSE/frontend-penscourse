@@ -23,7 +23,7 @@
       class="flex min-h-full flex-1 flex-col bg-white justify-center mx-6 lg:mx-8"
     >
       <p class="text-slate-800 text-center mb-5">
-        Silahkan masukkan kode OTP yang sudah dikirimkan
+        Silahkan masukkan password baru anda
       </p>
 
       <div
@@ -33,16 +33,28 @@
           <InputField
             label="Email"
             placeholder="Masukkan Email"
-            v-model:model-value="payload.email"
-            :value="payload.email"
-            :required="true"
+            v-model:model-value="email"
+            :value="email"
           />
           <InputField
             label="OTP"
             placeholder="Masukkan OTP"
-            v-model:model-value="payload.otp"
-            :value="payload.otp"
-            :required="true"
+            v-model:model-value="otp"
+            :value="otp"
+          />
+          <InputField
+            label="Password"
+            placeholder="Masukkan Password"
+            v-model:model-value="payload.password"
+            :value="payload.password"
+            :type="'password'"
+          />
+          <InputField
+            label="Konfirmasi Password"
+            placeholder="Masukkan Konfirmasi Password"
+            v-model:model-value="payload.password_confirmation"
+            :value="payload.password_confirmation"
+            :type="'password'"
           />
 
           <button
@@ -70,38 +82,40 @@ definePageMeta({
 });
 
 interface Otp {
-  email: string;
-  otp: string;
+  password: string;
+  password_confirmation: string;
 }
+
+const { email, otp } = storeToRefs(useAuthStore());
 
 const isLoading: Ref<boolean> = ref(false);
 const payload = reactive<{
-  email: string | undefined;
-  otp: string | undefined;
+  password: string | undefined;
+  password_confirmation: string | undefined;
 }>({
-  email: undefined,
-  otp: undefined,
+  password: undefined,
+  password_confirmation: undefined,
 });
 
 const handleSubmit = async () => {
   isLoading.value = true;
   const { data, error } = await useRestClient<APIResponseDetail<Otp>>(
-    "/authentication/forgot-password/verify",
+    "/authentication/forgot-password/reset",
     {
       method: "POST",
       body: {
-        email: payload.email,
+        email: email.value,
+        otp: otp.value,
+        password: payload.password,
+        password_confirmation: payload.password_confirmation,
       },
     }
   );
   if (data.value) {
     isLoading.value = false;
-    toast.success(data.value.message, {
-      transition: "slide",
-      autoClose: 5000,
-      position: "bottom-right",
-    });
-    navigateTo("/auth/verify-otp");
+    email.value = "";
+    otp.value = "";
+    navigateTo("/auth/login");
   }
   if (error.value) {
     isLoading.value = false;

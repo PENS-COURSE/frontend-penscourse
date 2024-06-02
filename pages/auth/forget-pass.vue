@@ -23,8 +23,8 @@
       class="flex min-h-full flex-1 flex-col bg-white justify-center mx-6 lg:mx-8"
     >
       <p class="text-slate-800 text-center mb-5">
-        Silahkan masukkan email anda yang sudah terdaftar untuk mendaftarkan
-        kode OTP
+        Silahkan masukkan email anda yang sudah terdaftar untuk mengirimkan kode
+        OTP
       </p>
 
       <div
@@ -36,7 +36,6 @@
             placeholder="Masukkan Email"
             v-model:model-value="payload.email"
             :value="payload.email"
-            :required="true"
           />
 
           <button
@@ -63,6 +62,8 @@ definePageMeta({
   middleware: "guest",
 });
 
+const { email } = storeToRefs(useAuthStore());
+
 interface Email {
   email: string;
 }
@@ -87,6 +88,9 @@ const handleSubmit = async () => {
   );
   if (data.value) {
     isLoading.value = false;
+    if (payload.email !== undefined) {
+      email.value = payload.email;
+    }
     navigateTo("/auth/verify-otp");
   }
   if (error.value) {

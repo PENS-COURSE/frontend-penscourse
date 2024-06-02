@@ -34,49 +34,25 @@
         class="sm:mx-auto sm:w-full sm:max-w-sm border border-alto-500 p-6 rounded-3xl"
       >
         <form @submit.prevent="handleLogin">
-          <div class="flex items-center justify-between">
-            <label
-              htmlFor="email"
-              class="block text-sm font-medium leading-6 text-alto-500-900"
-            >
-              Email
-            </label>
-          </div>
-
-          <input
-            v-model="user.email"
-            name="email"
+          <InputField
+            label="Email"
             placeholder="Masukkan email anda"
-            type="email"
-            autoComplete="email"
-            required
-            class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            v-model:model-value="user.email"
+            :value="user.email"
           />
-
-          <div class="flex items-center justify-between mt-2">
-            <label
-              htmlFor="password"
-              class="block text-sm font-medium leading-6 text-alto-500-900"
-            >
-              Password
-            </label>
-          </div>
-
-          <input
-            v-model="user.password"
-            name="password"
-            :type="isPasswordVisible ? 'text' : 'password'"
+          <InputField
+            label="Password"
             placeholder="Masukkan password anda"
-            autoComplete="password"
-            required
-            class="w-full mb-10 rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            v-model:model-value="user.password"
+            :value="user.password"
+            :type="'password'"
           />
 
-          <!-- <div class="mb-10 flex justify-end text-sm text-regal-blue-500">
+          <div class="mb-6 flex justify-end text-sm text-regal-blue-500">
             <NuxtLink to="/auth/forget-pass" class="hover:underline"
               >Lupa Password?</NuxtLink
             >
-          </div> -->
+          </div>
 
           <button
             type="submit"

@@ -23,7 +23,7 @@
       class="flex min-h-full flex-1 flex-col bg-white justify-center mx-6 lg:mx-8"
     >
       <p class="text-slate-800 text-center mb-5">
-        Silahkan masukkan kode OTP yang sudah dikirimkan
+        Silahkan masukkan kode OTP yang sudah dikirimkan di email
       </p>
 
       <div
@@ -33,16 +33,14 @@
           <InputField
             label="Email"
             placeholder="Masukkan Email"
-            v-model:model-value="payload.email"
-            :value="payload.email"
-            :required="true"
+            v-model:model-value="email"
+            :value="email"
           />
           <InputField
             label="OTP"
             placeholder="Masukkan OTP"
             v-model:model-value="payload.otp"
             :value="payload.otp"
-            :required="true"
           />
 
           <button
@@ -69,17 +67,16 @@ definePageMeta({
   middleware: "guest",
 });
 
+const { email, otp } = storeToRefs(useAuthStore());
+
 interface Otp {
-  email: string;
   otp: string;
 }
 
 const isLoading: Ref<boolean> = ref(false);
 const payload = reactive<{
-  email: string | undefined;
   otp: string | undefined;
 }>({
-  email: undefined,
   otp: undefined,
 });
 
@@ -90,22 +87,21 @@ const handleSubmit = async () => {
     {
       method: "POST",
       body: {
-        email: payload.email,
+        email: email.value,
+        otp: payload.otp,
       },
     }
   );
   if (data.value) {
     isLoading.value = false;
-    toast.success(data.value.message, {
-      transition: "slide",
-      autoClose: 5000,
-      position: "bottom-right",
-    });
-    navigateTo("/auth/verify-otp");
+    if (payload.otp !== undefined) {
+      otp.value = payload.otp;
+    }
+    navigateTo("/auth/reset-password");
   }
-  if (error.value) {
+  if (error.value?.statusCode == 403) {
     isLoading.value = false;
-    toast.error("Error, terjadi kesalahan!", {
+    toast.error("Anda salah memasukkan kode OTP!", {
       transition: "slide",
       autoClose: 5000,
       position: "bottom-right",
