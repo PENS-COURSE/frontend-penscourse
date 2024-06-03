@@ -80,7 +80,11 @@ interface Curriculum {
   week: number;
 }
 
-const { id, curriculum } = useRoute().params;
+const { id, curriculum } = useRoute().params as {
+  id: string;
+  curriculum: Curriculum;
+};
+
 const isLoading: Ref<boolean> = ref(false);
 
 const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
