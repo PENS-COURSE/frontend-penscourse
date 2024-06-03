@@ -3,6 +3,14 @@
     <h4 class="font-semibold text-2xl">Sertifikat Anda</h4>
   </div>
 
+  <div
+    v-if="certificates?.length == 0"
+    class="mt-10 flex flex-col justify-center items-center"
+  >
+    <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
+    <h2 class="text-xl font-semibold">Anda tidak memiliki sertifikat</h2>
+  </div>
+
   <div class="mt-8 gap-8 grid grid-cols-1 md:grid-cols-3">
     <template v-for="certificate in certificates" :key="certificate.uuid">
       <div
