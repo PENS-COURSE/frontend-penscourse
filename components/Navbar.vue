@@ -108,7 +108,14 @@
                     :key="item.id"
                   >
                     <div
-                      class="flex justify-between items-center gap-2 p-4 border-t-2 cursor-pointer border-gray-200 hover:bg-blue-100"
+                      :class="
+                        clsx(
+                          `flex justify-between items-center gap-2 p-4 border-t-2 cursor-pointer border-gray-200 hover:bg-blue-100`,
+                          {
+                            'bg-blue-100': item.read_at,
+                          }
+                        )
+                      "
                     >
                       <div class="w-1/8">
                         <Icon
@@ -239,8 +246,9 @@ const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 const showMenu = ref(false);
 const isOpen = ref(false);
+const { $OneSignal } = useNuxtApp();
 
-const { data: dataNotif } =
+const { data: dataNotif, refresh: refreshNotif } =
   useRestClient<APIResponsePagination<Notif>>("notifications");
 
 const notifications = computed(() => dataNotif.value?.data.data);
@@ -256,6 +264,15 @@ const closeModal = () => {
 const openModal = () => {
   isOpen.value = true;
 };
+
+onMounted(() => {
+  $OneSignal.Notifications.addEventListener(
+    "foregroundWillDisplay",
+    (event) => {
+      refreshNotif();
+    }
+  );
+});
 </script>
 
 <style scoped>

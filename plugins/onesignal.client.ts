@@ -1,7 +1,7 @@
 import { useOneSignal } from "@onesignal/onesignal-vue3";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const appId = useRuntimeConfig().public.oneSignalAppId;
+  const appId = nuxtApp.$config.public.oneSignalAppId;
 
   if (!appId) {
     return;
@@ -12,6 +12,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   OneSignal.init({
     appId,
     allowLocalhostAsSecureOrigin: true,
+  });
+
+  OneSignal.Debug.setLogLevel("trace");
+  OneSignal.Notifications.addEventListener("foregroundWillDisplay", (event) => {
+    console.log("OneSignal notification will display", event);
   });
 
   return {

@@ -416,13 +416,13 @@ const payload = reactive<{
   comment: undefined,
 });
 
-const { data: detailCourse } = await useRestClient<APIResponseDetail<Course>>(
-  `/courses/${id}`
-);
+const { data: detailCourse, refresh: detailCourseRefresh } =
+  await useRestClient<APIResponseDetail<Course>>(`/courses/${id}`);
 
-const { data: detailCurriculum } = await useRestClient<
-  APIResponseList<Curriculum>
->(`/courses/${id}/curriculums`);
+const { data: detailCurriculum, refresh: detailCurriculumRefresh } =
+  await useRestClient<APIResponseList<Curriculum>>(
+    `/courses/${id}/curriculums`
+  );
 
 const { data: detailMajor } =
   await useRestClient<APIResponsePagination<Department>>("/departments");
@@ -435,10 +435,6 @@ const course = computed(() => detailCourse?.value?.data);
 const curriculums = computed(() => detailCurriculum?.value?.data);
 const major = computed(() => detailMajor?.value?.data);
 const reviews = computed(() => dataReview?.value?.data.data);
-
-const getetailCourse = async () => {
-  await useRestClient<APIResponseDetail<Course>>(`/courses/${id}`);
-};
 
 const endrollCourse = async () => {
   isLoading.value = true;
@@ -454,8 +450,10 @@ const endrollCourse = async () => {
       autoClose: 5000,
       position: "top-right",
     });
-    location.reload();
-    // await getetailCourse();
+
+    await detailCourseRefresh();
+    await detailCurriculumRefresh();
+
     closeModalCourse();
   }
   if (error.value?.statusCode == 401) {

@@ -55,6 +55,7 @@ export const useAuthStore = defineStore("auth", {
         this.access_token = data.value.data.token.access_token;
         this.refresh_token = data.value.data.token.refresh_token;
         this.user = data.value.data.user;
+        useNuxtApp().$OneSignal.login(this.user.id.toString());
       }
       if (error.value?.statusCode == 403) {
         this.loading = false;
@@ -123,7 +124,10 @@ export const useAuthStore = defineStore("auth", {
       this.access_token = "";
       this.refresh_token = "";
       this.user = {} as User;
-      navigateTo("/auth/login");
+
+      useNuxtApp().$OneSignal.logout();
+
+      navigateTo("/auth/login", { replace: true });
     },
 
     async loginWithGoogle({ accessToken }: LoginWithGoogle) {
@@ -143,6 +147,7 @@ export const useAuthStore = defineStore("auth", {
         this.access_token = data.value.data.token.access_token;
         this.refresh_token = data.value.data.token.refresh_token;
         this.user = data.value.data.user;
+        useNuxtApp().$OneSignal.login(this.user.id.toString());
       }
 
       this.loading = false;
@@ -176,6 +181,7 @@ export const useAuthStore = defineStore("auth", {
 
       if (data.value) {
         this.user = data.value.data;
+        useNuxtApp().$OneSignal.login(this.user.id.toString());
       }
     },
   },
