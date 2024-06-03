@@ -9,7 +9,9 @@
       <div class="fixed inset-0 w-screen overflow-y-auto">
         <!-- Container to center the panel -->
         <div class="flex min-h-full items-center justify-center p-4">
-          <DialogPanel class="w-full max-w-lg rounded bg-white">
+          <DialogPanel
+            class="w-full max-w-2xl rounded bg-white overflow-x-auto max-h-[500px]"
+          >
             <div class="px-4 py-2">
               <DialogTitle class="text-lg font-medium text-gray-900">{{
                 title

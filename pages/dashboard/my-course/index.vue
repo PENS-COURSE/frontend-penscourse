@@ -127,6 +127,7 @@ import type { Enrollment } from "../../../models/Enrollment";
 
 definePageMeta({
   layout: "profile",
+  middleware: "authenticated",
 });
 
 const { data: enrollments } =

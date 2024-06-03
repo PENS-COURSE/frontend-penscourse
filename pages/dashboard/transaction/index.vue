@@ -105,6 +105,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "profile",
+  middleware: "authenticated",
 });
 
 const selectedStatus = ref<string>("all");
