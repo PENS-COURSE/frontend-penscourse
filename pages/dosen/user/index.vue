@@ -42,7 +42,7 @@
                     : `${useRuntimeConfig().public.BASE_URL}/${user.avatar}`
                 "
                 :alt="user.name"
-                class="w-14 h-14 rounded-full"
+                class="w-14 h-14 rounded-full object-cover"
               />
             </td>
             <td class="px-6 py-4 flex gap-2">
@@ -173,7 +173,8 @@ const users = computed(() => dataUsers?.value?.data.data);
 
 const totalUser = computed(() => {
   if (Array.isArray(users.value)) {
-    return users.value.length;
+    //localhost:3000/dosen/user
+    http: return users.value.length;
   } else {
     return 0;
   }

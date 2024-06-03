@@ -58,6 +58,12 @@ const menus = [
   },
   {
     id: 6,
+    route: "/dosen/configuration",
+    icon: "mdi:cog",
+    title: "Settings",
+  },
+  {
+    id: 7,
     route: "/",
     icon: "mdi:home",
     title: "Back to Home",
