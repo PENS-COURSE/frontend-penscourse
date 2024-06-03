@@ -5,13 +5,10 @@
     <div
       class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] text-white"
     >
-      <img
-        src="~assets/images/pens_white.png"
-        alt="Logo"
-        width="40"
-        height="40"
-        class="mb-10"
-      />
+      <NuxtLink to="/" class="mb-10 w-10 h-10">
+        <img src="~assets/images/pens_white.png" alt="Logo" class="" />
+      </NuxtLink>
+
       <h2 class="text-2xl lg:text-4xl xl:text-6xl font-semibold">
         Selamat Datang di PENS Course!
       </h2>
@@ -38,6 +35,7 @@
             id="email"
             name="email"
             label="Email"
+            type="email"
             placeholder="Masukkan email anda"
             v-model:model-value="user.email"
             :value="user.email"

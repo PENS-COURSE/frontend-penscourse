@@ -12,11 +12,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   OneSignal.init({
     appId,
     allowLocalhostAsSecureOrigin: true,
-  });
-
-  OneSignal.Debug.setLogLevel("trace");
-  OneSignal.Notifications.addEventListener("foregroundWillDisplay", (event) => {
-    console.log("OneSignal notification will display", event);
+    autoRegister: true,
+    autoResubscribe: true,
   });
 
   return {

@@ -5,13 +5,10 @@
     <div
       class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] text-white"
     >
-      <img
-        src="~assets/images/pens_white.png"
-        alt="Logo"
-        width="40"
-        height="40"
-        class="mb-10"
-      />
+      <NuxtLink to="/" class="mb-10 w-10 h-10">
+        <img src="~assets/images/pens_white.png" alt="Logo" class="" />
+      </NuxtLink>
+
       <h2 class="text-2xl lg:text-4xl xl:text-6xl font-semibold">
         Selamat Datang di PENS Course!
       </h2>
@@ -30,18 +27,6 @@
         class="sm:mx-auto sm:w-full sm:max-w-sm border border-alto-500 p-6 rounded-3xl"
       >
         <form @submit.prevent="handleSubmit">
-          <InputField
-            label="Email"
-            placeholder="Masukkan Email"
-            v-model:model-value="email"
-            :value="email"
-          />
-          <InputField
-            label="OTP"
-            placeholder="Masukkan OTP"
-            v-model:model-value="otp"
-            :value="otp"
-          />
           <InputField
             label="Password"
             placeholder="Masukkan Password"
@@ -85,8 +70,11 @@ interface Otp {
   password: string;
   password_confirmation: string;
 }
+const route = useRoute();
 
-const { email, otp } = storeToRefs(useAuthStore());
+const email = route.query.email as string;
+
+const { otp } = storeToRefs(useAuthStore());
 
 const isLoading: Ref<boolean> = ref(false);
 const payload = reactive<{
@@ -104,7 +92,7 @@ const handleSubmit = async () => {
     {
       method: "POST",
       body: {
-        email: email.value,
+        email: email,
         otp: otp.value,
         password: payload.password,
         password_confirmation: payload.password_confirmation,
@@ -113,7 +101,6 @@ const handleSubmit = async () => {
   );
   if (data.value) {
     isLoading.value = false;
-    email.value = "";
     otp.value = "";
     navigateTo("/auth/login");
   }
