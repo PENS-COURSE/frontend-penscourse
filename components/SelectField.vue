@@ -42,7 +42,7 @@ defineProps({
   options: {
     type: Array<{
       label: string;
-      value: string;
+      value: string | string[];
     }>,
     required: true,
   },

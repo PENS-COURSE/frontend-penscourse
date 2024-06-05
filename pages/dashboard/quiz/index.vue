@@ -5,8 +5,8 @@
     <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
     <h2 class="text-xl font-semibold">Fitur ini masih belum bisa digunakan</h2>
   </div> -->
-  <div class="flex items-center justify-between mt-8 gap-2">
-    <!-- <form>
+  <!-- <div class="flex items-center justify-between mt-8 gap-2"> -->
+  <!-- <form>
       <div class="relative text-alto-500 focus-within:text-alto-500">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
           <Icon name="mdi:magnify" class="text-regal-blue-500 w-5 h-5" />
@@ -21,7 +21,7 @@
       </div>
     </form> -->
 
-    <div class="flex gap-5">
+    <!-- <div class="flex gap-5">
       <select
         v-model="selectedStatus"
         class="border border-regal-blue-500 py-2 px-4 rounded-lg"
@@ -29,11 +29,11 @@
         <option value="all">Semua</option>
         <option value="ongoing">Berlangsung</option>
         <option value="late">Terlambat</option>
-        <option value="finished">Selesai</option>
-        <!-- <option v-for="order in quizztatus" :value="order" :key="order">
+        <option value="finished">Selesai</option> -->
+  <!-- <option v-for="order in quizztatus" :value="order" :key="order">
           {{ order }}
         </option> -->
-      </select>
+   </select>
     </div>
   </div>
 
@@ -122,21 +122,23 @@
 </template>
 
 <script setup lang="ts">
-import { useAsyncData } from 'nuxt/app';
+import { useAsyncData } from "nuxt/app";
 
 definePageMeta({
   layout: "profile",
+  middleware: "authenticated",
 });
 
 const selectedStatus = ref<string>("all");
 // const quizz = ref<QuizHistory[]>([]);
 // const isLoading = ref(true);
 
-const { data: quizz, pending: load} = useAsyncData('quizz', async () => {
-  const { data: historyHistory } =
-    await useRestClient<APIResponsePagination<QuizHistory>>(`/courses/quiz?status=${selectedStatus.value}`);
-    
-    return historyHistory.value ? historyHistory.value.data.data : []
+const { data: quizz, pending: load } = useAsyncData("quizz", async () => {
+  const { data: historyHistory } = await useRestClient<
+    APIResponsePagination<QuizHistory>
+  >(`/courses/quiz?status=${selectedStatus.value}`);
+
+  return historyHistory.value ? historyHistory.value.data.data : [];
 });
 
 // const getQuiz = async () => {
@@ -144,7 +146,7 @@ const { data: quizz, pending: load} = useAsyncData('quizz', async () => {
 //   const { data: historyHistory } =
 //     await useRestClient<APIResponsePagination<QuizHistory>>("/courses/quiz");
 //   console.log("test", historyHistory.value);
-  
+
 //   if (historyHistory.value) {
 //     quizz.value = historyHistory.value.data.data;
 //   }
@@ -152,12 +154,14 @@ const { data: quizz, pending: load} = useAsyncData('quizz', async () => {
 // };
 
 const filteredQuiz = computed(() => {
-  const { data: quizz, pending: load} = useAsyncData('quizz', async () => {
-  const { data: historyHistory } = await useRestClient<APIResponsePagination<QuizHistory>>(`/courses/quiz?status=${selectedStatus.value}`);
-    return historyHistory.value ? historyHistory.value.data.data : []
+  const { data: quizz, pending: load } = useAsyncData("quizz", async () => {
+    const { data: historyHistory } = await useRestClient<
+      APIResponsePagination<QuizHistory>
+    >(`/courses/quiz?status=${selectedStatus.value}`);
+    return historyHistory.value ? historyHistory.value.data.data : [];
   });
-  
-  console.log('selected', selectedStatus.value);
+
+  console.log("selected", selectedStatus.value);
   return quizz;
 
   // if (selectedStatus.value == "all") {
@@ -184,7 +188,7 @@ const major = computed(() => detailMajor?.value?.data);
 //   const { data: historyHistory } =
 //     await useRestClient<APIResponsePagination<QuizHistory>>("/courses/quiz");
 //   console.log("test", historyHistory.value);
-  
+
 //   if (historyHistory.value) {
 //     quizz.value = historyHistory.value.data.data;
 //   }

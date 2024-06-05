@@ -1,61 +1,81 @@
 <template>
   <div class="mx-auto">
-    <h1 class="text-2xl font-medium mb-5">Tambah Mata Pelajaran</h1>
+    <h1 class="text-2xl font-medium mb-5">Tambah Jurusan</h1>
 
     <div class="border border-alto-500/50 rounded w-full p-4">
-      <form>
+      <form @submit.prevent="handleSubmit">
         <div class="mt-3">
-          <FileInput label="Icon Jurusan" v-model:model-value="payload.icon" />
+          <FileInput
+            accept="image/*"
+            label="Icon Jurusan"
+            v-model:model-value="payload.icon"
+          />
           <InputField
             label="Nama"
             required
-            placeholder="Pemrograman Dasar"
+            placeholder="Masukkan nama jurusan"
             v-model:model-value="payload.name"
             :value="payload.name"
           />
-          <InputField
+          <LargeInputField
             label="Deskripsi"
-            placeholder="Deskripsi Mata Pelajaran"
+            placeholder="Masukkan deskripsi jurusan"
             v-model:model-value="payload.description"
             :value="payload.description"
           />
+          <SelectField
+            :label="'Aktif atau Tidak'"
+            :required="true"
+            :options="optionsIsActive"
+            :value="payload.is_active"
+            v-model:model-value="payload.is_active"
+          />
           <InputField
             label="Peserta"
+            placeholder="Masukkan note peserta"
             required
             :value="payload.participant_note"
             v-model:model-value="payload.participant_note"
           />
           <InputField
-            label="Peluang"
-            required
-            :value="payload.opportunities_note"
-            v-model:model-value="payload.opportunities_note"
-          />
-          <InputField
             label="Benefit"
+            placeholder="Masukkan note benefit"
             required
             :value="payload.benefits_note"
             v-model:model-value="payload.benefits_note"
           />
-          <FileInput
-            label="Thumbnail"
-            v-model:model-value="payload.participant_thumbnail"
+          <InputField
+            label="Peluang"
+            placeholder="Masukkan note peluang"
+            required
+            :value="payload.opportunities_note"
+            v-model:model-value="payload.opportunities_note"
           />
-          <FileInput
-            label="Thumbnail"
-            v-model:model-value="payload.opportunities_thumbnail"
-          />
-          <FileInput
-            label="Thumbnail"
-            v-model:model-value="payload.benefits_thumbnail"
-          />
+          <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-5">
+            <FileInput
+              accept="image/*"
+              label="Thumbnail Peserta"
+              v-model:model-value="payload.participant_thumbnail"
+            />
+            <FileInput
+              accept="image/*"
+              label="Thumbnail Peluang"
+              v-model:model-value="payload.opportunities_thumbnail"
+            />
+            <FileInput
+              accept="image/*"
+              label="Thumbnail Benefit"
+              v-model:model-value="payload.benefits_thumbnail"
+            />
+          </div>
         </div>
-        <div class="mt-3 flex justify-end">
+        <div class="mt-5 flex justify-end">
           <button
-            class="bg-regal-blue-500 text-white rounded-lg text-sm font-medium gap-2 px-6 py-2"
+            class="flex w-full justify-center rounded bg-regal-blue-500 p-3 font-medium text-gray-100"
             type="submit"
           >
-            Simpan
+            <span v-if="isLoading"><LoadingSpinner /></span>
+            <span v-if="!isLoading">Tambah</span>
           </button>
         </div>
       </form>
@@ -64,15 +84,19 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from "vue3-toastify";
+
 definePageMeta({
   middleware: "authenticated",
   layout: "admin",
 });
 
+const isLoading: Ref<boolean> = ref(false);
+
 const payload = reactive<{
   name: string | undefined;
   description: string | undefined;
-  is_active: boolean | undefined;
+  is_active: string | undefined;
   participant_note: string | undefined;
   benefits_note: string | undefined;
   opportunities_note: string | undefined;
@@ -92,4 +116,52 @@ const payload = reactive<{
   benefits_thumbnail: undefined,
   opportunities_thumbnail: undefined,
 });
+
+const handleSubmit = async () => {
+  isLoading.value = true;
+  const { data, error } = await useRestClient<APIResponseDetail<Department>>(
+    "departments/create",
+    {
+      method: "POST",
+      body: converterFormData({
+        name: payload.name,
+        description: payload.description,
+        is_active: payload.is_active,
+        participant_note: payload.participant_note,
+        benefits_note: payload.benefits_note,
+        opportunities_note: payload.opportunities_note,
+        icon: payload.icon,
+        participant_thumbnail: payload.participant_thumbnail,
+        benefits_thumbnail: payload.benefits_thumbnail,
+        opportunities_thumbnail: payload.opportunities_thumbnail,
+      }),
+    }
+  );
+
+  if (data.value) {
+    isLoading.value = false;
+    console.log(data.value);
+    navigateTo("/dosen/major");
+    toast.success("Berhasil Menambah Jurusan!", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
+
+  if (error.value) {
+    isLoading.value = false;
+    console.log(error.value);
+    navigateTo("/dosen/major");
+    toast.error("Error!", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
+  isLoading.value = false;
+};
+
+const optionsIsActive = [
+  { value: "true", label: "Ya" },
+  { value: "false", label: "Tidak" },
+];
 </script>

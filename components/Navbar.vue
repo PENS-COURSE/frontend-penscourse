@@ -46,7 +46,15 @@
         v-if="authenticated"
         to="/dashboard/profile"
         class="text-white hover:text-gray-200"
+        :class="user.role == 'admin' ? 'hidden' : ''"
         >Dashboard</NuxtLink
+      >
+
+      <NuxtLink
+        v-if="authenticated && user.role == 'admin'"
+        to="/dosen"
+        class="text-white hover:text-gray-200"
+        >Dashboard Admin</NuxtLink
       >
     </ul>
 
@@ -100,7 +108,14 @@
                     :key="item.id"
                   >
                     <div
-                      class="flex justify-between items-center gap-2 p-4 border-t-2 cursor-pointer border-gray-200 hover:bg-blue-100"
+                      :class="
+                        clsx(
+                          `flex justify-between items-center gap-2 p-4 border-t-2 cursor-pointer border-gray-200 hover:bg-blue-100`,
+                          {
+                            'bg-blue-100': item.read_at,
+                          }
+                        )
+                      "
                     >
                       <div class="w-1/8">
                         <Icon
@@ -128,14 +143,20 @@
         </Popover>
 
         <div class="flex items-center gap-3">
-          <NuxtLink v-if="user?.avatar == null" to="/dashboard/profile">
+          <NuxtLink
+            v-if="user?.avatar == null"
+            :to="user.role == 'admin' ? '/dosen' : '/dashboard/profile'"
+          >
             <img
               src="/images/profile.png"
               class="w-10 h-10 rounded-full object-cover"
               :alt="user.name"
             />
           </NuxtLink>
-          <NuxtLink v-else to="/dashboard/profile">
+          <NuxtLink
+            v-else
+            :to="user.role == 'admin' ? '/dosen' : '/dashboard/profile'"
+          >
             <img
               :src="`${useRuntimeConfig().public.BASE_URL}/${user?.avatar}`"
               class="w-10 h-10 rounded-full object-cover"
@@ -225,8 +246,9 @@ const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 const showMenu = ref(false);
 const isOpen = ref(false);
+const { $OneSignal } = useNuxtApp();
 
-const { data: dataNotif } =
+const { data: dataNotif, refresh: refreshNotif } =
   useRestClient<APIResponsePagination<Notif>>("notifications");
 
 const notifications = computed(() => dataNotif.value?.data.data);
@@ -242,6 +264,15 @@ const closeModal = () => {
 const openModal = () => {
   isOpen.value = true;
 };
+
+onMounted(() => {
+  $OneSignal.Notifications.addEventListener(
+    "foregroundWillDisplay",
+    (event) => {
+      refreshNotif();
+    }
+  );
+});
 </script>
 
 <style scoped>

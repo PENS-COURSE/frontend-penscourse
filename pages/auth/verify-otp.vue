@@ -5,13 +5,10 @@
     <div
       class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] text-white"
     >
-      <img
-        src="~assets/images/pens_white.png"
-        alt="Logo"
-        width="40"
-        height="40"
-        class="mb-10"
-      />
+      <NuxtLink to="/" class="mb-10 w-10 h-10">
+        <img src="~assets/images/pens_white.png" alt="Logo" class="" />
+      </NuxtLink>
+
       <h2 class="text-2xl lg:text-4xl xl:text-6xl font-semibold">
         Selamat Datang di PENS Course!
       </h2>
@@ -23,7 +20,7 @@
       class="flex min-h-full flex-1 flex-col bg-white justify-center mx-6 lg:mx-8"
     >
       <p class="text-slate-800 text-center mb-5">
-        Silahkan masukkan kode OTP yang sudah dikirimkan
+        Silahkan masukkan kode OTP yang sudah dikirimkan di email
       </p>
 
       <div
@@ -31,18 +28,10 @@
       >
         <form @submit.prevent="handleSubmit">
           <InputField
-            label="Email"
-            placeholder="Masukkan Email"
-            v-model:model-value="payload.email"
-            :value="payload.email"
-            :required="true"
-          />
-          <InputField
             label="OTP"
             placeholder="Masukkan OTP"
             v-model:model-value="payload.otp"
             :value="payload.otp"
-            :required="true"
           />
 
           <button
@@ -69,17 +58,20 @@ definePageMeta({
   middleware: "guest",
 });
 
+const route = useRoute();
+
+const email = route.query.email as string;
+
+const { otp } = storeToRefs(useAuthStore());
+
 interface Otp {
-  email: string;
   otp: string;
 }
 
 const isLoading: Ref<boolean> = ref(false);
 const payload = reactive<{
-  email: string | undefined;
   otp: string | undefined;
 }>({
-  email: undefined,
   otp: undefined,
 });
 
@@ -90,22 +82,27 @@ const handleSubmit = async () => {
     {
       method: "POST",
       body: {
-        email: payload.email,
+        email: email,
+        otp: payload.otp,
       },
     }
   );
   if (data.value) {
     isLoading.value = false;
-    toast.success(data.value.message, {
-      transition: "slide",
-      autoClose: 5000,
-      position: "bottom-right",
+    if (payload.otp !== undefined) {
+      otp.value = payload.otp;
+    }
+
+    navigateTo({
+      path: "/auth/reset-password",
+      query: {
+        email: email,
+      },
     });
-    navigateTo("/auth/verify-otp");
   }
-  if (error.value) {
+  if (error.value?.statusCode == 403) {
     isLoading.value = false;
-    toast.error("Error, terjadi kesalahan!", {
+    toast.error("Anda salah memasukkan kode OTP!", {
       transition: "slide",
       autoClose: 5000,
       position: "bottom-right",

@@ -1,7 +1,7 @@
 import { useOneSignal } from "@onesignal/onesignal-vue3";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const appId = useRuntimeConfig().public.oneSignalAppId;
+  const appId = nuxtApp.$config.public.oneSignalAppId;
 
   if (!appId) {
     return;
@@ -12,6 +12,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   OneSignal.init({
     appId,
     allowLocalhostAsSecureOrigin: true,
+    autoRegister: true,
+    autoResubscribe: true,
   });
 
   return {

@@ -40,6 +40,7 @@ export interface Quiz {
   created_at?: Date;
   updated_at?: Date;
   total_questions?: number;
+  is_taken: boolean;
 }
 
 export interface QuizScoreResponse {
@@ -105,12 +106,22 @@ export interface QuizHistory {
   curriculum: Curriculum
   detail_score: DetailScore
   is_taken: boolean
-  is_submitted: boolean
   status: "ongoing" | "late" | "finished";
   course: Course;
+  is_submitted: boolean
 }
 
 export interface DetailScore {
-  score: any
-  is_passed: boolean
+  score: any;
+  is_passed: boolean;
+}
+
+export interface ResetQuiz {
+  id: string;
+  user_id: number;
+  quiz_id: string;
+  score: number;
+  is_ended: boolean;
+  created_at: string;
+  updated_at: string;
 }

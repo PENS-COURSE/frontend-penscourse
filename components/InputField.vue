@@ -7,7 +7,7 @@
       <span class="text-red-500 ml-1" v-if="required">*</span>
     </div>
     <input
-      :id="label"
+      :id="name"
       :name="name"
       :type="type"
       class="w-full rounded border-2 border-gray-200 bg-transparent py-2 px-5 font-medium outline-none transition focus:border-blue-900 active:border-regal-blue-500 disabled:bg-sky-50"
@@ -18,6 +18,7 @@
       @change="onChange"
       @click="onClick && onClick()"
       :disabled="disabled"
+      :autocomplete="autocomplete"
       @input="
         onInput && onInput;
         onChange($event);
@@ -81,6 +82,11 @@ defineProps({
   name: {
     type: String,
     required: false,
+  },
+  autocomplete: {
+    type: String,
+    required: false,
+    default: "off",
   },
 });
 </script>

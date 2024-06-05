@@ -14,11 +14,15 @@ export interface Course {
   department_id?: number;
   user_id?: number;
   is_active?: boolean;
+  is_completed?: boolean;
+  completed_at?: Date;
   created_at?: Date;
   updated_at?: Date;
   discount?: string;
   user?: UserCourse;
   is_enrolled?: boolean;
+  ratings?: number;
+  total_user_ratings?: number;
 }
 
 export interface UserCourse {

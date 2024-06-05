@@ -32,12 +32,11 @@
           />
           <InputField
             label="Judul"
-            required
             placeholder="Pemrograman Dasar"
             v-model:model-value="payload.title"
             :value="payload.title"
           />
-          <InputField
+          <LargeInputField
             label="Deskripsi"
             placeholder="Deskripsi Mata Pelajaran"
             v-model:model-value="payload.description"
@@ -54,13 +53,11 @@
             <SelectField
               label="Kelas Berbayar"
               :options="optionsIsFree"
-              required
               :value="payload.is_free"
               v-model:model-value="payload.is_free"
             />
             <InputField
               label="Harga"
-              required
               v-if="
                 payload.is_free === 'false' && payload.is_free !== undefined
               "
@@ -71,7 +68,6 @@
             <SelectField
               label="Tersedia Sertifikat"
               :options="optionsIsCertificate"
-              required
               :value="payload.is_certified"
               v-model:model-value="payload.is_certified"
             />
@@ -88,22 +84,20 @@
               type="date"
               :value="payload.end_date"
               v-model:model-value="payload.end_date"
-              :required="payload.start_date !== undefined"
             />
           </div>
           <div class="grid grid-cols-2 gap-5">
             <SelectField
               label="Grade Level"
               :options="optionsGradeLevel"
-              required
               :value="payload.grade_level"
               v-model:model-value="payload.grade_level"
             />
             <InputField
               label="Maksimal Siswa"
-              type="number"
               placeholder="30"
-              :value="payload.max_students"
+              :type="'number'"
+              :value="payload.max_students?.toString()"
               v-model:model-value="payload.max_students"
             />
           </div>
@@ -115,7 +109,6 @@
           >
             <InputField
               label="Jurusan"
-              required
               readonly
               :on-click="setOpenModalJurusan"
               :value="payload.department_selected?.name"
@@ -124,7 +117,6 @@
             <InputField
               v-show="user.role === 'admin'"
               label="Author"
-              required
               readonly
               :on-click="setOpenModalJurusan"
               placeholder="Pilih Author"
@@ -134,7 +126,7 @@
           </div>
           <button
             class="flex w-full justify-center rounded bg-regal-blue-500 p-3 font-medium text-gray-100"
-            type="button"
+            type="submit"
           >
             <span v-if="isLoading"><LoadingSpinner /></span>
             <span v-if="!isLoading">Simpan</span>
@@ -200,8 +192,10 @@ definePageMeta({
   middleware: "authenticated",
 });
 
+import { toast } from "vue3-toastify";
+
 const { user } = storeToRefs(useAuthStore());
-const route = useRoute().params;
+const { id } = useRoute().params;
 
 const isLoading: Ref<boolean> = ref(false);
 
@@ -226,7 +220,7 @@ const payload = reactive<{
   start_date: any | undefined;
   end_date: any | undefined;
   is_active: boolean | undefined;
-  max_students: any | undefined;
+  max_students: number | undefined;
   department_id: number | undefined;
   department_selected: Department | undefined;
   user_id: number | undefined;
@@ -249,7 +243,7 @@ const payload = reactive<{
 });
 
 const { data } = await useRestClient<APIResponseDetail<Course>>(
-  `/courses/${route.id}`
+  `/courses/${id}`
 );
 
 const course = computed(() => data?.value?.data);
@@ -321,47 +315,59 @@ const handleCancel = () => {
 
 const handleSubmit = async () => {
   isLoading.value = true;
-  const { error } = await useRestClient<APIResponsePagination<Department>>(
-    `/courses/${route.id}/update`,
-    {
-      method: "PATCH",
-      body: !payload.thumbnail
-        ? {
-            name: payload.title,
-            description: payload.description,
-            price: payload.price,
-            is_free: payload.is_free,
-            is_certified: payload.is_certified,
-            grade_level: payload.grade_level,
-            start_date: payload.start_date,
-            end_date: payload.end_date,
-            is_active: payload.is_active,
-            max_students: payload.max_students,
-            department_id: payload.department_id,
-            user_id: payload.user_id,
-          }
-        : converterFormData({
-            name: payload.title,
-            description: payload.description,
-            price: payload.price,
-            is_free: payload.is_free,
-            is_certified: payload.is_certified,
-            grade_level: payload.grade_level,
-            start_date: payload.start_date,
-            end_date: payload.end_date,
-            is_active: payload.is_active,
-            max_students: payload.max_students,
-            department_id: payload.department_id,
-            user_id: payload.user_id,
-            thumbnail: payload.thumbnail,
-          }),
-    }
-  );
+  const { data, error } = await useRestClient<
+    APIResponsePagination<Department>
+  >(`/courses/${id}/update`, {
+    method: "PATCH",
+    body: !payload.thumbnail
+      ? {
+          name: payload.title,
+          description: payload.description,
+          price: payload.price,
+          is_free: payload.is_free,
+          is_certified: payload.is_certified,
+          grade_level: payload.grade_level,
+          start_date: payload.start_date,
+          end_date: payload.end_date,
+          is_active: payload.is_active,
+          max_students: payload.max_students,
+          department_id: payload.department_id,
+          user_id: payload.user_id,
+        }
+      : converterFormData({
+          name: payload.title,
+          description: payload.description,
+          price: payload.price,
+          is_free: payload.is_free,
+          is_certified: payload.is_certified,
+          grade_level: payload.grade_level,
+          start_date: payload.start_date,
+          end_date: payload.end_date,
+          is_active: payload.is_active,
+          max_students: payload.max_students,
+          department_id: payload.department_id,
+          user_id: payload.user_id,
+          thumbnail: payload.thumbnail,
+        }),
+  });
 
-  if (!error.value) {
+  if (data.value) {
     isLoading.value = false;
-    navigateTo("/dosen/course");
+    toast.success("Sukses mengedit mata kuliah!", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+
+    navigateTo(`/course/${id}`);
   }
+  if (error.value) {
+    isLoading.value = false;
+    toast.error("Gagal mengedit mata kuliah!", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
+
   isLoading.value = false;
 };
 

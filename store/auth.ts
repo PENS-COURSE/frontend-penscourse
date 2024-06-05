@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
+import { toast } from "vue3-toastify";
 import { useRestClient } from "../composables/useRestClient";
 import type { Authentication, User } from "../models/Authentication";
 import type { APIResponseDetail } from "../models/Data";
-import { toast } from "vue3-toastify";
 
 interface AuthPayloadInterface {
   email: string;
@@ -14,6 +14,10 @@ interface RegisterPayloadInterface {
   email: string;
   password: string;
   password_confirmation: string;
+}
+
+interface LoginWithGoogle {
+  accessToken: string;
 }
 
 interface SendOtpPayloadInterface {
@@ -28,6 +32,7 @@ export const useAuthStore = defineStore("auth", {
     authenticated: false,
     loading: false,
     isOpenModal: false,
+    otp: "",
   }),
   persist: true,
   actions: {
@@ -49,6 +54,7 @@ export const useAuthStore = defineStore("auth", {
         this.access_token = data.value.data.token.access_token;
         this.refresh_token = data.value.data.token.refresh_token;
         this.user = data.value.data.user;
+        useNuxtApp().$OneSignal.login(this.user.id.toString());
       }
       if (error.value?.statusCode == 403) {
         this.loading = false;
@@ -117,7 +123,33 @@ export const useAuthStore = defineStore("auth", {
       this.access_token = "";
       this.refresh_token = "";
       this.user = {} as User;
-      navigateTo("/auth/login");
+
+      useNuxtApp().$OneSignal.logout();
+
+      navigateTo("/auth/login", { replace: true });
+    },
+
+    async loginWithGoogle({ accessToken }: LoginWithGoogle) {
+      this.loading = true;
+      const { data, error } = await useRestClient<
+        APIResponseDetail<Authentication>
+      >("/authentication/login/google/token", {
+        method: "GET",
+        query: {
+          access_token: accessToken,
+        },
+      });
+
+      if (data.value) {
+        this.loading = false;
+        this.authenticated = true;
+        this.access_token = data.value.data.token.access_token;
+        this.refresh_token = data.value.data.token.refresh_token;
+        this.user = data.value.data.user;
+        useNuxtApp().$OneSignal.login(this.user.id.toString());
+      }
+
+      this.loading = false;
     },
 
     // async sendOtp({ email }: SendOtpPayloadInterface) {
@@ -148,6 +180,7 @@ export const useAuthStore = defineStore("auth", {
 
       if (data.value) {
         this.user = data.value.data;
+        useNuxtApp().$OneSignal.login(this.user.id.toString());
       }
     },
   },

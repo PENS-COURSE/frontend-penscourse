@@ -1,21 +1,6 @@
 <template>
-  <h4 class="font-semibold text-2xl">Transaksi</h4>
-
   <div class="flex items-center justify-between mt-8 gap-2">
-    <!-- <form>
-      <div class="relative text-alto-500 focus-within:text-alto-500">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <Icon name="mdi:magnify" class="text-regal-blue-500 w-5 h-5" />
-        </span>
-        <input
-          type="search"
-          name="q"
-          class="w-56 lg:w-96 py-2 text-s bg-alto-500 rounded-md pl-10 focus:outline-none focus:text-regal-blue-500"
-          placeholder="Search..."
-          autocomplete="off"
-        />
-      </div>
-    </form> -->
+    <h4 class="font-semibold text-2xl">Transaksi</h4>
 
     <div class="flex gap-5">
       <select
@@ -26,9 +11,6 @@
         <option value="pending">Pending</option>
         <option value="expired">Kadaluarsa</option>
         <option value="paid">Terbayar</option>
-        <!-- <option v-for="order in orderStatus" :value="order" :key="order">
-          {{ order }}
-        </option> -->
       </select>
     </div>
   </div>
@@ -105,6 +87,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "profile",
+  middleware: "authenticated",
 });
 
 const selectedStatus = ref<string>("all");

@@ -76,7 +76,7 @@
   </section>
 </template>
 <script setup lang="ts">
-const { id } = useRoute().params;
+const { id } = useRoute().params as { id: string };
 
 const { data } = await useRestClient<APIResponseDetail<Order>>(`/orders/${id}`);
 const order = computed(() => data.value?.data);

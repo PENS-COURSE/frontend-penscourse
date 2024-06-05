@@ -8,7 +8,7 @@ export interface Curriculum {
   created_at: Date;
   updated_at: Date;
   subjects: Subjects;
-  course? : Course;
+  course?: Course;
 }
 
 export interface Subjects {
@@ -44,19 +44,19 @@ export interface LiveClass {
   is_completed: boolean;
 }
 
-export interface Quiz {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  start_date: Date;
-  end_date: Date;
-  is_ended: boolean;
-  is_active: boolean;
-  show_result: boolean;
-  pass_grade: number;
-  curriculum_id: string;
-  created_at: Date;
-  updated_at: Date;
-  is_taken: boolean;
-}
+// export interface Quiz {
+//   id: string;
+//   title: string;
+//   description: string;
+//   duration: number;
+//   start_date: Date;
+//   end_date: Date;
+//   is_ended: boolean;
+//   is_active: boolean;
+//   show_result: boolean;
+//   pass_grade: number;
+//   curriculum_id: string;
+//   created_at: Date;
+//   updated_at: Date;
+//   is_taken: boolean;
+// }

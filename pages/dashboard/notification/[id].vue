@@ -6,9 +6,10 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "profile",
+  middleware: "authenticated",
 });
 
-const { id } = useRoute().params;
+const { id } = useRoute().params as { id: string };
 
 const { data: detailNotif } = useRestClient<APIResponseDetail<Notif>>(
   `notifications/${id}`

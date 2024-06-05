@@ -3,7 +3,7 @@
     class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
   >
     <h2 class="text-title-md2 font-bold text-black">
-      Tambah Kuis {{ course?.name }}
+      Tambah Kuis {{ c?.title }}
     </h2>
     <nav>
       <ol class="flex items-center gap-2">
@@ -13,7 +13,7 @@
           >
         </li>
         <li class="font-medium text-regal-blue-500">
-          Tambah Kuis {{ course?.name }}
+          Tambah Kuis {{ c?.title }}
         </li>
       </ol>
     </nav>
@@ -22,11 +22,6 @@
   <div
     class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 rounded-sm border border-gray-200 bg-gray-50 shadow-lg"
   >
-    <div class="border-b border-stroke py-4 px-6">
-      <h3 class="font-semibold text-black">
-        Tambah Kurikulum {{ course?.name }}
-      </h3>
-    </div>
     <div class="p-6">
       <form @submit.prevent="handleSubmit">
         <div class="mt-3">
@@ -45,7 +40,7 @@
           <InputField
             label="Durasi"
             v-model:model-value="payload.duration"
-            :value="payload.duration?.toString()"
+            :value="payload.duration"
             :required="true"
           />
           <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-2">
@@ -74,7 +69,7 @@
           <InputField
             label="Nilai Minimal (KKM)"
             v-model:model-value="payload.pass_grade"
-            :value="payload.pass_grade?.toString()"
+            :value="payload.pass_grade"
             :required="true"
           />
           <InputField
@@ -93,7 +88,7 @@
             <InputField
               label="Presentase Soal Mudah"
               v-model:model-value="payload.generated_questions.easy_percentage"
-              :value="payload.generated_questions.easy_percentage?.toString()"
+              :value="payload.generated_questions.easy_percentage"
               :required="true"
             />
             <InputField
@@ -101,13 +96,13 @@
               v-model:model-value="
                 payload.generated_questions.medium_percentage
               "
-              :value="payload.generated_questions.medium_percentage?.toString()"
+              :value="payload.generated_questions.medium_percentage"
               :required="true"
             />
             <InputField
               label="Presentase Soal Susah"
               v-model:model-value="payload.generated_questions.hard_percentage"
-              :value="payload.generated_questions.hard_percentage?.toString()"
+              :value="payload.generated_questions.hard_percentage"
               :required="true"
             />
           </div>
@@ -122,8 +117,8 @@
           />
           <InputField
             label="Jumlah Pertanyaan"
-            :v-model:model-value="payload.generated_questions.total_question"
-            :value="payload.generated_questions.total_question?.toString()"
+            v-model:model-value="payload.generated_questions.total_question"
+            :value="payload.generated_questions.total_question"
             :required="true"
           />
         </div>
@@ -158,18 +153,14 @@ interface Quiz {
   title: string;
   description: string;
   duration: number;
-  start_date: StartDate;
-  end_date: EndDate;
+  start_date: Date;
+  end_date: Date;
   show_result: boolean;
   pass_grade: number;
   curriculum_uuid: string;
   course_slug: string;
   generated_questions: GeneratedQuestions;
 }
-
-interface StartDate {}
-
-interface EndDate {}
 
 interface GeneratedQuestions {
   easy_percentage: number;
@@ -185,29 +176,33 @@ const isLoading: Ref<boolean> = ref(false);
 const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
 );
-const course = computed(() => dataCourse?.value?.data);
-
 const { data: dataCurriculum } = await useRestClient<
   APIResponseDetail<Curriculum>
 >(`/courses/${id}/curriculums/${curriculum}`);
+
+const { data: dataMajor } =
+  await useRestClient<APIResponsePagination<Course>>("/courses");
+
+const course = computed(() => dataCourse?.value?.data);
 const c = computed(() => dataCurriculum?.value?.data);
+const majors = computed(() => dataMajor.value?.data.data);
 
 const payload = reactive<{
   title: string | undefined;
   description: string | undefined;
-  duration: number | undefined;
+  duration: any | undefined;
   start_date: object | undefined;
   end_date: object | undefined;
   show_result: string | undefined;
-  pass_grade: number | undefined;
+  pass_grade: any | undefined;
   curriculum_uuid: string | undefined;
   course_slug: string | undefined;
   generated_questions: {
-    easy_percentage: number | undefined;
-    medium_percentage: number | undefined;
-    hard_percentage: number | undefined;
+    easy_percentage: any | undefined;
+    medium_percentage: any | undefined;
+    hard_percentage: any | undefined;
     all_curriculum_questions: string | undefined;
-    total_question: number | undefined;
+    total_question: any | undefined;
   };
 }>({
   title: undefined,
@@ -230,7 +225,6 @@ const payload = reactive<{
 
 const handleSubmit = async () => {
   isLoading.value = true;
-  console.log(payload);
 
   const { data, error } = await useRestClient<APIResponseDetail<Quiz>>(
     `/quizzes/create`,
@@ -239,24 +233,27 @@ const handleSubmit = async () => {
       body: {
         title: payload.title,
         description: payload.description,
-        duration: payload.duration,
-        start_date: payload.start_date,
-        end_date: payload.end_date,
+        duration: Number(payload.duration),
+        start_date: Object(payload.start_date),
+        end_date: Object(payload.end_date),
         show_result: payload.show_result,
-        pass_grade: payload.pass_grade,
+        pass_grade: Number(payload.pass_grade),
         curriculum_uuid: c.value?.id,
         course_slug: course.value?.slug,
         generated_questions: {
-          easy_percentage: payload.generated_questions.easy_percentage,
-          medium_percentage: payload.generated_questions.medium_percentage,
-          hard_percentage: payload.generated_questions.hard_percentage,
+          easy_percentage: Number(payload.generated_questions.easy_percentage),
+          medium_percentage: Number(
+            payload.generated_questions.medium_percentage
+          ),
+          hard_percentage: Number(payload.generated_questions.hard_percentage),
           all_curriculum_questions:
             payload.generated_questions.all_curriculum_questions,
-          total_question: payload.generated_questions.total_question,
+          total_question: Number(payload.generated_questions.total_question),
         },
       },
     }
   );
+  console.log(payload);
 
   if (data.value) {
     isLoading.value = false;

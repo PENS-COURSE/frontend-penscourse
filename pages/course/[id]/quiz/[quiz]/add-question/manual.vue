@@ -122,8 +122,20 @@ const isLoading: Ref<boolean> = ref(false);
 const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
   `/courses/${id}`
 );
-
 const course = computed(() => dataCourse?.value?.data);
+
+interface AddQuestion {
+  question: string;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  option_e: string;
+  question_type: string;
+  right_answer: string[];
+  level: string;
+  curriculum_uuid: string;
+}
 
 const payload = reactive<{
   question: string | undefined;
@@ -154,36 +166,36 @@ const handleSubmit = async () => {
   payload.curriculum_uuid = question;
   console.log(payload);
 
-  //   const { data, error } = await useRestClient<APIResponseDetail<Curriculum>>(
-  //     `/quizzes/${quiz}/questions/create`,
-  //     {
-  //       method: "POST",
-  //       body: {
-  //         question: payload.question,
-  //         option_a: payload.option_a,
-  //         option_b: payload.option_b,
-  //         option_c: payload.option_c,
-  //         option_d: payload.option_d,
-  //         option_e: payload.option_e,
-  //         question_type: payload.question_type,
-  //         right_answer: payload.right_answer,
-  //         level: payload.level,
-  //         curriculum_uuid: payload.curriculum_uuid,
-  //       },
-  //     }
-  //   );
+  const { data, error } = await useRestClient<APIResponseDetail<AddQuestion>>(
+    `/quizzes/${quiz}/questions/create`,
+    {
+      method: "POST",
+      body: {
+        question: payload.question,
+        option_a: payload.option_a,
+        option_b: payload.option_b,
+        option_c: payload.option_c,
+        option_d: payload.option_d,
+        option_e: payload.option_e,
+        question_type: payload.question_type,
+        right_answer: payload.right_answer,
+        level: payload.level,
+        curriculum_uuid: payload.curriculum_uuid,
+      },
+    }
+  );
 
-  //   if (data.value) {
-  //     isLoading.value = false;
-  //     navigateTo(`/course/${id}/quiz/${quiz}`);
-  //   }
+  if (data.value) {
+    isLoading.value = false;
+    navigateTo(`/course/${id}/quiz/${quiz}`);
+  }
 
-  //   if (error.value) {
-  //     toast.error("Error, terjadi kesalahan!", {
-  //       autoClose: 5000,
-  //       position: "bottom-right",
-  //     });
-  //   }
+  if (error.value) {
+    toast.error("Error, terjadi kesalahan!", {
+      autoClose: 5000,
+      position: "bottom-right",
+    });
+  }
   isLoading.value = false;
 };
 

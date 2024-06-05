@@ -5,13 +5,10 @@
     <div
       class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] text-white"
     >
-      <img
-        src="~assets/images/pens_white.png"
-        alt="Logo"
-        width="40"
-        height="40"
-        class="mb-10"
-      />
+      <NuxtLink to="/" class="mb-10 w-10 h-10">
+        <img src="~assets/images/pens_white.png" alt="Logo" class="" />
+      </NuxtLink>
+
       <h2 class="text-2xl lg:text-4xl xl:text-6xl font-semibold">
         Selamat Datang di PENS Course!
       </h2>
@@ -34,49 +31,31 @@
         class="sm:mx-auto sm:w-full sm:max-w-sm border border-alto-500 p-6 rounded-3xl"
       >
         <form @submit.prevent="handleLogin">
-          <div class="flex items-center justify-between">
-            <label
-              htmlFor="email"
-              class="block text-sm font-medium leading-6 text-alto-500-900"
-            >
-              Email
-            </label>
-          </div>
-
-          <input
-            v-model="user.email"
+          <InputField
+            id="email"
             name="email"
-            placeholder="Masukkan email anda"
+            label="Email"
             type="email"
-            autoComplete="email"
-            required
-            class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            placeholder="Masukkan email anda"
+            v-model:model-value="user.email"
+            :value="user.email"
           />
-
-          <div class="flex items-center justify-between mt-2">
-            <label
-              htmlFor="password"
-              class="block text-sm font-medium leading-6 text-alto-500-900"
-            >
-              Password
-            </label>
-          </div>
-
-          <input
-            v-model="user.password"
+          <InputField
+            id="password"
             name="password"
-            :type="isPasswordVisible ? 'text' : 'password'"
+            label="Password"
+            autocomplete="current-password"
             placeholder="Masukkan password anda"
-            autoComplete="password"
-            required
-            class="w-full mb-10 rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            v-model:model-value="user.password"
+            :value="user.password"
+            :type="'password'"
           />
 
-          <!-- <div class="mb-10 flex justify-end text-sm text-regal-blue-500">
+          <div class="mb-6 flex justify-end text-sm text-regal-blue-500">
             <NuxtLink to="/auth/forget-pass" class="hover:underline"
               >Lupa Password?</NuxtLink
             >
-          </div> -->
+          </div>
 
           <button
             type="submit"
@@ -87,11 +66,11 @@
             <span v-if="!loading">Masuk</span>
           </button>
 
-          <!-- <p class="text-center text-sm mb-6">Atau masuk melalui</p>
+          <p class="text-center text-sm mb-6">Atau masuk melalui</p>
 
-          <div class="flex justify-center">
-            <GoogleLogin :callback="callback" />
-          </div> -->
+          <div class="flex justify-center mb-6">
+            <GoogleLogin :callback="googleCallback" />
+          </div>
 
           <p class="text-sm text-center">
             Belum punya akun?
@@ -112,16 +91,15 @@ import {
 } from "vue3-google-signin";
 import { useAuthStore } from "../../store/auth";
 import { GoogleLogin } from "vue3-google-login";
+import { toast } from "vue3-toastify";
 
 definePageMeta({
   layout: "auth",
   middleware: "guest",
 });
 
-const { login } = useAuthStore();
+const { login, loginWithGoogle } = useAuthStore();
 const { authenticated, loading } = storeToRefs(useAuthStore());
-
-const isPasswordVisible = ref(false);
 
 const user = ref({
   email: "",
@@ -132,28 +110,20 @@ const handleLogin = async () => {
   await login(user.value);
 
   if (authenticated.value) {
-    navigateTo("/");
+    navigateTo("/").then(() => toast.success("Login berhasil !"));
   }
 };
 
-const callback = async (response: CredentialResponse) => {
+const googleCallback = async (response: CredentialResponse) => {
   const { credential } = response;
-  console.log(credential);
 
-  let user;
   if (credential) {
-    user = await useRestClient<APIResponseDetail<Authentication>>(
-      "/authentication/login",
-      {
-        method: "POST",
-        body: {
-          token: credential,
-        },
-      }
-    );
+    await loginWithGoogle({ accessToken: credential });
+
+    if (authenticated.value) {
+      navigateTo("/").then(() => toast.success("Login berhasil !"));
+    }
   }
-  console.log("Access Token", credential);
-  console.log("Handle the response", response);
 };
 
 // handle success event

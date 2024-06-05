@@ -5,13 +5,10 @@
     <div
       class="hidden w-full md:flex md:flex-col md:justify-between md:w-1/2 p-20 bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] text-white"
     >
-      <img
-        src="~assets/images/pens_white.png"
-        alt="Logo"
-        width="40"
-        height="40"
-        class="mb-10"
-      />
+      <NuxtLink to="/" class="mb-10 w-10 h-10">
+        <img src="~assets/images/pens_white.png" alt="Logo" class="" />
+      </NuxtLink>
+
       <h2 class="text-2xl lg:text-4xl xl:text-6xl font-semibold">
         Selamat Datang di PENS Course!
       </h2>
@@ -27,91 +24,54 @@
       </h2>
 
       <p class="text-slate-gray-500 text-center mb-8">
-        Silahkan masukkan data anda
+        Silahkan masukan data anda
       </p>
 
       <div
         class="sm:mx-auto sm:w-full sm:max-w-sm border border-alto-500 p-6 rounded-3xl"
       >
         <form @submit.prevent="handleRegister">
-          <div class="flex items-center justify-between">
-            <label htmlFor="name" class="block text-sm font-medium">
-              Nama Lengkap
-            </label>
-          </div>
-
-          <input
-            v-model="registerPayload.name"
+          <InputField
+            id="name"
             name="name"
-            placeholder="masukkan nama anda"
-            type="text"
-            required
-            class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            label="Nama Lengkap"
+            type="name"
+            placeholder="Masukkan nama lengkap anda"
+            v-model:model-value="registerPayload.name"
+            :value="registerPayload.name"
           />
 
-          <div class="flex items-center justify-between mt-2">
-            <label htmlFor="email" class="block text-sm font-medium">
-              Email
-            </label>
-          </div>
-
-          <input
-            v-model="registerPayload.email"
+          <InputField
+            id="email"
             name="email"
-            placeholder="masukkan email anda"
+            label="Email"
             type="email"
-            required
-            class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
+            placeholder="Masukan email anda"
+            v-model:model-value="registerPayload.email"
+            :value="registerPayload.email"
           />
 
-          <div class="flex items-center justify-between mt-2">
-            <label htmlFor="password" class="block text-sm font-medium">
-              Password
-            </label>
-          </div>
+          <InputField
+            id="password"
+            name="password"
+            label="Password"
+            autocomplete="new-password"
+            placeholder="Masukkan password anda"
+            v-model:model-value="registerPayload.password"
+            :value="registerPayload.password"
+            :type="'password'"
+          />
 
-          <div class="relative">
-            <input
-              v-model="registerPayload.password"
-              name="password"
-              type="password"
-              placeholder="masukkan password anda"
-              required
-              class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
-            />
-
-            <button
-              class="absolute bottom-2 right-3 text-slate-gray-500 flex items-center"
-            >
-              <!-- <font-awesome-icon :icon="['fas', 'eye']" /> -->
-            </button>
-          </div>
-
-          <div class="flex items-center justify-between mt-2">
-            <label
-              htmlFor="password_confirmation"
-              class="block text-sm font-medium"
-            >
-              Konfirmasi Password
-            </label>
-          </div>
-
-          <div class="relative mb-16">
-            <input
-              v-model="registerPayload.password_confirmation"
-              name="password_confirmation"
-              type="password"
-              placeholder="masukkan password anda"
-              required
-              class="w-full rounded-lg py-1.5 pl-4 text-regal-blue-500 border border-alto-500 placeholder:text-alto-500 focus:outline-none focus:ring-inset focus:ring-blue sm:text-sm"
-            />
-
-            <button
-              class="absolute bottom-2 right-3 text-slate-gray-500 flex items-center"
-            >
-              <!-- <font-awesome-icon :icon="['fas', 'eye']" /> -->
-            </button>
-          </div>
+          <InputField
+            id="password_confirmation"
+            name="password_confirmation"
+            label="Konfirmasi Password"
+            autocomplete="new-password"
+            placeholder="Masukkan konfirmasi password anda"
+            v-model:model-value="registerPayload.password_confirmation"
+            :value="registerPayload.password_confirmation"
+            :type="'password'"
+          />
 
           <button
             type="submit"
@@ -171,6 +131,7 @@ definePageMeta({
   middleware: "guest",
 });
 
+import { toast } from "vue3-toastify";
 import { useAuthStore } from "../../store/auth";
 
 const { register } = useAuthStore();
@@ -184,7 +145,9 @@ const registerPayload = ref({
 });
 
 const handleRegister = async () => {
-  await register(registerPayload.value);
+  await register(registerPayload.value).then(() =>
+    toast.success("Registrasi berhasil !")
+  );
 };
 </script>
 

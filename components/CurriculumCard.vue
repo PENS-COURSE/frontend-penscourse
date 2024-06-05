@@ -24,15 +24,14 @@
           Tambah Video
         </NuxtLink>
         <NuxtLink
-          v-if="user.role == 'admin' || user.role == 'dosen'"
-          :to="
-            curriculum?.subjects.quizzes == 0
-              ? `/course/${course?.slug}/quiz/${curriculum?.id}/create-quiz`
-              : ``
+          v-if="
+            (user.role == 'admin' || user.role == 'dosen') &&
+            quizzes?.length == 0
           "
+          :to="`/course/${course?.slug}/quiz/${curriculum?.id}/create-quiz`"
           class="text-regal-blue-500 hover:underline"
         >
-          {{ curriculum?.subjects.quizzes == 0 ? "Tambah Kuis" : "" }}
+          {{ quizzes?.length == 0 ? "Tambah Kuis" : "" }}
         </NuxtLink>
         <Icon
           :name="
@@ -320,17 +319,13 @@ const { user } = storeToRefs(auth);
 // Streaming Request Token
 const streamingRequestToken = async ({ roomSlug }: { roomSlug: string }) => {
   const { data, error } = await useRestClient<APIResponseDetail<StreamingJoin>>(
-    user?.value?.role === "user"
-      ? `/streaming/${roomSlug}/join-url`
-      : `/streaming/${roomSlug}/open-room`,
+    `/streaming/${roomSlug}/join-url`,
     {
       method: "GET",
     }
   );
 
   if (data.value) {
-    console.log(roomSlug);
-
     window.open(data.value.data.url, "_blank");
   }
 

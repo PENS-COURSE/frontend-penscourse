@@ -61,6 +61,7 @@ import { toast } from "vue3-toastify";
 
 definePageMeta({
   layout: "profile",
+  middleware: "authenticated",
 });
 
 const isLoading = ref(false);
