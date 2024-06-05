@@ -4,8 +4,8 @@
       <div class="md:w-1/2 max-h-96">
         <h2 class="mb-6 text-2xl font-semibold">Rincian Pembelian</h2>
         <div class="p-4 border border-alto-500 rounded-lg">
-          <img
-            v-if="order?.course.thumbnail == null"
+          <!-- <img
+            v-if="quizdetail?.course.thumbnail == null"
             src="~assets/images/course.png"
             alt=""
             class="w-full mb-2 max-h-52"
@@ -13,51 +13,51 @@
           <img
             v-else
             :src="`${useRuntimeConfig().public.BASE_URL}/${
-              order.course.thumbnail
+              quizdetail.course.thumbnail
             }`"
-            :alt="order.course.name"
+            :alt="quizdetail.course.name"
             class="w-full mb-2 max-h-72 object-cover"
-          />
-          <h4 class="font-semibold mb-2">{{ order?.course.name }}</h4>
+          /> -->
+          <h4 class="font-semibold mb-2">{{ quizdetail }}</h4>
           <p class="text-sm lg:text-base">
-            {{ getMajorName(order?.course.department_id) }}
+            {{ getMajorName(quizdetail?.course.department_id) }}
           </p>
         </div>
       </div>
       <div class="md:w-1/2">
         <div class="flex justify-between border border-alto-500 p-2 mb-4">
           <h4>Rincian Pembelian</h4>
-          <p
+          <!-- <p
             :class="
-              order?.status == 'paid'
+              quizdetail?.status == 'paid'
                 ? 'text-green-500'
-                : order?.status == 'expired'
+                : quizdetail?.status == 'expired'
                   ? 'text-red-500'
-                  : order?.status == 'pending'
+                  : quizdetail?.status == 'pending'
                     ? 'text-regal-blue-500'
                     : ''
             "
           >
             {{
-              order?.status == "paid"
+              quizdetail?.status == "paid"
                 ? "Terbayar"
-                : order?.status == "expired"
+                : quizdetail?.status == "expired"
                   ? "Kadaluarsa"
-                  : order?.status == "pending"
+                  : quizdetail?.status == "pending"
                     ? "Pending"
                     : ""
             }}
-          </p>
+          </p> -->
         </div>
         <h2 class="mb-4 font-semibold text-xl">Informasi Pembelian</h2>
         <div class="flex flex-col gap-2 border border-alto-500 p-2">
           <div class="flex justify-between text-sm">
             <p>Tanggal Pembelian</p>
-            <p>{{ order?.created_at }}</p>
+            <p class="text-black">{{ quizdetail?.duration }}</p>
           </div>
           <div class="flex justify-between text-sm">
             <p>Kode Transaksi</p>
-            <p>{{ order?.xendit_id }}</p>
+            <p>{{ quizdetail?.end_date }}</p>
           </div>
           <div class="flex justify-between">
             <p>Total Pembayaran</p>
@@ -65,7 +65,7 @@
               Rp
               {{
                 new Intl.NumberFormat("id-ID").format(
-                  order?.total_price as number
+                  quizdetail?.course.max_students as number
                 )
               }}
             </p>
@@ -78,8 +78,10 @@
 <script setup lang="ts">
 const { id } = useRoute().params;
 
-const { data } = await useRestClient<APIResponseDetail<Order>>(`/orders/${id}`);
-const order = computed(() => data.value?.data);
+const { data } = await useRestClient<APIResponseDetail<QuizHistory>>(`/courses/quizdetail/${id}`);
+const quizdetail = computed(() => data.value?.data);
+
+console.log(quizdetail)
 
 const { data: majorData } =
   await useRestClient<APIResponsePagination<Department>>("/departments");

@@ -15,14 +15,13 @@
           telah dipelajari di kelas ini.
         </p>
         <p class="mt-4 text-xs sm:text-sm">
-          Terdapat (belum ada api) Pertanyaan yang harus dikerjakan dalam ujian ini. Beberapa
+          Terdapat {{ response?.data.total_questions }} Pertanyaan yang harus dikerjakan dalam ujian ini. Beberapa
           ketentuannya sebagai berikut:
         </p>
         <p v-if="response" class="mt-2 ml-4 text-xs sm:text-sm">1. Syarat nilai kelulusan: {{ response.data.pass_grade }}%</p>
         <p v-if="response" class="mt-2 ml-4 text-xs sm:text-sm">2. Durasi ujian: {{ response.data.duration }} menit</p>
       </div>
       <div class="text-center mt-6">
-
         <div class="mt-4">
           <button
             type="button"
@@ -32,7 +31,6 @@
             Mulai Ujian Sekarang
           </button>
         </div>
-        
       </div>
     </div>
   </div>
@@ -116,6 +114,7 @@
     curriculum_id: string;
     created_at:    Date;
     updated_at:    Date;
+    total_questions: number;
   }
 
   const { id, slug } = useRoute().query

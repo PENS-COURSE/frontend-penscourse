@@ -39,6 +39,7 @@ export interface Quiz {
   curriculum_id?: string;
   created_at?: Date;
   updated_at?: Date;
+  total_questions?: number;
 }
 
 export interface QuizScoreResponse {
@@ -104,6 +105,7 @@ export interface QuizHistory {
   curriculum: Curriculum
   detail_score: DetailScore
   is_taken: boolean
+  is_submitted: boolean
   status: "ongoing" | "late" | "finished";
   course: Course;
 }

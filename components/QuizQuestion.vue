@@ -28,12 +28,13 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, ref } from 'vue';
-import type { QuizPilihan } from "../models/Quiz";
     const props = defineProps({
         soal: Object as any,
         pilihan: [],
         data_questions: Object as any
     });
+
+    console.log("Props Quiz Question", props);
 
     
     const emit = defineEmits(['selectedAnswer']);

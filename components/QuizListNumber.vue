@@ -10,37 +10,55 @@
         />
       </button>
       <span v-else class="font-semibold">Nomor Soal</span>
+      <!-- <span v-else class="font-semibold">{{ quizCookies().questions[0].answer.length }}</span> -->
     </div>
   </div>
   
   <div class="flex flex-col">
-    <div class="flex flex-row sm:items-center flex-wrap gap-1 mx-auto sm:mx-auto">
-      <div v-for="index in (props.soalLength || 0)" :key="index">
-        <button @click="notifyParent(index - 1)"
-          :class="{ 'clicked': (index - 1) === selectedButton }"
-          class="mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-3 rounded-lg"
-          :style="{ backgroundColor: index === selectedButton ? '#14487A' : '#14487A' }"  
+    <div class="flex flex-row sm:items-center flex-wrap gap-1 mx-auto sm:mx-auto mb-5 place-content-center place-self-center">
+      <div v-for="index in (props.soalLength > 20 ? 20 : props.soalLength)" :key="index">
+        <button @click="notifyParent((index + listNumber) - 1)"
+          :class="{ 'clicked': ((index + listNumber) - 1) === selectedButton }"
+          class="mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-auto rounded-lg"
           v-if="(isMobile && showPanel) || !isMobile">
-          {{ index }}
+          {{ (index + listNumber) }}
         </button>
       </div>
     </div>
 
-    <div :class="isMobile ? 'w-full flex justify-between gap-0.5' : 'mt-8 w-full flex justify-between gap-0.5'">
+    <div :class="isMobile ? 'w-full flex mx-auto my-auto place-self-center place-items-center justify-between gap-0.5' : 'my-auto place-self-center place-items-center w-full flex justify-between gap-0.5'">
+      <!-- Salah Satu Prev Pagination Click nya -->
+      <a :style="listNumber - 20 < 0 && {
+        pointerEvents: 'none',
+        cursor: 'default',
+        backgroundColor: 'grey'
+      }" @click="previousPagination"
+        class="hover:bg-[#14487A] m-auto border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+          <Icon name="material-symbols:keyboard-double-arrow-left" class="text-[#14487A] hover:text-white w-5 h-5 p-0" />
+      </a>
       <a @click="previousPage"
-        class="hover:bg-[#14487A] mt-4 border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+        class="hover:bg-[#14487A] m-auto border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
           <Icon name="material-symbols:arrow-back-ios-new-rounded" class="text-[#14487A] hover:text-white w-5 h-5 p-0" />
       </a>
       <button
         @click="openModal"
         type="button"
-        class="mt-4 mb-0 w-full text-[#14487A] font-semibold hover:text-white border-2 border-[#14487A] hover:bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
+        class="w-full text-[#14487A] font-semibold hover:text-white border-2 border-[#14487A] hover:bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
       >
-        Selesaikan Ujian
+        Submit Jawaban
       </button>
-      <a @click="nextPage"
-        class="hover:bg-[#14487A] mt-4 border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+      <!-- Salah Satu Next Pagination Click nya -->
+      <a @click="nextPage" 
+        class="hover:bg-[#14487A] m-auto border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
           <Icon name="material-symbols:arrow-forward-ios-rounded" class="text-[#14487A] hover:text-white ml-0.5 w-5 h-5 p-0" />
+      </a>
+      <a :style="listNumber + 21 > props.soalLength && {
+        pointerEvents: 'none',
+        cursor: 'default',
+        backgroundColor: 'grey'
+      }" @click="nextPagination"
+        class="hover:bg-[#14487A] m-auto border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
+          <Icon name="material-symbols:keyboard-double-arrow-right" class="text-[#14487A] hover:text-white ml-0.5 w-5 h-5 p-0" />
       </a>
     </div>
   </div>
@@ -121,8 +139,11 @@ import {
 } from "@headlessui/vue";
 import { toast } from "vue3-toastify";
 import { defineProps, defineEmits } from "vue";
+import { quizCookies } from "~/store/quiz";
+
 const { id, slug } = useRoute().query
 
+const listNumber = ref(0);
 const isOpen = ref(false);
 const isLoading: Ref<boolean> = ref(false);
 
@@ -161,7 +182,7 @@ const submitQuiz = async () => {
 };
 
 const emit = defineEmits(["updateParentVariable"]);
-const selectedButton = ref(null);
+const selectedButton = ref<number | null>(0);
 const loading = ref(false);
 
 const notifyParent = (index: number) => {
@@ -183,6 +204,13 @@ const nextPage = () => {
   notifyParent(nextIndex);
 };
 
+const nextPagination = () => {
+  const currentIndex = selectedButton.value || 0;
+  const nextIndex = currentIndex < props.soalLength - 1 ? currentIndex + 20 : 0;
+  listNumber.value += 20;
+  notifyParent(nextIndex);
+}
+
 const previousPage = () => {
   const currentIndex = selectedButton.value || 0;
   const previousIndex =
@@ -190,6 +218,13 @@ const previousPage = () => {
   notifyParent(previousIndex);
 };
 
+const previousPagination = () => {
+  const currentIndex = selectedButton.value || 0;
+  const previousIndex =
+    currentIndex > 0 ? currentIndex - 1 : props.soalLength - 1;
+    listNumber.value -= 20;
+  notifyParent(previousIndex);
+};
 
 const isMobile = ref(false);
 
@@ -204,6 +239,7 @@ const checkScreenSize = () => {
 };
 
 onMounted(() => {
+  console.log("cookiess", quizCookies().questions);
   checkScreenSize(); // Pengecekan saat komponen dimuat
   window.addEventListener('resize', checkScreenSize); // Pengecekan ukuran layar berubah
 });
@@ -226,7 +262,9 @@ onBeforeUnmount(() => {
 }
 
 .clicked {
-  background-color: #ffe000 !important;
+  background-color: transparent !important;
+  color: black;
+  border: 2px solid #14487A;
 }
 .unhover {
   pointer-events: none; /* Disables hover effect after button is clicked */

@@ -102,6 +102,8 @@
               :curriculum="curriculum"
               :slug="id"
               v-for="curriculum in curriculums"
+              :key="curriculum.id"
+              :default="defaultOpen"
             />
           </div>
           <div v-else>
@@ -296,6 +298,7 @@ import {
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 const { id } = useRoute().params as { id: string };
+const { defaultOpen } = useRoute().query as { defaultOpen: string};
 const isLoading: Ref<boolean> = ref(false);
 const isOpen: Ref<boolean> = ref(false);
 
