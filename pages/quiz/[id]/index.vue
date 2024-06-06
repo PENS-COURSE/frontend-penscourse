@@ -29,6 +29,7 @@
                 :soalLength="soal.length" 
                 :quizSessionid="quizzes?.detail?.session_id"
                 :quizUuid="quizzes?.quiz?.id"
+                :soal="soal"
               />
             </div>
           </aside>
@@ -175,7 +176,7 @@ function initQuiz(arr: any[]): any[] {
 
   // data.pilihan = randomizeArray(data.pilihan);
   pilihan.value = data;
-  quizCookies().saveQuizCookies(randomizedArr);
+  // quizCookies().saveQuizCookies(randomizedArr);
   return randomizedArr;
 }
 
@@ -185,18 +186,16 @@ const selectedAnswer = (answer: string[]) => {
 };
 
 const updateVariable = (newValue: number) => {
-  console.log("newValueSoal::", newValue);
-
-  
+  console.log("THX", soal[selectedSoal.value].question.question_type);
   try {
-    selectedSoal.value = newValue;
-
     const data: any = {
       question_type: "",
       pilihan: []
     };
-
-   if (answerPicked.value.length !== 0) {
+    
+    if (soal[selectedSoal.value].question.question_type === 'multiple_choice' || answerPicked.value.length !== 0) {
+    soal[selectedSoal.value].answer = answerPicked.value;
+    
     const response = useRestClient<APIResponseList<any>>(
       `/courses/quiz/update-answer`,
       {
@@ -211,6 +210,8 @@ const updateVariable = (newValue: number) => {
       }
     );
    }
+
+   selectedSoal.value = newValue;
 
     selectedAnswer([]);
 
@@ -249,28 +250,28 @@ const updateVariable = (newValue: number) => {
       throw new Error("Cannot read properties of undefined (reading 'question')");
     }
   } catch (error) {
-    // console.error(error);
-    const response = useRestClient<APIResponseDetail<QuizScoreResponse>>(
-    `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
-    {
-      method: "PATCH",
-    }
-  );
+    console.error(error);
+  //   const response = useRestClient<APIResponseDetail<QuizScoreResponse>>(
+  //   `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
+  //   {
+  //     method: "PATCH",
+  //   }
+  // );
 
-  router.push(`/quiz/${id}/nilai`);
+  // router.push(`/quiz/${id}/nilai`);
   }
 };
 
-const handleSubmit = async () => {
-  const response = await useRestClient<APIResponseDetail<QuizScoreResponse>>(
-    `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
-    {
-      method: "PATCH",
-    }
-  );
+// const handleSubmit = async () => {
+//   const response = await useRestClient<APIResponseDetail<QuizScoreResponse>>(
+//     `/courses/quiz/${quizzes.value?.detail?.session_id}/submit`,
+//     {
+//       method: "PATCH",
+//     }
+//   );
 
-  router.push(`/quiz/${id}/nilai`);
-};
+//   router.push(`/quiz/${id}/nilai`);
+// };
 
 
 const props = defineProps({
@@ -281,18 +282,18 @@ const emit = defineEmits(["updateParentVariable"]);
 const selectedButton = ref(null);
 const loading = ref(false);
 
-const notifyParent = (index: number) => {
-  if (selectedButton.value === index) {
-    selectedButton.value = null; // Deselect if the same button is clicked again
-  } else {
-    loading.value = true; // Show loading state
-    setTimeout(() => {
-      emit("updateParentVariable", index);
-      selectedButton.value = index;
-      loading.value = false; // Hide loading state after the operation is complete
-    }, 1000); // Simulate a 1-second delay
-  }
-};
+// const notifyParent = (index: number) => {
+//   if (selectedButton.value === index) {
+//     selectedButton.value = null; // Deselect if the same button is clicked again
+//   } else {
+//     loading.value = true; // Show loading state
+//     setTimeout(() => {
+//       emit("updateParentVariable", index);
+//       selectedButton.value = index;
+//       loading.value = false; // Hide loading state after the operation is complete
+//     }, 1000); // Simulate a 1-second delay
+//   }
+// };
 
 interface TimerState {
   timer: number;

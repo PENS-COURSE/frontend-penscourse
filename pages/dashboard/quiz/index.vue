@@ -33,9 +33,9 @@
   <!-- <option v-for="order in quizztatus" :value="order" :key="order">
           {{ order }}
         </option> -->
-   </select>
-    </div>
-  </div>
+   <!-- </select> -->
+    <!-- </div> -->
+  <!-- </div> -->
 
   <p v-if="load" class="text-center mt-5">Loading...</p>
   <div

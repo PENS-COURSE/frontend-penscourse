@@ -18,8 +18,10 @@
     <div class="flex flex-row sm:items-center flex-wrap gap-1 mx-auto sm:mx-auto mb-5 place-content-center place-self-center">
       <div v-for="index in (props.soalLength > 20 ? 20 : props.soalLength)" :key="index">
         <button @click="notifyParent((index + listNumber) - 1)"
-          :class="{ 'clicked': ((index + listNumber) - 1) === selectedButton }"
-          class="mt-3 w-9 bg-[#14487A] text-white font-semibold py-2 px-auto rounded-lg"
+          :class="{ 'clicked': ((index + listNumber) - 1) === selectedButton,
+            'filled' : props.soal[(index + listNumber) - 1].answer.length > 0
+           }"
+          class="mt-3 w-9 bg-[transparent] text-[#14487A] border-2 border-solid border-[#14487A] font-semibold py-2 px-auto rounded-lg"
           v-if="(isMobile && showPanel) || !isMobile">
           {{ (index + listNumber) }}
         </button>
@@ -158,6 +160,7 @@ const props = defineProps({
   soalLength: Number,
   quizSessionid: String,
   quizUuid: String,
+  soal: Object as any,
 });
 
 const submitQuiz = async () => {
@@ -201,13 +204,18 @@ const notifyParent = (index: number) => {
 const nextPage = () => {
   const currentIndex = selectedButton.value || 0;
   const nextIndex = currentIndex < props.soalLength - 1 ? currentIndex + 1 : 0;
+  if(props.soalLength && props.soalLength === currentIndex + 1){
+    listNumber.value = 0
+  } else if(((nextIndex % 20) === 0) && props.soalLength && props.soalLength > 20){
+    listNumber.value += 20;
+  }
   notifyParent(nextIndex);
 };
 
 const nextPagination = () => {
   const currentIndex = selectedButton.value || 0;
-  const nextIndex = currentIndex < props.soalLength - 1 ? currentIndex + 20 : 0;
   listNumber.value += 20;
+  const nextIndex = currentIndex < props.soalLength - 1 ? listNumber.value : 0;
   notifyParent(nextIndex);
 }
 
@@ -215,14 +223,19 @@ const previousPage = () => {
   const currentIndex = selectedButton.value || 0;
   const previousIndex =
     currentIndex > 0 ? currentIndex - 1 : props.soalLength - 1;
+  if(props.soalLength && props.soalLength === previousIndex + 1){
+    listNumber.value = 80;
+  } else if(currentIndex % 20 === 0 && props.soalLength && props.soalLength > 20){
+    listNumber.value -=20;
+  }
   notifyParent(previousIndex);
 };
 
 const previousPagination = () => {
   const currentIndex = selectedButton.value || 0;
+  listNumber.value -= 20;
   const previousIndex =
-    currentIndex > 0 ? currentIndex - 1 : props.soalLength - 1;
-    listNumber.value -= 20;
+    currentIndex > 0 ? (listNumber.value) : props.soalLength - 1;
   notifyParent(previousIndex);
 };
 
@@ -239,7 +252,7 @@ const checkScreenSize = () => {
 };
 
 onMounted(() => {
-  console.log("cookiess", quizCookies().questions);
+  // console.log("cookiess", quizCookies().questions);
   checkScreenSize(); // Pengecekan saat komponen dimuat
   window.addEventListener('resize', checkScreenSize); // Pengecekan ukuran layar berubah
 });
@@ -262,10 +275,16 @@ onBeforeUnmount(() => {
 }
 
 .clicked {
-  background-color: transparent !important;
-  color: black;
+  background-color: #14487A !important;
+  color: white !important;
   border: 2px solid #14487A;
 }
+
+.filled {
+  background-color: green;
+  color: white;
+}
+
 .unhover {
   pointer-events: none; /* Disables hover effect after button is clicked */
 }
