@@ -11,9 +11,9 @@
             name="select" 
           />
         <label :for="`option-${index + 1}`" :class="`option-${index + 1}`" class="ml-2">
-          <div class="text-white text-left">
+          <img v-if="item.answer.startsWith('https') " :src="item.answer" />
+          <div v-else class="text-white text-left">
             {{ item.answer }}
-
           </div>
         </label>
       </div>

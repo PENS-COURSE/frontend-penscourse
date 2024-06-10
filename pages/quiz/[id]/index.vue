@@ -174,9 +174,13 @@ function initQuiz(arr: any[]): any[] {
     });
   }
 
-  // data.pilihan = randomizeArray(data.pilihan);
+  for (let i = data.pilihan.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [data.pilihan[i], data.pilihan[j]] = [data.pilihan[j], data.pilihan[i]]; // Swap elements
+  }
+
   pilihan.value = data;
-  // quizCookies().saveQuizCookies(randomizedArr);
+
   return randomizedArr;
 }
 
@@ -186,7 +190,6 @@ const selectedAnswer = (answer: string[]) => {
 };
 
 const updateVariable = (newValue: number) => {
-  console.log("THX", soal[selectedSoal.value].question.question_type);
   try {
     const data: any = {
       question_type: "",
@@ -244,6 +247,11 @@ const updateVariable = (newValue: number) => {
           answer: soal[newValue].question.option_e,
         });
       }
+
+        for (let i = data.pilihan.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [data.pilihan[i], data.pilihan[j]] = [data.pilihan[j], data.pilihan[i]]; // Swap elements
+        }    
 
       pilihan.value = data;
     } else {

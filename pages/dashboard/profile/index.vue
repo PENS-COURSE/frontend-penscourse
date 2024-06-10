@@ -71,6 +71,24 @@
     </div>
     <div class="border border-alto-500 rounded-lg">
       <div class="py-4 px-6">
+        <h5 class="text-slate-gray-500 font-medium text-base">Kuis Saya</h5>
+      </div>
+
+      <div class="border-t border-alto-500 px-6 py-3">
+        <h5>{{ quizTotal?.data.data.length }}</h5>
+      </div>
+    </div>
+    <div class="border border-alto-500 rounded-lg">
+      <div class="py-4 px-6">
+        <h5 class="text-slate-gray-500 font-medium text-base">Kuis Selesai</h5>
+      </div>
+
+      <div class="border-t border-alto-500 px-6 py-3">
+        <h5>{{ quizDone?.data.data.length }}</h5>
+      </div>
+    </div>
+    <div class="border border-alto-500 rounded-lg">
+      <div class="py-4 px-6">
         <h5 class="text-slate-gray-500 font-medium text-base">
           Sertifikat Saya
         </h5>
@@ -192,6 +210,16 @@ const payload = reactive<{
 
 const { data: enrollments } =
   await useRestClient<APIResponsePagination<Enrollment>>("/enrollments");
+
+const { data: quizTotal } = await useRestClient<
+    APIResponsePagination<QuizHistory>
+  >(`/courses/quiz`);
+
+  const { data: quizDone } = await useRestClient<
+    APIResponsePagination<QuizHistory>
+  >(`/courses/quiz?status=finished`);
+
+  console.log("QUIZ", quizTotal.value?.data.data.length)
 
 const courses = computed(() => enrollments.value?.data.data);
 

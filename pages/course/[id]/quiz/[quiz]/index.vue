@@ -110,8 +110,8 @@
             <td class="px-6 py-4">
               {{ question.option_e }}
             </td>
-            <td class="px-6 py-4 flex" v-for="q in question.answer">
-              {{ q.answer }}
+            <td class="px-6 py-4 flex" v-for="q in question.answer.length !== 0 ? question.answer : 1">
+              {{ q.answer ?? '' }}
             </td>
             <td class="px-6 py-4">
               <NuxtLink

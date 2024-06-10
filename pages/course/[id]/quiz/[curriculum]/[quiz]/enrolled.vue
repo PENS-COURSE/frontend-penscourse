@@ -26,6 +26,7 @@
       <table class="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead class="w-full text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
+            <th scope="col" class="px-6 py-3">User ID</th>
             <th scope="col" class="px-6 py-3">Nama</th>
             <th scope="col" class="px-6 py-3">Nilai</th>
             <th scope="col" class="px-6 py-3">Aksi</th>
@@ -38,14 +39,17 @@
             class="bg-white border-b hover:bg-gray-50"
           >
             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-              {{ enroll.user.name }} {{ enroll.user_id }}
+              {{ enroll.user_id }}
+            </td>
+            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+              {{ enroll.user.name }}
             </td>
             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
               {{ enroll.score }}
             </td>
             <td class="px-6 py-4">
               <button
-                @click="openModal"
+                @click="openModal(enroll.user_id)"
                 class="font-medium text-school-bus-yellow-600 hover:underline"
               >
                 Reset
@@ -85,7 +89,7 @@
                         <div class="mt-2">
                           <p class="mb-4 text-center text-gray-500">
                             Apakah anda me reset kuis mahasiswa ini?
-                            {{ enroll.user_id }}
+                            {{ userId }}
                           </p>
                           <div
                             class="flex justify-center items-center space-x-4"
@@ -98,7 +102,7 @@
                               Tidak
                             </button>
                             <button
-                              @click="resetQuiz(enroll.user_id)"
+                              @click="resetQuiz(userId)"
                               class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300"
                             >
                               <span v-if="isLoading"><LoadingSpinner /></span>
@@ -136,10 +140,12 @@ definePageMeta({
 
 const { id, quiz } = useRoute().params;
 
+const userId = ref<number>();
+
 const isOpen: Ref<boolean> = ref(false);
 const isLoading: Ref<boolean> = ref(false);
 
-const { data: dataEnrolled } = await useRestClient<
+const { data: dataEnrolled, refresh: getData } = await useRestClient<
   APIResponseList<EnrolledQuiz>
 >(`/quizzes/${quiz}/enrolled`);
 
@@ -150,38 +156,40 @@ const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
 const enrolls = computed(() => dataEnrolled.value?.data);
 const course = computed(() => dataCourse?.value?.data);
 
-const resetQuiz = async (userId: number) => {
+const resetQuiz = async (userId: number | undefined) => {
   console.log("user ID terpilih: ", userId);
 
-  // const { data: dataReset, error } = await useRestClient<
-  //   APIResponseDetail<ResetQuiz>
-  // >(`/quizzes/${quiz}/reset/${userId}`);
+  const { data: dataReset, error, refresh } = await useRestClient<
+    APIResponseDetail<ResetQuiz>
+  >(`/quizzes/${quiz}/reset/${userId}`);
 
-  // if (dataReset.value) {
-  //   console.log("Response: ", dataReset.value);
+  if (dataReset.value) {
+    console.log("Response: ", dataReset.value);
 
-  //   closeModal();
-  //   // location.reload();
-  //   toast.success("Sukses reset Kuis!", {
-  //     position: "top-right",
-  //     autoClose: 5000,
-  //   });
-  // }
+    closeModal();
+    // location.reload();
+    await getData();
+    toast.success("Sukses reset Kuis!", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
 
-  // if (error.value) {
-  //   closeModal();
-  //   toast.error("Gagal reset kuis!", {
-  //     position: "top-right",
-  //     autoClose: 5000,
-  //   });
-  // }
+  if (error.value) {
+    closeModal();
+    toast.error("Gagal reset kuis!", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
 };
 
 const closeModal = () => {
   isOpen.value = false;
 };
 
-const openModal = () => {
+const openModal = (value: any) => {
   isOpen.value = true;
+  userId.value = value;
 };
 </script>

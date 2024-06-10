@@ -138,6 +138,7 @@
               >
                 Enrolled
               </NuxtLink>
+              
               <!-- <button
                 v-else
                 disabled

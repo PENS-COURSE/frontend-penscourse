@@ -281,8 +281,9 @@ onBeforeUnmount(() => {
 }
 
 .filled {
-  background-color: green;
+  background-color: #00F076;
   color: white;
+  border: 2px solid #00F076;
 }
 
 .unhover {

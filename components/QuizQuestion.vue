@@ -9,7 +9,8 @@
                 alt=""
               /> -->
         <div class="border-b-2 border-opacity-30 border-[#14487A] py-2 pb-4 text-start font-normal antialiased xl:text-lg text-base text-black">
-            {{ soal.question.question }}
+            <vue-markdown :source="soal.question.question" />
+            <!-- {{ soal.question.question }} -->
         </div>
         <div class="py-3 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]">
             Pilihan Jawaban
@@ -27,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import VueMarkdown from 'vue-markdown-render'
 import { defineProps, defineEmits, ref } from 'vue';
     const props = defineProps({
         soal: Object as any,
