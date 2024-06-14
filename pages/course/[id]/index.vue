@@ -125,7 +125,7 @@
         </div>
 
         <div class="flex justify-between items-center">
-          <h4 class="font-semibold text-2xl text-blue mb-6">Testimoni</h4>
+          <h4 class="font-semibold text-2xl text-blue mb-4">Testimoni</h4>
           <button
             v-if="
               course?.is_enrolled && course?.is_completed && user.role == 'user'
@@ -136,6 +136,9 @@
             <Icon name="mdi:plus" class="w-5 h-5" />
             Tambahkan Testimoni
           </button>
+        </div>
+        <div v-if="!reviews?.length">
+          <h1>Belum ada testimoni</h1>
         </div>
         <div class="flex flex-col md:flex-row gap-5 mt-8">
           <template v-for="review in reviews" :key="review.id">
@@ -148,12 +151,18 @@
                   class="w-12 h-12 rounded-full"
                 />
                 <img
+                  v-else-if="review.user.avatar.includes('http')"
+                  :src="review.user.avatar"
+                  :alt="review.user.avatar"
+                  class="w-12 h-12 rounded-full"
+                />
+                <img
                   v-else
                   :src="`${useRuntimeConfig().public.BASE_URL}/${
                     review.user.avatar
                   }`"
                   :alt="review.user.name"
-                  class="w-12 h-12 rounded-full"
+                  class="w-12 h-12 rounded-full object-cover"
                 />
                 <div class="flex-col">
                   <h5>{{ review.user.name }}</h5>
@@ -366,13 +375,14 @@
                 />
 
                 <div class="flex justify-center items-center space-x-4">
-                  <button
+                  <div
                     @click="closeModalReviews"
-                    class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
+                    class="cursor-pointer py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10"
                   >
                     Tidak
-                  </button>
+                  </div>
                   <button
+                    type="submit"
                     class="py-2 px-3 text-sm font-medium text-center text-white bg-regal-blue-500 rounded-lg hover:bg-regal-blue-500 focus:ring-4 focus:outline-none focus:ring-regal-blue-300"
                     :disabled="isLoading"
                   >
@@ -403,9 +413,9 @@ import {
 } from "@headlessui/vue";
 import type { Review } from "~/models/Review";
 const auth = useAuthStore();
-const { authenticated, user } = storeToRefs(auth);
+const { user } = storeToRefs(auth);
 const { id } = useRoute().params as { id: string };
-const { defaultOpen } = useRoute().query as { defaultOpen: string};
+const { defaultOpen } = useRoute().query as { defaultOpen: string };
 const isLoading: Ref<boolean> = ref(false);
 const isOpenCourse: Ref<boolean> = ref(false);
 const isOpenReviews: Ref<boolean> = ref(false);
@@ -495,7 +505,6 @@ const handleReview = async () => {
   );
 
   if (data.value) {
-    console.log(data.value);
     toast.success("Berhasil memberikan testimoni", {
       position: "top-right",
       autoClose: 5000,
