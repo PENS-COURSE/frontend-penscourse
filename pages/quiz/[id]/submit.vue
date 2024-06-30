@@ -26,15 +26,15 @@
         <div class="grid grid-cols-3 gap-3 mb-2">
           <dl class="bg-orange-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
             <dt class="w-8 h-8 rounded-full bg-orange-100 dark:bg-gray-500 text-orange-600 dark:text-orange-300 text-sm font-medium flex items-center justify-center mb-1">{{data.data.quiz.pass_grade}}</dt>
-            <dd class="text-orange-600 dark:text-orange-300 text-sm font-medium">Minimal Skor</dd>
+            <dd class="text-orange-600 dark:text-orange-300  text-center text-sm font-medium">Minimal Skor</dd>
           </dl>
           <dl class="bg-teal-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
             <dt class="w-8 h-8 rounded-full bg-teal-100 dark:bg-gray-500 text-teal-600 dark:text-teal-300 text-sm font-medium flex items-center justify-center mb-1">{{data.data.quiz.total_questions}}</dt>
-            <dd class="text-teal-600 dark:text-teal-300 text-sm font-medium">Jumlah soal</dd>
+            <dd class="text-teal-600 dark:text-teal-300 text-center text-sm font-medium">Jumlah soal</dd>
           </dl>
-          <dl class="bg-blue-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
+          <dl class="bg-blue-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center sm:h-[30px] h-[78px]">
             <dt class="w-8 h-8 rounded-full bg-blue-100 dark:bg-gray-500 text-blue-600 dark:text-blue-300 text-sm font-medium flex items-center justify-center mb-1">{{data.data.quiz.duration}}</dt>
-            <dd class="text-blue-600 dark:text-blue-300 text-sm font-medium">Waktu Kuis (Menit)</dd>
+            <dd class="text-blue-600 dark:text-blue-300 text-center text-xs font-medium">Waktu Kuis (Menit)</dd>
           </dl>
         </div>
         
@@ -44,7 +44,7 @@
       </div>
       <div class="text-center mt-20">
         <div class="mt-4">
-          <NuxtLink to="/dashboard/my-course" class="rounded-md bg-[#FBB50E] px-4 py-2 sm:text-sm text-xs font-medium text-white hover:bg-[#FBB50E] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">Ujian Telah Dilaksanakan</NuxtLink>
+          <NuxtLink to="/dashboard/quiz" class="rounded-md bg-[#FBB50E] px-4 py-2 sm:text-sm text-xs font-medium text-white hover:bg-[#FBB50E] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">Ujian Telah Dilaksanakan</NuxtLink>
         </div>
       </div>
     </div>

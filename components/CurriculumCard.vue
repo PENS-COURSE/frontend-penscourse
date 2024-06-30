@@ -105,14 +105,14 @@
               >
                 <button
                   :class="[
-                    quiz
+                    moment(quiz.end_date).isAfter(moment())
                       ? 'bg-regal-blue-500 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'
                       : 'bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center',
                     user.role == 'admin' || user.role == 'dosen'
                       ? 'hidden'
                       : '',
                   ]"
-                  :disabled="!quiz"
+                  :disabled="moment(quiz.end_date).isBefore(moment())"
                 >
                   Mulai
                 </button>
@@ -297,10 +297,11 @@ import {
 import type { Course } from "../models/Course";
 import type { APIResponseDetail } from "../models/Data";
 import type { StreamingJoin } from "../models/Streaming";
+import moment from 'moment';
 
 const props = defineProps({
   curriculum: Object as PropType<Curriculum>,
-  slug: String,
+  slug: String, 
   course: Object as PropType<Course>,
   default: String
 });

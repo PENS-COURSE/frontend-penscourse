@@ -2,7 +2,7 @@
   <div :class="isMobile ? 'w-full  border-[#14487A]  text-dark border-b-2 border-opacity-30' : 'border-b-2 border-opacity-30 border-[#14487A] p-2 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]'">
     <div class=" w-full items-center">
       <button v-if="isMobile" @click.prevent="togglePanel" class="p-4 w-full font-semibold flex items-center justify-between ">
-        <span class="font-semibold ">Nomor Soal</span>
+       <span class="font-semibold ">Nomor Soal</span> 
         <Icon
           :name="'ic:baseline-keyboard-arrow-down'"
           class="text-gray-600 w-7 h-7 items-right"
@@ -16,7 +16,7 @@
   
   <div class="flex flex-col">
     <div class="flex flex-row sm:items-center flex-wrap gap-1 mx-auto sm:mx-auto mb-5 place-content-center place-self-center">
-      <div v-for="index in (props.soalLength > 20 ? 20 : props.soalLength)" :key="index">
+      <div v-for="index in (props.soalLength > 20 ? numberLoop : props.soalLength)" :key="index">
         <button @click="notifyParent((index + listNumber) - 1)"
           :class="{ 'clicked': ((index + listNumber) - 1) === selectedButton,
             'filled' : props.soal[(index + listNumber) - 1].answer.length > 0
@@ -148,6 +148,7 @@ const { id, slug } = useRoute().query
 const listNumber = ref(0);
 const isOpen = ref(false);
 const isLoading: Ref<boolean> = ref(false);
+const numberLoop = ref(20);
 
 function closeModal() {
   isOpen.value = false;
@@ -187,6 +188,7 @@ const submitQuiz = async () => {
 const emit = defineEmits(["updateParentVariable"]);
 const selectedButton = ref<number | null>(0);
 const loading = ref(false);
+const flag = ref(0);
 
 const notifyParent = (index: number) => {
   if (selectedButton.value === index) {
@@ -197,23 +199,35 @@ const notifyParent = (index: number) => {
       emit("updateParentVariable", index);
       selectedButton.value = index;
       loading.value = false; // Hide loading state after the operation is complete
-    }, 1000); // Simulate a 1-second delay
+    }); // Simulate a 1-second delay
   }
 };
 
 const nextPage = () => {
   const currentIndex = selectedButton.value || 0;
-  const nextIndex = currentIndex < props.soalLength - 1 ? currentIndex + 1 : 0;
+  const nextIndex = currentIndex < props.soalLength! - 1 ? currentIndex + 1 : 0;
   if(props.soalLength && props.soalLength === currentIndex + 1){
-    listNumber.value = 0
-  } else if(((nextIndex % 20) === 0) && props.soalLength && props.soalLength > 20){
-    listNumber.value += 20;
+    listNumber.value = 0;
+    numberLoop.value = 20;
+  } else if (((nextIndex % 20) === 0) && props.soalLength && props.soalLength > 20) {
+    if ((nextIndex + 20) > props.soalLength! && (props.soalLength! % 20) > 0) {
+      listNumber.value += 20;
+      numberLoop.value = (props.soalLength! % 20);
+    } else {
+      listNumber.value += 20;
+      numberLoop.value = 20;
+    }
   }
   notifyParent(nextIndex);
 };
 
 const nextPagination = () => {
   const currentIndex = selectedButton.value || 0;
+  if (listNumber.value + 40 > props.soalLength!) {
+    numberLoop.value = (props.soalLength! % 20);
+  } else {
+    numberLoop.value = 20;
+  }
   listNumber.value += 20;
   const nextIndex = currentIndex < props.soalLength - 1 ? listNumber.value : 0;
   notifyParent(nextIndex);
@@ -223,17 +237,34 @@ const previousPage = () => {
   const currentIndex = selectedButton.value || 0;
   const previousIndex =
     currentIndex > 0 ? currentIndex - 1 : props.soalLength - 1;
-  if(props.soalLength && props.soalLength === previousIndex + 1){
-    listNumber.value = 80;
-  } else if(currentIndex % 20 === 0 && props.soalLength && props.soalLength > 20){
-    listNumber.value -=20;
+  if (props.soalLength && props.soalLength === previousIndex + 1) {
+    if (props.soalLength % 20 > 0) {
+      numberLoop.value = props.soalLength % 20;
+    } else {
+      numberLoop.value = 20;
+    }
+    listNumber.value = props.soalLength - (props.soalLength % 20);
+  } else if (currentIndex % 20 === 0 && props.soalLength && props.soalLength > 20) {
+    if (numberLoop.value < 20) {
+      listNumber.value -= 20;
+      numberLoop.value = 20;
+    } else {
+      listNumber.value -= 20;
+      numberLoop.value = 20;
+    }
   }
   notifyParent(previousIndex);
 };
 
 const previousPagination = () => {
   const currentIndex = selectedButton.value || 0;
-  listNumber.value -= 20;
+  if (numberLoop.value < 20) {
+    listNumber.value -= 20;
+    numberLoop.value = 20;
+  } else {
+    listNumber.value -= 20;
+    numberLoop.value = 20;
+  }
   const previousIndex =
     currentIndex > 0 ? (listNumber.value) : props.soalLength - 1;
   notifyParent(previousIndex);
