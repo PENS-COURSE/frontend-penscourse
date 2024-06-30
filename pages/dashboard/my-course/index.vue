@@ -57,7 +57,7 @@
           {{ getMajorName(course.course.department_id) }}
         </p>
         <div class="w-full bg-gray-200 rounded-full">
-          <div
+          <!-- <div
             class="text-xs font-medium text-center p-1 leading-none rounded-full"
             :class="
               course.progress_completed == null
@@ -76,7 +76,7 @@
                 ? ""
                 : `${course.progress_completed}%`
             }}
-          </div>
+          </div> -->
           <!-- <div
             class="text-xs font-medium text-center p-0.5 leading-none rounded-full bg-regal-blue-500 text-gray-100"
             :style="{

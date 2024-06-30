@@ -303,12 +303,12 @@ const props = defineProps({
   curriculum: Object as PropType<Curriculum>,
   slug: String, 
   course: Object as PropType<Course>,
-  default: String
+  default: String,
 });
 
-console.log("Defaut: ", props.default)
-console.log("Id: ", props.curriculum.id)
-console.log(props.curriculum?.id === props.default)
+// console.log("Defaut: ", props.default);
+// console.log("Id: ", props.curriculum?.id ?? "");
+// console.log(props.curriculum?.id === props.default);
 
 const quizzes = computed(() => props.curriculum?.subjects.quizzes);
 const materials = computed(() => props.curriculum?.subjects.file_contents);
@@ -337,8 +337,7 @@ const streamingRequestToken = async ({ roomSlug }: { roomSlug: string }) => {
 };
 
 // Panel
-const showPanel = ref(props.curriculum?.id == props
-  .default ? true : false);
+const showPanel = ref(props.curriculum?.id == props.default ? true : false);
 const togglePanel = () => (showPanel.value = !showPanel.value);
 
 // Modal
