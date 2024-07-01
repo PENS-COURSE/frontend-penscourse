@@ -1,10 +1,10 @@
 <template>
   <h4 class="font-semibold text-2xl">Kuis</h4>
 
-  <!-- <div class="mt-10 flex flex-col justify-center items-center">
+  <div class="mt-10 flex flex-col justify-center items-center">
     <img src="/images/empty.jpg" alt="empty image" class="w-96 h-80 mb-10" />
     <h2 class="text-xl font-semibold">Fitur ini masih belum bisa digunakan</h2>
-  </div> -->
+  </div>
   <!-- <div class="flex items-center justify-between mt-8 gap-2"> -->
   <!-- <form>
       <div class="relative text-alto-500 focus-within:text-alto-500">
@@ -21,7 +21,7 @@
       </div>
     </form> -->
 
-    <div class="flex gap-5 mt-3">
+  <!-- <div class="flex gap-5">
       <select
         v-model="selectedStatus"
         class="border border-regal-blue-500 py-2 px-4 rounded-lg"
@@ -32,10 +32,10 @@
         <option value="finished">Selesai</option>
         <option v-for="order in quizzstatus" :value="order" :key="order">
           {{ order }}
-        </option>
-      </select>
+        </option> -->
+  <!-- </select>
     </div>
-   <!-- </div> -->
+  </div> -->
 
   <p v-if="load" class="text-center mt-5">Loading...</p>
   <div
@@ -46,47 +46,71 @@
     <template v-for="quiz in quizz" :key="quiz.id">
       <NuxtLink
         :to="{
-          path: quiz.is_submitted ? `/quiz/${quiz.id}/submit` : `/course/${quiz.curriculum.course?.slug}`,
-          query: quiz.is_submitted ? undefined : {
-            defaultOpen: quiz.curriculum.id
-          }
-
-          }"
+          path: quiz.is_submitted
+            ? `/quiz/${quiz?.id}/submit`
+            : `/course/${quiz?.curriculum?.course?.slug}`,
+          query: quiz.is_submitted
+            ? undefined
+            : {
+                defaultOpen: quiz.curriculum.id,
+              },
+        }"
         class="border border-alto-500 p-4"
       >
-      <!-- <div class="border border-alto-500 p-4" > -->
-        
-        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Minggu {{ quiz.curriculum.week }}</span>
+        <!-- <div class="border border-alto-500 p-4" > -->
+
+        <span
+          class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+          >Minggu {{ quiz.curriculum.week }}</span
+        >
 
         <h4 class="font-semibold text-base mb-1 mt-2">{{ quiz.title }}</h4>
         <!-- <p class="text-slate-gray-500 mb-4">
           {{ getMajorName(quiz.course.department_id) }}
         </p> -->
-        <p class="text-slate-gray-500 text-sm mb-1">{{ quiz.curriculum.course?.name ?? ''}}</p>
+        <p class="text-slate-gray-500 text-sm mb-1">
+          {{ quiz.curriculum.course?.name ?? "" }}
+        </p>
 
-        <div class="flex flex-col mx-auto my-auto place-content-start gap-2 mt-2 ">
-          
-          <span class=" text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2 dark:bg-gray-700 dark:text-gray-400">
-            <svg class="w-2.5 h-2.5 me-1.5 mb-0.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+        <div class="flex mx-auto my-auto place-self-center place-items-center">
+          <span
+            class="text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <svg
+              class="w-2.5 h-2.5 me-1.5 mb-0.5 text-gray-800 dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"
+                clip-rule="evenodd"
+              />
             </svg>
-            {{ moment(quiz.start_date).format('L') }} - 
-            {{ moment(quiz.end_date).format('L') }}
+            {{ moment(quiz.start_date).format("L") }} -
+            {{ moment(quiz.end_date).format("L") }}
           </span>
 
-          <div class="flex flex-row">
-            <span class=" text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2 dark:bg-gray-700 dark:text-gray-400">
-              <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
-              </svg>
-              <p class="text-slate-gray-600 text-xs mr-1">Durasi</p>
-              {{ quiz.duration}} Menit
-            </span>
-          </div>
-          
-      
+          <span
+            class="text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <svg
+              class="w-2.5 h-2.5 me-1.5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"
+              />
+            </svg>
+            {{ quiz.duration }} Menit
+          </span>
         </div>
-        
+
         <!-- <div class="flex justify-between items-center">
           <h4 class="font-semibold text-base text-regal-blue-500">
             Rp {{ new Intl.NumberFormat("id-ID").format(quiz.total_price) }}
@@ -114,7 +138,7 @@
             }}
           </p>
         </div> -->
-      <!-- </div> -->
+        <!-- </div> -->
       </NuxtLink>
     </template>
   </div>
@@ -129,7 +153,7 @@
 
 <script setup lang="ts">
 import { useAsyncData } from "nuxt/app";
-import moment from 'moment';
+import moment from "moment";
 
 definePageMeta({
   layout: "profile",

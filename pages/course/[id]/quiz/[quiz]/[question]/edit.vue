@@ -31,6 +31,7 @@
     <div class="p-6">
       <form @submit.prevent="handleSubmit">
         <div class="mt-3">
+          <TextEditor />
           <InputField
             label="Pertanyaan"
             v-model:model-value="payload.question"
@@ -118,7 +119,11 @@ definePageMeta({
   middleware: "authenticated",
 });
 
-const { id, quiz, question } = useRoute().params;
+const { id, quiz, question } = useRoute().params as {
+  id: string;
+  quiz: string;
+  question: string;
+};
 const isLoading: Ref<boolean> = ref(false);
 
 const { data: detailQuestion } = useRestClient<APIResponseDetail<QuizQuestion>>(

@@ -97,7 +97,7 @@
             </div>
             <div class="flex gap-3">
               <NuxtLink
-                v-if="quiz"
+                v-if="!quiz.is_submitted"
                 :to="{
                   path: '/quiz',
                   query: { id: `${quiz?.id}`, slug: `${slug}` },
@@ -111,12 +111,27 @@
                     user.role == 'admin' || user.role == 'dosen'
                       ? 'hidden'
                       : '',
+                    quiz.is_submitted ? '!bg-gray-400' : '',
                   ]"
-                  :disabled="!quiz"
+                  :disabled="quiz.is_submitted"
                 >
                   Mulai
                 </button>
               </NuxtLink>
+              <button
+                v-else
+                :class="[
+                  quiz
+                    ? 'bg-regal-blue-500 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center'
+                    : 'bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex items-center',
+                  user.role == 'admin' || user.role == 'dosen' ? 'hidden' : '',
+                  quiz.is_submitted ? '!bg-gray-400' : '',
+                ]"
+                :disabled="quiz.is_submitted"
+              >
+                Mulai
+              </button>
+
               <NuxtLink
                 :to="`/course/${course?.slug}/quiz/${quiz.id}`"
                 v-if="user.role == 'admin' || user.role == 'dosen'"
@@ -302,12 +317,8 @@ const props = defineProps({
   curriculum: Object as PropType<Curriculum>,
   slug: String,
   course: Object as PropType<Course>,
-  default: String
+  default: String,
 });
-
-console.log("Defaut: ", props.default)
-console.log("Id: ", props.curriculum.id)
-console.log(props.curriculum?.id === props.default)
 
 const quizzes = computed(() => props.curriculum?.subjects.quizzes);
 const materials = computed(() => props.curriculum?.subjects.file_contents);
@@ -336,8 +347,7 @@ const streamingRequestToken = async ({ roomSlug }: { roomSlug: string }) => {
 };
 
 // Panel
-const showPanel = ref(props.curriculum?.id == props
-  .default ? true : false);
+const showPanel = ref(props.curriculum?.id == props.default ? true : false);
 const togglePanel = () => (showPanel.value = !showPanel.value);
 
 // Modal

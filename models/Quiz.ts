@@ -41,6 +41,7 @@ export interface Quiz {
   updated_at?: Date;
   total_questions?: number;
   is_taken: boolean;
+  is_submitted: boolean;
 }
 
 export interface QuizScoreResponse {
@@ -90,25 +91,25 @@ export interface EnrolledQuiz {
 }
 
 export interface QuizHistory {
-  id: string
-  title: string
-  description: string
-  duration: number
-  start_date: string
-  end_date: string
-  is_ended: boolean
-  is_active: boolean
-  show_result: boolean
-  pass_grade: number
-  curriculum_id: string
-  created_at: string
-  updated_at: string
-  curriculum: Curriculum
-  detail_score: DetailScore
-  is_taken: boolean
+  id: string;
+  title: string;
+  description: string;
+  duration: number;
+  start_date: string;
+  end_date: string;
+  is_ended: boolean;
+  is_active: boolean;
+  show_result: boolean;
+  pass_grade: number;
+  curriculum_id: string;
+  created_at: string;
+  updated_at: string;
+  curriculum: Curriculum;
+  detail_score: DetailScore;
+  is_taken: boolean;
   status: "ongoing" | "late" | "finished";
   course: Course;
-  is_submitted: boolean
+  is_submitted: boolean;
 }
 
 export interface DetailScore {

@@ -76,12 +76,14 @@
   </section>
 </template>
 <script setup lang="ts">
-const { id } = useRoute().params;
+const { id } = useRoute().params as { id: string };
 
-const { data } = await useRestClient<APIResponseDetail<QuizHistory>>(`/courses/quizdetail/${id}`);
+const { data } = await useRestClient<APIResponseDetail<QuizHistory>>(
+  `/courses/quizdetail/${id}`
+);
 const quizdetail = computed(() => data.value?.data);
 
-console.log(quizdetail)
+console.log(quizdetail);
 
 const { data: majorData } =
   await useRestClient<APIResponsePagination<Department>>("/departments");

@@ -27,6 +27,7 @@
   "dependencies": {
     "@headlessui/tailwindcss": "^0.2.0",
     "@headlessui/vue": "^1.7.18",
+    "@kangc/v-md-editor": "^2.3.18",
     "@mdi/font": "^7.4.47",
     "@nuxtjs/moment": "^1.6.1",
     "@onesignal/onesignal-vue3": "^2.0.1",
@@ -42,6 +43,7 @@
     "nuxt-rating": "^0.0.15",
     "nuxt-vue3-google-signin": "^0.0.10",
     "pinia": "^2.1.7",
+    "prismjs": "^1.29.0",
     "tailwind-merge": "^2.3.0",
     "vue-awesome-paginate": "^1.1.46",
     "vue-markdown-render": "^2.2.1",

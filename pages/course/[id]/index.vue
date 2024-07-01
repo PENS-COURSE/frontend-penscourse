@@ -120,7 +120,7 @@
             />
           </div>
           <div v-else>
-            <h1>belum ada kurikulum</h1>
+            <h1>Tidak ada kurikulum yang tersedia</h1>
           </div>
         </div>
 
@@ -405,7 +405,7 @@ import type { Review } from "~/models/Review";
 const auth = useAuthStore();
 const { authenticated, user } = storeToRefs(auth);
 const { id } = useRoute().params as { id: string };
-const { defaultOpen } = useRoute().query as { defaultOpen: string};
+const { defaultOpen } = useRoute().query as { defaultOpen: string };
 const isLoading: Ref<boolean> = ref(false);
 const isOpenCourse: Ref<boolean> = ref(false);
 const isOpenReviews: Ref<boolean> = ref(false);
