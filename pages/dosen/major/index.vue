@@ -104,7 +104,7 @@
                           </DialogTitle>
                           <div class="mt-2">
                             <p class="mb-4 text-center text-gray-500">
-                              Apakah anda yakin akan menghapus kurikulum ini?
+                              Apakah anda yakin akan menghapus jurusan ini?
                             </p>
                             <div
                               class="flex justify-center items-center space-x-4"

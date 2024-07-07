@@ -125,31 +125,6 @@ const googleCallback = async (response: CredentialResponse) => {
     }
   }
 };
-
-// handle success event
-const handleLoginSuccess = async (response: CredentialResponse) => {
-  const { credential } = response;
-  console.log(credential);
-
-  let user;
-  if (credential) {
-    user = await useRestClient<APIResponseDetail<Authentication>>(
-      "/authentication/login",
-      {
-        method: "POST",
-        body: {
-          token: credential,
-        },
-      }
-    );
-  }
-  console.log("Access Token", credential);
-};
-
-// handle an error event
-const handleLoginError = () => {
-  console.error("Login failed");
-};
 </script>
 
 <style></style>

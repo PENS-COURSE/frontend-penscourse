@@ -42,17 +42,14 @@
       <div class="p-4 rounded-lg border border-alto-500">
         <div class="flex justify-between">
           <h5>ATM BCA</h5>
-          <!-- <font-awesome-icon :icon="['fas', 'chevron-down']" /> -->
         </div>
         <hr class="text-alto-500 my-2" />
         <div class="flex justify-between">
           <h5>BCA Internet Banking</h5>
-          <!-- <font-awesome-icon :icon="['fas', 'chevron-down']" /> -->
         </div>
         <hr class="text-alto-500 my-2" />
         <div class="flex justify-between">
           <h5>BCA Mobile Banking</h5>
-          <!-- <font-awesome-icon :icon="['fas', 'chevron-down']" /> -->
         </div>
       </div>
     </div>

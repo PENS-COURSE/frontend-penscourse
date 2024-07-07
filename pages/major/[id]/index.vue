@@ -43,9 +43,17 @@
   </section>
 
   <section class="mx-10 lg:mx-16 xl:mx-32">
-    <h4 class="font-semibold text-3xl text-regal-blue-500">
-      Mata Kuliah Terpopuler
-    </h4>
+    <div class="flex justify-between">
+      <h4 class="font-semibold text-3xl text-regal-blue-500">
+        Mata Kuliah Terpopuler
+      </h4>
+      <NuxtLink
+        v-if="user.role === 'admin' || user.role === 'dosen'"
+        :to="`/major/${major?.slug}/add-course`"
+        class="bg-regal-blue-500 py-2 px-3 text-white rounded-md hover:bg-regal-blue-600 transition-colors"
+        ><span><Icon name="mdi:plus" /></span> Tambah Mata Kuliah</NuxtLink
+      >
+    </div>
     <div
       class="mt-12 gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
     >
@@ -72,10 +80,13 @@
           <h4 class="text-sm text-slate-gray-500 mb-1">
             {{ major?.name }}
           </h4>
-          <!-- <div class="flex text-sm gap-2 items-center mb-4">
-            <p class="text-school-bus-yellow-500">3.4</p>
-            <p class="text-alto-500">(12k)</p>
-          </div> -->
+          <div class="flex text-sm gap-2 items-center mb-4">
+            <p class="text-school-bus-yellow-500">
+              <span><Icon name="material-symbols:kid-star-sharp" /></span>
+              {{ Number(course.ratings).toFixed(1) }}
+            </p>
+            <p class="text-alto-500">({{ course?.total_user_rating }})</p>
+          </div>
           <div class="flex justify-between items-center">
             <h5 class="text-regal-blue-500 font-semibold text-xl">
               {{
@@ -111,7 +122,9 @@ import type { APIResponseDetail } from "../../../models/Data";
 import type { Department } from "../../../models/Department";
 import type { Course } from "../../../models/Course";
 
-const { id } = useRoute().params;
+const auth = useAuthStore();
+const { user } = storeToRefs(auth);
+const { id } = useRoute().params as { id: string };
 const { data } = await useRestClient<APIResponseDetail<Department>>(
   `/departments/${id}`
 );
@@ -122,6 +135,10 @@ const { data: coursesData } = await useRestClient<
 
 const major = computed(() => data?.value?.data);
 const courses = computed(() => coursesData?.value?.data.data);
+
+if (!major.value) {
+  throw createError({ statusCode: 404, message: "Jurusan tidak ditemukan!" });
+}
 
 // const getMajorName = (course_id: number | undefined) => {
 //   const majorName = major.value?.id;

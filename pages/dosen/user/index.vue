@@ -17,16 +17,14 @@
           <tr>
             <th scope="col" class="px-6 py-3">No</th>
             <th scope="col" class="px-6 py-3">Nama</th>
+            <th scope="col" class="px-6 py-3">Role</th>
             <th scope="col" class="px-6 py-3">Email</th>
             <th scope="col" class="px-6 py-3">Avatar</th>
             <th scope="col" class="px-6 py-3">Aksi</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="user in displayedUser"
-            class="bg-white border-b hover:bg-gray-50"
-          >
+          <tr v-for="user in users" class="bg-white border-b hover:bg-gray-50">
             <td class="px-6 py-4">{{ user.id }}</td>
             <td
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap truncate max-w-[120px]"
@@ -34,6 +32,7 @@
               {{ user.name }}
             </td>
             <td class="px-6 py-4">{{ user.email }}</td>
+            <td class="px-6 py-4">{{ user.role }}</td>
             <td class="px-6 py-4">
               <img
                 :src="
@@ -104,7 +103,7 @@
                           </DialogTitle>
                           <div class="mt-2">
                             <p class="mb-4 text-center text-gray-500">
-                              Apakah anda yakin akan menghapus kurikulum ini?
+                              Apakah anda yakin akan menghapus user ini?
                             </p>
                             <div
                               class="flex justify-center items-center space-x-4"
@@ -117,6 +116,7 @@
                                 Tidak
                               </button>
                               <button
+                                @click="deleteBanner(user.id)"
                                 class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300"
                               >
                                 <span v-if="isLoading"><LoadingSpinner /></span>
@@ -160,32 +160,63 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
+import { toast } from "vue3-toastify";
 
-const itemsPerPage = 5;
+const itemsPerPage = 25;
 const currentPage = ref(1);
+const userMeta = ref<Meta>({} as Meta);
+const users = ref<User[]>([]);
 const isOpen: Ref<boolean> = ref(false);
 const isLoading: Ref<boolean> = ref(false);
 
-const { data: dataUsers } =
-  await useRestClient<APIResponsePagination<User>>(`/users`);
+const getUser = async () => {
+  isLoading.value = true;
+  const { data: dataUsers } = await useRestClient<APIResponsePagination<User>>(
+    `/users?page=${currentPage.value}`
+  );
 
-const users = computed(() => dataUsers?.value?.data.data);
+  if (dataUsers.value) {
+    isLoading.value = false;
+    users.value = dataUsers.value.data.data;
+    userMeta.value = dataUsers.value.data.meta;
+  }
+  isLoading.value = false;
+};
+
+const deleteBanner = async (id: number) => {
+  const { data, error } = await useRestClient<APIResponseDetail<Banner>>(
+    `/banners/${id}/remove`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (data.value) {
+    console.log(data.value);
+    toast.success("Banner berhasil dihapus", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
+  if (error.value) {
+    console.log(error.value);
+    toast.error("Terjadi Error", {
+      position: "top-right",
+      autoClose: 5000,
+    });
+  }
+};
+
+watch([currentPage], () => {
+  getUser();
+});
 
 const totalUser = computed(() => {
-  if (Array.isArray(users.value)) {
-    //localhost:3000/dosen/user
-    http: return users.value.length;
+  if (users.value) {
+    return userMeta.value.total;
   } else {
     return 0;
   }
-});
-
-const displayedUser = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  return Array.isArray(users.value)
-    ? users.value.slice(startIndex, endIndex)
-    : [];
 });
 
 const closeModal = () => {
@@ -203,6 +234,11 @@ const onClickHandler = (page: number) => {
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
+
+onMounted(() => {
+  getUser();
+  scrollToTop();
+});
 </script>
 
 <style>

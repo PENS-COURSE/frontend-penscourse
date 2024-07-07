@@ -12,7 +12,7 @@
     <div class="flex justify-start max-w-xl mt-6 mb-4 gap-16">
       <div class="flex gap-2 items-center">
         <Icon name="material-symbols-light:school" class="text-white w-5 h-5" />
-        <p class="text-white">{{ getMajorName(course?.department_id) }}</p>
+        <p class="text-white">{{ course?.department.name }}</p>
       </div>
       <div class="flex gap-2 items-center">
         <Icon name="mdi:account" class="text-white w-5 h-5" />
@@ -41,7 +41,7 @@
             <Menu
               as="div"
               class="relative inline-block"
-              v-if="user.role == 'admin' || user.role == 'dosen'"
+              v-if="user.role == 'admin' || user.id === course?.user_id"
             >
               <div>
                 <MenuButton
@@ -111,10 +111,10 @@
           </div>
           <div v-if="curriculums?.length">
             <CurriculumCard
+              v-for="curriculum in curriculums"
               :course="course"
               :curriculum="curriculum"
               :slug="id"
-              v-for="curriculum in curriculums"
               :key="curriculum.id"
               :default="defaultOpen"
             />
@@ -140,7 +140,7 @@
         <div v-if="!reviews?.length">
           <h1>Belum ada testimoni</h1>
         </div>
-        <div class="flex flex-col md:flex-row gap-5 mt-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
           <template v-for="review in reviews" :key="review.id">
             <div class="bg-white border border-gray rounded-lg p-6">
               <div class="flex gap-3 mb-3">
@@ -171,7 +171,9 @@
                       name="material-symbols-light:kid-star-sharp"
                       class="w-5 h-5 text-yellow-300"
                     />
-                    <p class="text-yellow">{{ review.rating }}</p>
+                    <p class="text-yellow">
+                      {{ Number(review.rating).toFixed(1) }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -212,9 +214,15 @@
             <button
               v-if="course?.is_free"
               @click="openModalCourse"
-              :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
-              :disabled="isLoading || course.is_enrolled"
-              class="w-full py-3 text-white rounded-md text-center mb-4"
+              :class="
+                course?.is_enrolled || course?.is_completed
+                  ? 'bg-gray-500 mb-1'
+                  : 'bg-regal-blue-500 mb-4'
+              "
+              :disabled="
+                isLoading || course.is_enrolled || course?.is_completed
+              "
+              class="w-full py-3 text-white rounded-md text-center"
             >
               <span v-if="isLoading"><LoadingSpinner /></span>
               <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>
@@ -223,25 +231,37 @@
             <button
               v-if="!course?.is_free"
               @click="openModalCourse"
-              :class="course?.is_enrolled ? 'bg-gray-500' : 'bg-regal-blue-500'"
-              :disabled="isLoading || course?.is_enrolled"
-              class="w-full py-3 text-white rounded-md text-center mb-4"
+              :class="
+                course?.is_enrolled || course?.is_completed
+                  ? 'bg-gray-500 mb-1'
+                  : 'bg-regal-blue-500 mb-4'
+              "
+              :disabled="
+                isLoading || course?.is_enrolled || course?.is_completed
+              "
+              class="w-full py-3 text-white rounded-md text-center"
             >
               <span v-if="isLoading"><LoadingSpinner /></span>
               <span v-else-if="course?.is_enrolled">Sudah Dimiliki</span>
               <span v-else>Beli Kelas</span>
             </button>
+            <p
+              v-if="course?.is_completed"
+              class="text-right text-red-600 text-sm mb-2"
+            >
+              Mata kuliah sudah berakhir!
+            </p>
 
-            <h6 class="font-semibold text-base text-blue mb-6">Paket Kelas</h6>
+            <h6 class="font-semibold text-base text-blue mb-4">Paket Kelas</h6>
 
             <div class="flex items-center text-gray-600 gap-5 mb-2">
               <Icon name="bi:camera-video-fill" />
               <p>{{ curriculums?.length }} Materi</p>
             </div>
-            <div class="flex items-center text-gray-600 gap-5 mb-2">
+            <!-- <div class="flex items-center text-gray-600 gap-5 mb-2">
               <Icon name="material-symbols:check-box-rounded" />
               <p>Konversi SKS</p>
-            </div>
+            </div> -->
             <div class="flex items-center text-gray-600 gap-5 mb-2">
               <Icon name="mdi:file-document" />
               <p>Sertifikat elektronik</p>
@@ -449,6 +469,13 @@ const curriculums = computed(() => detailCurriculum?.value?.data);
 const major = computed(() => detailMajor?.value?.data);
 const reviews = computed(() => dataReview?.value?.data.data);
 
+if (!course.value) {
+  throw createError({
+    statusCode: 404,
+    message: "Mata kuliah tidak ditemukan!",
+  });
+}
+
 const endrollCourse = async () => {
   isLoading.value = true;
   const { data, error } = await useRestClient<APIResponseDetail<Course>>(
@@ -470,7 +497,18 @@ const endrollCourse = async () => {
     closeModalCourse();
   }
   if (error.value?.statusCode == 401) {
+    isLoading.value = false;
     navigateTo("/auth/login");
+  }
+
+  if (error.value?.statusCode == 400) {
+    closeModalCourse();
+    isLoading.value = false;
+    toast.error("Maaf, mata kuliah ini sudah berakhir", {
+      transition: "slide",
+      autoClose: 5000,
+      position: "top-right",
+    });
   }
   isLoading.value = false;
 };
@@ -487,7 +525,17 @@ const handlePayment = async () => {
     window.location.href = data.value.data.payment.invoice_url;
   }
   if (error.value?.statusCode == 401) {
+    isLoading.value = false;
     navigateTo("/auth/login");
+  }
+  if (error.value?.statusCode == 400) {
+    closeModalCourse();
+    isLoading.value = false;
+    toast.error("Maaf, mata kuliah ini sudah berakhir", {
+      transition: "slide",
+      autoClose: 5000,
+      position: "top-right",
+    });
   }
   isLoading.value = false;
 };

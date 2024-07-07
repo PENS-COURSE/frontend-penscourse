@@ -55,19 +55,19 @@
               }}
             </td>
             <td class="px-6 py-4">
-              <NuxtLink
-                :to="`/course/${course?.slug}/curriculum/${curriculum.id}/edit`"
-                class="font-medium text-blue-600 hover:underline"
-                >Edit</NuxtLink
-              >
-            </td>
-            <td class="px-6 py-4">
-              <button
-                @click="openModal"
-                class="font-medium text-red-600 hover:underline"
-              >
-                Hapus
-              </button>
+              <div class="flex gap-2">
+                <NuxtLink
+                  :to="`/course/${course?.slug}/curriculum/${curriculum.id}/edit`"
+                  class="font-medium text-blue-600 hover:underline"
+                  >Edit</NuxtLink
+                >
+                <button
+                  @click="openModal"
+                  class="font-medium text-red-600 hover:underline"
+                >
+                  Hapus
+                </button>
+              </div>
               <TransitionRoot appear :show="isOpen" as="template">
                 <Dialog as="div" @close="closeModal" class="relative z-10">
                   <TransitionChild
@@ -165,7 +165,7 @@ definePageMeta({
   middleware: "authenticated",
 });
 
-const { id } = useRoute().params;
+const { id } = useRoute().params as { id: string };
 
 const isOpen: Ref<boolean> = ref(false);
 const isLoading: Ref<boolean> = ref(false);
@@ -177,10 +177,6 @@ const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
 const { data: dataCurriculum } = await useRestClient<
   APIResponseList<Curriculum>
 >(`/courses/${id}/curriculums`);
-
-// if (dataCurriculum.value) {
-//   dataCurriculum.value.data.sort((a, b) => a.week - b.week);
-// }
 
 const course = computed(() => dataCourse?.value?.data);
 const curriculums = computed(() => dataCurriculum?.value?.data);

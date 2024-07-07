@@ -26,10 +26,6 @@
             class="w-full py-4 ml-2 text-sm font-medium text-slate-gray-500"
             >Transfer Bank</label
           >
-          <!-- <font-awesome-icon
-            :icon="['fas', 'credit-card']"
-            class="text-regal-blue-500 text-lg"
-          /> -->
         </div>
         <div
           class="flex items-center pl-4 px-3 border border-slate-gray-500 focus:border focus:border-regal-blue-500 rounded-lg"

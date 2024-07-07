@@ -2,7 +2,7 @@
   <div
     class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
   >
-    <h2 class="text-title-md2 font-bold text-black">Tambah File</h2>
+    <h2 class="text-title-md2 font-bold text-black">Edit Video</h2>
     <nav>
       <ol class="flex items-center gap-2">
         <li>
@@ -10,7 +10,9 @@
             >{{ course?.name }} /</NuxtLink
           >
         </li>
-        <li class="font-medium text-regal-blue-500">Tambah File</li>
+        <li class="font-medium text-regal-blue-500">
+          Edit Video {{ v?.title }}
+        </li>
       </ol>
     </nav>
   </div>
@@ -19,9 +21,7 @@
     class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 rounded-sm border border-gray-200 bg-gray-50 shadow-lg"
   >
     <div class="border-b border-stroke py-4 px-6">
-      <h3 class="font-semibold text-black">
-        Tambah Kurikulum {{ course?.name }}
-      </h3>
+      <h3 class="font-semibold text-black">Edit Video {{ course?.name }}</h3>
     </div>
     <div class="p-6">
       <form @submit.prevent="handleSubmit">
@@ -40,7 +40,20 @@
             :required="true"
             name="description"
           />
-          <FileInput label="File" v-model:model-value="payload.file" />
+          <InputField
+            label="Link Video"
+            v-model:model-value="payload.video_url"
+            :value="payload.video_url"
+            :required="true"
+            name="video_url"
+          />
+          <InputField
+            label="Durasi"
+            v-model:model-value="payload.duration"
+            :value="payload.duration"
+            :required="true"
+            name="duration"
+          />
         </div>
         <div class="mt-3 flex justify-center">
           <button
@@ -64,9 +77,10 @@ definePageMeta({
   middleware: "authenticated",
 });
 
-const { id, curriculum } = useRoute().params as {
+const { id, curriculum, subject } = useRoute().params as {
   id: string;
   curriculum: string;
+  subject: string;
 };
 const isLoading: Ref<boolean> = ref(false);
 
@@ -77,39 +91,48 @@ const { data: dataCurriculum } = await useRestClient<
   APIResponseDetail<Curriculum>
 >(`/courses/${id}/curriculums/${curriculum}`);
 
+const { data: detailVideo } = await useRestClient<APIResponseDetail<Content>>(
+  `/courses/${id}/curriculums/${curriculum}/subjects/${subject}`
+);
+
 const c = computed(() => dataCurriculum?.value?.data);
 const course = computed(() => dataCourse?.value?.data);
+const v = computed(() => detailVideo?.value?.data);
 
 const payload = reactive<{
   title: string | undefined;
   description: string | undefined;
-  file: File | undefined;
+  video_url: string | undefined;
+  duration: string | undefined;
 }>({
   title: undefined,
   description: undefined,
-  file: undefined,
+  video_url: undefined,
+  duration: undefined,
 });
 
 const handleSubmit = async () => {
   isLoading.value = true;
   const { data, error } = await useRestClient<APIResponseDetail<Curriculum>>(
-    `/courses/${course.value?.slug}/curriculums/${curriculum}/subjects/file-content/add`,
+    `/courses/${id}/curriculums/${curriculum}/subjects/${subject}/video-content/update`,
     {
-      method: "POST",
-      body: converterFormData({
+      method: "PATCH",
+      body: {
         title: payload.title,
         description: payload.description,
-        file: payload.file,
-      }),
+        video_url: payload.video_url,
+        duration: payload.duration,
+      },
     }
   );
 
   if (data.value) {
     isLoading.value = false;
-    navigateTo(`/course/${course.value?.slug}`);
+    navigateTo(`/course/${id}`);
   }
 
   if (error.value) {
+    isLoading.value = false;
     toast.error("Error, terjadi kesalahan!", {
       autoClose: 5000,
       position: "bottom-right",
@@ -117,4 +140,11 @@ const handleSubmit = async () => {
   }
   isLoading.value = false;
 };
+
+onMounted(() => {
+  payload.title = v.value?.title;
+  payload.description = v.value?.description;
+  payload.video_url = v.value?.url;
+  payload.duration = v.value?.duration;
+});
 </script>

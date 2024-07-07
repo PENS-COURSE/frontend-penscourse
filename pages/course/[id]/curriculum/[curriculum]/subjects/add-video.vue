@@ -77,7 +77,10 @@ definePageMeta({
   middleware: "authenticated",
 });
 
-const { id, curriculum } = useRoute().params;
+const { id, curriculum } = useRoute().params as {
+  id: string;
+  curriculum: string;
+};
 const isLoading: Ref<boolean> = ref(false);
 
 const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(

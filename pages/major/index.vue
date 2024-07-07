@@ -1,6 +1,6 @@
 <template>
   <section
-    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-16 xl:px-32"
+    class="w-full bg-gradient-to-r from-regal-blue-500 via-regal-blue-500 to-[#3E6F96] p-10 lg:px-16 md:py-16 xl:px-32 mb-4"
   >
     <div class="text-white">
       <h2 class="font-semibold text-4xl pb-2">Jurusan</h2>
@@ -11,22 +11,25 @@
     </div>
   </section>
 
-  <!-- <div class="flex items-center justify-center gap-4 my-16">
+  <div class="mb-10">
+    <h4 class="mb-2 font-semibold text-2xl text-regal-blue-500 text-center">
+      Jurusan
+    </h4>
+    <p class="font-medium text-sm md:text-base text-slate-gray-500 text-center">
+      Pilih jurusan yang sesuai dengan minat dan bakatmu
+    </p>
+  </div>
+
+  <div class="flex items-center justify-center gap-4">
     <form>
       <div class="relative text-alto-500 focus-within:text-alto-500">
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-          <font-awesome-icon
-            :icon="['fas', 'magnifying-glass']"
-            class="text-dark-500"
-          />
           <Icon name="ic:baseline-search" class="text-dark-500" />
         </span>
         <input
           type="search"
-          name="q"
           class="w-56 lg:w-96 py-2 text-s bg-alto-500 rounded-md pl-10 focus:outline-none focus:text-regal-blue-500"
           placeholder="Search..."
-          autocomplete="off"
         />
       </div>
     </form>
@@ -34,7 +37,7 @@
     <button class="bg-regal-blue-500 text-white py-2 px-6 rounded-lg">
       Search
     </button>
-  </div> -->
+  </div>
 
   <div
     class="px-10 lg:px-16 md:py-16 xl:px-32 gap-6 justify-items-center grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4"
@@ -66,5 +69,3 @@ const { data } =
   await useRestClient<APIResponsePagination<Department>>("/departments");
 const majors = computed(() => data?.value?.data?.data);
 </script>
-
-<style></style>

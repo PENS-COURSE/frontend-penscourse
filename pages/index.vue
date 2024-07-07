@@ -226,12 +226,15 @@
                   {{ c.name }}
                 </h4>
                 <h4 class="text-sm text-slate-gray-500 mb-1">
-                  {{ getMajorName(c.department_id) }}
+                  {{ c.department.name }}
                 </h4>
-                <!-- <div class="flex text-sm gap-2 items-center mb-4">
-                  <p class="text-school-bus-yellow-500">3.4</p>
-                  <p class="text-alto-500">(12k)</p>
-                </div> -->
+                <div class="flex text-sm gap-2 items-center mb-4">
+                  <p class="text-school-bus-yellow-500">
+                    <span><Icon name="material-symbols:kid-star-sharp" /></span>
+                    {{ Number(c.ratings).toFixed(1) }}
+                  </p>
+                  <p class="text-alto-600">({{ c.total_user_rating }})</p>
+                </div>
                 <div class="flex justify-between items-center">
                   <h5 class="text-regal-blue-500 font-semibold text-xl">
                     {{

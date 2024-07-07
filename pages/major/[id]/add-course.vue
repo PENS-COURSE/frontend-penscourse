@@ -2,15 +2,15 @@
   <div
     class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
   >
-    <h2 class="text-title-md2 font-bold text-black">Edit Mata Kuliah</h2>
+    <h2 class="text-title-md2 font-bold text-black">Tambah Mata Kuliah</h2>
     <nav>
       <ol class="flex items-center gap-2">
         <li>
-          <NuxtLink :to="`/course/${course?.slug}`" class="font-medium"
-            >{{ course?.name }} /</NuxtLink
+          <NuxtLink :to="`/major/${id}`" class="font-medium"
+            >{{ major?.name }} /</NuxtLink
           >
         </li>
-        <li class="font-medium text-regal-blue-500">Edit Mata Kuliah</li>
+        <li class="font-medium text-regal-blue-500">Tambah Mata Kuliah</li>
       </ol>
     </nav>
   </div>
@@ -20,7 +20,7 @@
   >
     <div class="border-b border-stroke py-4 px-6">
       <h3 class="font-semibold text-black">
-        Edit Mata Kuliah {{ course?.name }}
+        Tambah Mata Kuliah {{ major?.name }}
       </h3>
     </div>
     <div class="p-6">
@@ -32,12 +32,12 @@
           />
           <InputField
             label="Judul"
-            placeholder="Pemrograman Dasar"
+            placeholder="Masukkan Judul Mata Kuliah"
             v-model:model-value="payload.title"
             :value="payload.title"
           />
           <LargeInputField
-            label="Deskripsi"
+            label="Masukkan Deskripsi Mata Kuliah"
             placeholder="Deskripsi Mata Pelajaran"
             v-model:model-value="payload.description"
             :value="payload.description"
@@ -188,18 +188,17 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "livestream",
   middleware: "authenticated",
+  layout: "livestream",
 });
 
-import { toast } from "vue3-toastify";
+import type { APIResponsePagination } from "../../../models/Data";
 
 const { user } = storeToRefs(useAuthStore());
 const { id } = useRoute().params as { id: string };
 
-const isLoading: Ref<boolean> = ref(false);
-
 const inputSearchJurusan = ref("");
+const isLoading: Ref<boolean> = ref(false);
 const modal = reactive({
   jurusanModal: false,
 });
@@ -210,17 +209,22 @@ const loading = reactive({
   jurusan: false,
 });
 
+const { data } = await useRestClient<APIResponseDetail<Department>>(
+  `/departments/${id}`
+);
+const major = computed(() => data?.value?.data);
+
 const payload = reactive<{
   title: string | undefined;
   description: string | undefined;
-  price: any | undefined;
-  is_free: any | undefined;
-  is_certified: any | undefined;
+  price: string | undefined;
+  is_free: string | undefined;
+  is_certified: string | undefined;
   grade_level: string | undefined;
-  start_date: any | undefined;
-  end_date: any | undefined;
+  start_date: string | undefined;
+  end_date: string | undefined;
   is_active: boolean | undefined;
-  max_students: number | undefined;
+  max_students: string | undefined;
   department_id: number | undefined;
   department_selected: Department | undefined;
   user_id: number | undefined;
@@ -242,12 +246,6 @@ const payload = reactive<{
   thumbnail: undefined,
 });
 
-const { data } = await useRestClient<APIResponseDetail<Course>>(
-  `/courses/${id}`
-);
-
-const course = computed(() => data?.value?.data);
-
 watch(modal, async (value) => {
   if (value.jurusanModal) {
     await getJurusan({ search: "" });
@@ -264,6 +262,7 @@ const optionsIsFree = [
   { value: "true", label: "Gratis" },
   { value: "false", label: "Berbayar" },
 ];
+
 const optionsIsCertificate = [
   { value: "true", label: "Ya" },
   { value: "false", label: "Tidak" },
@@ -314,80 +313,51 @@ const handleCancel = () => {
 };
 
 const handleSubmit = async () => {
-  isLoading.value = true;
-  const { data, error } = await useRestClient<
-    APIResponsePagination<Department>
-  >(`/courses/${id}/update`, {
-    method: "PATCH",
-    body: !payload.thumbnail
-      ? {
-          name: payload.title,
-          description: payload.description,
-          price: payload.price,
-          is_free: payload.is_free,
-          is_certified: payload.is_certified,
-          grade_level: payload.grade_level,
-          start_date: payload.start_date,
-          end_date: payload.end_date,
-          is_active: payload.is_active,
-          max_students: payload.max_students,
-          department_id: payload.department_id,
-          user_id: payload.user_id,
-        }
-      : converterFormData({
-          name: payload.title,
-          description: payload.description,
-          price: payload.price,
-          is_free: payload.is_free,
-          is_certified: payload.is_certified,
-          grade_level: payload.grade_level,
-          start_date: payload.start_date,
-          end_date: payload.end_date,
-          is_active: payload.is_active,
-          max_students: payload.max_students,
-          department_id: payload.department_id,
-          user_id: payload.user_id,
-          thumbnail: payload.thumbnail,
-        }),
-  });
+  const { error } = await useRestClient<APIResponsePagination<Department>>(
+    "/courses/create",
+    {
+      method: "POST",
 
-  if (data.value) {
-    isLoading.value = false;
-    toast.success("Sukses mengedit mata kuliah!", {
-      position: "top-right",
-      autoClose: 5000,
-    });
+      body: !payload.thumbnail
+        ? {
+            name: payload.title,
+            description: payload.description,
+            price: payload.price,
+            is_free: payload.is_free,
+            is_certified: payload.is_certified,
+            grade_level: payload.grade_level,
+            start_date: payload.start_date,
+            end_date: payload.end_date,
+            is_active: payload.is_active,
+            max_students: payload.max_students,
+            department_id: payload.department_id,
+            user_id: user.value.id,
+          }
+        : converterFormData({
+            name: payload.title,
+            description: payload.description,
+            price: payload.price,
+            is_free: payload.is_free,
+            is_certified: payload.is_certified,
+            grade_level: payload.grade_level,
+            start_date: payload.start_date,
+            end_date: payload.end_date,
+            is_active: payload.is_active,
+            max_students: payload.max_students,
+            department_id: payload.department_id,
+            user_id: user.value.id,
+            thumbnail: payload.thumbnail,
+          }),
+    }
+  );
 
-    navigateTo(`/course/${id}`);
+  if (!error.value) {
+    navigateTo("/major");
   }
-  if (error.value) {
-    isLoading.value = false;
-    toast.error("Gagal mengedit mata kuliah!", {
-      position: "top-right",
-      autoClose: 5000,
-    });
-  }
-
-  isLoading.value = false;
 };
 
 const setOpenModalJurusan = () => {
   inputSearchJurusan.value = "";
   modal.jurusanModal = true;
 };
-
-onMounted(() => {
-  payload.title = course.value?.name;
-  payload.description = course.value?.description;
-  payload.price = course.value?.price;
-  payload.is_free = course.value?.is_free;
-  payload.is_certified = course.value?.is_certified;
-  payload.grade_level = course.value?.grade_level;
-  payload.start_date = course.value?.start_date;
-  payload.end_date = course.value?.end_date;
-  payload.is_active = course.value?.is_active;
-  payload.max_students = course.value?.max_students;
-  payload.department_id = course.value?.department_id;
-  payload.user_id = course.value?.user_id;
-});
 </script>

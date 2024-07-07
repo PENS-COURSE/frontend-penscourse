@@ -2,7 +2,7 @@
   <div
     class="mx-10 md:mx-28 xl:mx-40 2xl:mx-52 mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
   >
-    <h2 class="text-title-md2 font-bold text-black">Tambah File</h2>
+    <h2 class="text-title-md2 font-bold text-black">Edit File</h2>
     <nav>
       <ol class="flex items-center gap-2">
         <li>
@@ -10,7 +10,7 @@
             >{{ course?.name }} /</NuxtLink
           >
         </li>
-        <li class="font-medium text-regal-blue-500">Tambah File</li>
+        <li class="font-medium text-regal-blue-500">Edit File</li>
       </ol>
     </nav>
   </div>
@@ -48,7 +48,7 @@
             type="submit"
           >
             <span v-if="isLoading"><LoadingSpinner /></span>
-            <span v-if="!isLoading">Simpan</span>
+            <span v-if="!isLoading">Edit</span>
           </button>
         </div>
       </form>
@@ -64,9 +64,10 @@ definePageMeta({
   middleware: "authenticated",
 });
 
-const { id, curriculum } = useRoute().params as {
+const { id, curriculum, subject } = useRoute().params as {
   id: string;
   curriculum: string;
+  subject: string;
 };
 const isLoading: Ref<boolean> = ref(false);
 
@@ -77,8 +78,13 @@ const { data: dataCurriculum } = await useRestClient<
   APIResponseDetail<Curriculum>
 >(`/courses/${id}/curriculums/${curriculum}`);
 
+const { data: detailFile } = await useRestClient<APIResponseDetail<Content>>(
+  `/courses/${id}/curriculums/${curriculum}/subjects/${subject}`
+);
+
 const c = computed(() => dataCurriculum?.value?.data);
 const course = computed(() => dataCourse?.value?.data);
+const f = computed(() => detailFile?.value?.data);
 
 const payload = reactive<{
   title: string | undefined;
@@ -93,9 +99,9 @@ const payload = reactive<{
 const handleSubmit = async () => {
   isLoading.value = true;
   const { data, error } = await useRestClient<APIResponseDetail<Curriculum>>(
-    `/courses/${course.value?.slug}/curriculums/${curriculum}/subjects/file-content/add`,
+    `/courses/${id}/curriculums/${curriculum}/subjects/${subject}/file-content/update`,
     {
-      method: "POST",
+      method: "PATCH",
       body: converterFormData({
         title: payload.title,
         description: payload.description,
@@ -117,4 +123,9 @@ const handleSubmit = async () => {
   }
   isLoading.value = false;
 };
+
+onMounted(() => {
+  payload.title = f.value?.title;
+  payload.description = f.value?.description;
+});
 </script>

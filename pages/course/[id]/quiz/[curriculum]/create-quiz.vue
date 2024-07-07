@@ -137,7 +137,7 @@
 </template>
 <script setup lang="ts">
 import { toast } from "vue3-toastify";
-import moment from 'moment';
+import moment from "moment";
 
 definePageMeta({
   layout: "livestream",
@@ -172,7 +172,10 @@ interface GeneratedQuestions {
   total_questions: number;
 }
 
-const { id, curriculum } = useRoute().params;
+const { id, curriculum } = useRoute().params as {
+  id: string;
+  curriculum: string;
+};
 const isLoading: Ref<boolean> = ref(false);
 
 const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(
@@ -228,26 +231,27 @@ const payload = reactive<{
 const handleSubmit = async () => {
   isLoading.value = true;
   const body: any = {
-        title: payload.title,
-        description: payload.description,
-        duration: Number(payload.duration),
-        start_date: (moment(payload.start_date).format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z'),
-        end_date: (moment(payload.end_date).format('YYYY-MM-DDTHH:mm:ss.SSS') + 'Z'),
-        show_result: payload.show_result === 'true' ? true : false,
-        pass_grade: Number(payload.pass_grade),
-        curriculum_uuid: c.value?.id,
-        course_slug: course.value?.slug,
-        generated_questions: {
-          easy_percentage: Number(payload.generated_questions.easy_percentage),
-          medium_percentage: Number(
-            payload.generated_questions.medium_percentage
-          ),
-          hard_percentage: Number(payload.generated_questions.hard_percentage),
-          all_curriculum_questions:
-            payload.generated_questions.all_curriculum_questions === 'true' ? true : false,
-          total_questions: Number(payload.generated_questions.total_question),
-        },
-      }
+    title: payload.title,
+    description: payload.description,
+    duration: Number(payload.duration),
+    start_date:
+      moment(payload.start_date).format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z",
+    end_date: moment(payload.end_date).format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z",
+    show_result: payload.show_result === "true" ? true : false,
+    pass_grade: Number(payload.pass_grade),
+    curriculum_uuid: c.value?.id,
+    course_slug: course.value?.slug,
+    generated_questions: {
+      easy_percentage: Number(payload.generated_questions.easy_percentage),
+      medium_percentage: Number(payload.generated_questions.medium_percentage),
+      hard_percentage: Number(payload.generated_questions.hard_percentage),
+      all_curriculum_questions:
+        payload.generated_questions.all_curriculum_questions === "true"
+          ? true
+          : false,
+      total_questions: Number(payload.generated_questions.total_question),
+    },
+  };
 
   const { data, error } = await useRestClient<APIResponseDetail<Quiz>>(
     `/quizzes/create`,
@@ -256,29 +260,28 @@ const handleSubmit = async () => {
       body: body,
     }
   );
-  
+
   console.log(body);
   body.is_ended = false;
   body.is_active = true;
 
   if (data.value) {
-    const { data: response, error: updateError} = await useRestClient<APIResponseDetail<Quiz>>(
-      `quizzes/${data.value.data.id}/update`, 
-      {
-        method: "PATCH",
-        body: body
-      }
-    )
-    if(response.value){
+    const { data: response, error: updateError } = await useRestClient<
+      APIResponseDetail<Quiz>
+    >(`quizzes/${data.value.data.id}/update`, {
+      method: "PATCH",
+      body: body,
+    });
+    if (response.value) {
       isLoading.value = false;
       navigateTo(`/course/${course.value?.slug}`);
     }
 
-    if(updateError.value){
+    if (updateError.value) {
       toast.error("Error, terjadi kesalahan!", {
-      autoClose: 5000,
-      position: "bottom-right",
-    });
+        autoClose: 5000,
+        position: "bottom-right",
+      });
     }
   }
 

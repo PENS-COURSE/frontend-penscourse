@@ -16,6 +16,8 @@ export interface User {
   google_id: null;
   avatar: string | undefined;
   role: "admin" | "user" | "dosen";
+  password: string;
+  password_confirmation: string;
   created_at: Date;
   updated_at: Date;
 }

@@ -4,61 +4,66 @@
   >
     <button
       @click.prevent="togglePanel"
-      :disabled="user.role !== 'admin' && !course?.is_enrolled"
+      :disabled="
+        (user.role !== 'admin' || $props.course?.user_id !== user.id) &&
+        !course?.is_enrolled
+      "
       class="p-4 w-full font-semibold flex flex-row items-center justify-between"
     >
       {{ curriculum?.title }}
-      <span class="flex items-center gap-3 justify-between">
+      <span
+        v-if="user.id == $props.course?.user_id || user.role == 'admin'"
+        class="flex items-center gap-3 justify-between"
+      >
         <NuxtLink
-          v-if="user.role == 'admin' || user.role == 'dosen'"
           :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-files`"
           class="text-regal-blue-500 hover:underline"
         >
           Tambah File
         </NuxtLink>
         <NuxtLink
-          v-if="user.role == 'admin' || user.role == 'dosen'"
           :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/add-video`"
           class="text-regal-blue-500 hover:underline"
         >
           Tambah Video
         </NuxtLink>
         <NuxtLink
-          v-if="
-            (user.role == 'admin' || user.role == 'dosen') &&
-            quizzes?.length == 0
-          "
+          v-if="quizzes?.length == 0"
           :to="`/course/${course?.slug}/quiz/${curriculum?.id}/create-quiz`"
           class="text-regal-blue-500 hover:underline"
         >
           {{ quizzes?.length == 0 ? "Tambah Kuis" : "" }}
         </NuxtLink>
-        <Icon
-          :name="
-            course?.is_enrolled || user.role == 'admin' || user.role == 'dosen'
-              ? 'ic:baseline-keyboard-arrow-down'
-              : 'material-symbols:lock'
-          "
-          class="text-gray-600 w-7 h-7"
-          :class="
-            showPanel == true ? 'rotate-180 transform transition-transform' : ''
-          "
-        />
-        <!-- <button v-if="user.role == 'admin' || user.role == 'dosen'">
-          Tambah Materi
-        </button> -->
-        <!-- <Icon
-          v-else
-          name="material-symbols:lock"
-          class="text-black w-7 h-7"
-          :class="
-            showPanel == true ? 'rotate-180 transform transition-transform' : ''
-          "
-        /> -->
+        <NuxtLink
+          v-if="streamings?.length == 0"
+          :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/streamings/add-streaming`"
+          class="text-regal-blue-500 hover:underline"
+        >
+          {{ streamings?.length == 0 ? "Tambah Streaming" : "" }}
+        </NuxtLink>
       </span>
+      <Icon
+        :name="
+          course?.is_enrolled
+            ? 'ic:baseline-keyboard-arrow-down'
+            : 'material-symbols:lock'
+        "
+        class="text-gray-600 w-7 h-7"
+        :class="
+          showPanel == true ? 'rotate-180 transform transition-transform' : ''
+        "
+      />
     </button>
 
-    <div class="p-4 bg-white" v-if="showPanel">
+    <div
+      class="p-4 bg-white"
+      v-if="
+        showPanel &&
+        (user.id === $props.course?.user_id ||
+          user.role === 'admin' ||
+          course?.is_enrolled)
+      "
+    >
       <div class="w-full h-full rounded-lg" :class="showPanel ? 'ease-in' : ''">
         <p>
           {{
@@ -138,14 +143,6 @@
               >
                 Enrolled
               </NuxtLink>
-              
-              <!-- <button
-                v-else
-                disabled
-                class="bg-gray-400 hover:bg-grey text-white py-1 px-4 rounded inline-flex-center"
-              >
-                <span>Mulai</span>
-              </button> -->
             </div>
           </div>
 
@@ -161,7 +158,16 @@
               <span v-text="`Kelas Online - ${streaming.title}`"></span>
             </div>
 
-            <div>
+            <div class="flex gap-2">
+              <NuxtLink
+                v-if="
+                  user.id === $props.course?.user_id || user.role === 'admin'
+                "
+                :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/streamings/${streaming.id}/edit`"
+                class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-2 px-3 rounded-md"
+              >
+                Edit
+              </NuxtLink>
               <button
                 @click="
                   async () =>
@@ -232,19 +238,41 @@
                     {{ material.title }}
                   </p>
 
-                  <a
-                    :href="`${useRuntimeConfig().public.BASE_URL}/${
-                      material.url
-                    }`"
-                    target="_blank"
-                    class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
-                  >
-                    <Icon
-                      name="material-symbols:download-2"
-                      class="w-4 h-4 mr-2"
-                    />
-                    <span>Download</span>
-                  </a>
+                  <div class="flex gap-4">
+                    <a
+                      :href="`${useRuntimeConfig().public.BASE_URL}/${
+                        material.url
+                      }`"
+                      target="_blank"
+                      class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
+                    >
+                      <Icon
+                        name="material-symbols:download-2"
+                        class="w-4 h-4 mr-2"
+                      />
+                      <span>Download</span>
+                    </a>
+                    <NuxtLink
+                      v-if="
+                        user.id === $props.course?.user_id ||
+                        user.role === 'admin'
+                      "
+                      :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/${material.id}/edit-file`"
+                      class="bg-school-bus-yellow-500 hover:bg-school-bus-yellow-600 text-white py-1 px-4 rounded"
+                    >
+                      <span><Icon name="mdi:pencil-outline" /></span> Edit
+                    </NuxtLink>
+                    <button
+                      v-if="
+                        user.id === $props.course?.user_id ||
+                        user.role === 'admin'
+                      "
+                      class="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded"
+                      @click="deleteMaterial(material.id)"
+                    >
+                      <span><Icon name="mdi:trash-can" /></span> Hapus
+                    </button>
+                  </div>
                 </div>
               </template>
 
@@ -255,17 +283,39 @@
                     {{ video.title }}
                   </p>
 
-                  <a
-                    :href="video.url"
-                    target="_blank"
-                    class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
-                  >
-                    <Icon
-                      name="material-symbols:play-arrow"
-                      class="w-4 h-4 mr-2"
-                    />
-                    <span>Putar</span>
-                  </a>
+                  <div class="flex gap-4">
+                    <a
+                      :href="video.url"
+                      target="_blank"
+                      class="bg-regal-blue-500 hover:bg-regal-blue-600 text-white py-1 px-4 rounded inline-flex items-center"
+                    >
+                      <Icon
+                        name="material-symbols:play-arrow"
+                        class="w-4 h-4 mr-2"
+                      />
+                      <span>Putar</span>
+                    </a>
+                    <NuxtLink
+                      v-if="
+                        user.id === $props.course?.user_id ||
+                        user.role === 'admin'
+                      "
+                      :to="`/course/${course?.slug}/curriculum/${curriculum?.id}/subjects/${video.id}/edit-video`"
+                      class="bg-school-bus-yellow-500 hover:bg-school-bus-yellow-600 text-white py-1 px-4 rounded"
+                    >
+                      <span><Icon name="mdi:pencil-outline" /></span> Edit
+                    </NuxtLink>
+                    <button
+                      v-if="
+                        user.id === $props.course?.user_id ||
+                        user.role === 'admin'
+                      "
+                      class="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded"
+                      @click="deleteMaterial(video.id)"
+                    >
+                      <span><Icon name="mdi:trash-can" /></span> Hapus
+                    </button>
+                  </div>
                 </div>
               </template>
 
@@ -297,11 +347,12 @@ import {
 import type { Course } from "../models/Course";
 import type { APIResponseDetail } from "../models/Data";
 import type { StreamingJoin } from "../models/Streaming";
-import moment from 'moment';
+import moment from "moment";
+import { toast } from "vue3-toastify";
 
 const props = defineProps({
   curriculum: Object as PropType<Curriculum>,
-  slug: String, 
+  slug: String,
   course: Object as PropType<Course>,
   default: String,
 });
@@ -314,6 +365,7 @@ const quizzes = computed(() => props.curriculum?.subjects.quizzes);
 const materials = computed(() => props.curriculum?.subjects.file_contents);
 const videos = computed(() => props.curriculum?.subjects.video_contents);
 const streamings = computed(() => props.curriculum?.subjects.live_classes);
+console.log(streamings.value);
 
 const auth = useAuthStore();
 const { user } = storeToRefs(auth);
@@ -344,4 +396,30 @@ const togglePanel = () => (showPanel.value = !showPanel.value);
 const isModalOpen = ref(false);
 const closeModal = () => (isModalOpen.value = false);
 const openModal = () => (isModalOpen.value = true);
+
+//action
+const deleteMaterial = async (uuid: string) => {
+  const { data, error } = await useRestClient<APIResponseDetail<Curriculum>>(
+    `/courses/${props.course?.slug}/curriculums/${props.curriculum?.id}/subjects/${uuid}/remove`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (data.value) {
+    toast.success("Berhasil hapus materi", {
+      autoClose: 3000,
+      position: "top-right",
+    });
+    closeModal();
+  }
+
+  if (error.value) {
+    toast.error("Gagal hapus materi", {
+      autoClose: 3000,
+      position: "top-right",
+    });
+    console.log("Error: ", error.value);
+  }
+};
 </script>

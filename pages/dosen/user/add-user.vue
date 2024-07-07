@@ -36,6 +36,12 @@
             :type="'password'"
             v-model:model-value="payload.password_confirmation"
           />
+          <SelectField
+            label="Role"
+            :options="optionsRole"
+            :value="payload.role"
+            v-model:model-value="payload.role"
+          />
         </div>
         <div class="mt-5 flex justify-end">
           <button
@@ -66,11 +72,13 @@ const payload = reactive<{
   email: string | undefined;
   password: string | undefined;
   password_confirmation: string | undefined;
+  role: string | undefined;
 }>({
   name: undefined,
   email: undefined,
   password: undefined,
   password_confirmation: undefined,
+  role: undefined,
 });
 
 const handleSubmit = async () => {
@@ -84,6 +92,7 @@ const handleSubmit = async () => {
         email: payload.email,
         password: payload.password,
         password_confirmation: payload.password_confirmation,
+        role: payload.role,
       },
     }
   );
@@ -106,4 +115,10 @@ const handleSubmit = async () => {
   }
   isLoading.value = false;
 };
+
+const optionsRole = [
+  { value: "admin", label: "Admin" },
+  { value: "user", label: "User" },
+  { value: "dosen", label: "Dosen" },
+];
 </script>

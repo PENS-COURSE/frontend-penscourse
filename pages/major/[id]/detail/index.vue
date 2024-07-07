@@ -73,10 +73,13 @@
             {{ course.name }}
           </h4>
           <h4 class="text-sm text-slate-gray-500 mb-1">{{ major?.name }}</h4>
-          <!-- <div class="flex text-sm gap-2 items-center mb-4">
-            <p class="text-school-bus-yellow-500">3.4</p>
-            <p class="text-alto-500">(12k)</p>
-          </div> -->
+          <div class="flex text-sm gap-2 items-center mb-4">
+            <p class="text-school-bus-yellow-500">
+              <span><Icon name="material-symbols:kid-star-sharp" /></span>
+              {{ Number(course.ratings).toFixed(1) }}
+            </p>
+            <p class="text-alto-500">({{ course?.total_user_rating }})</p>
+          </div>
           <div class="flex justify-between items-center">
             <h5 class="text-regal-blue-500 font-semibold text-xl">
               {{
@@ -108,11 +111,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Course } from "../../../../models/Course";
-
-const current_page = ref(1);
 const loading: Ref<boolean> = ref(false);
-const { id } = useRoute().params;
+const { id } = useRoute().params as { id: string };
 
 const { data: courseData } = await useRestClient<APIResponsePagination<Course>>(
   `/departments/${id}/courses`
@@ -124,6 +124,10 @@ const { data: majorData } = await useRestClient<APIResponseDetail<Department>>(
 
 const major = computed(() => majorData?.value?.data);
 const courses = computed(() => courseData?.value?.data.data);
+
+if (!major.value) {
+  throw createError({ statusCode: 404, message: "Jurusan tidak ditemukan!" });
+}
 </script>
 
 <style></style>

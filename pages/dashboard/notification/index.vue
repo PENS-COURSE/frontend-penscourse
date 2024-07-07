@@ -112,7 +112,6 @@ const markAsRead = async (id: string) => {
   );
 
   if (data.value) {
-    console.log(data.value);
     await getNotif();
   }
 };
@@ -129,14 +128,6 @@ const totalNotif = computed(() => {
     return 0;
   }
 });
-
-// const displayedNotif = computed(() => {
-//   const startIndex = (currentPage.value - 1) * itemsPerPage;
-//   const endIndex = startIndex + itemsPerPage;
-//   return Array.isArray(notifications.value)
-//     ? notifications.value.slice(startIndex, endIndex)
-//     : [];
-// });
 
 const convertDate = (date: Date) => {
   const isoDateString = date;

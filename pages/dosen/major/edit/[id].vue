@@ -93,7 +93,7 @@ definePageMeta({
   layout: "admin",
 });
 
-const { id } = useRoute().params;
+const { id } = useRoute().params as { id: string };
 const { data } = await useRestClient<APIResponseDetail<Department>>(
   `/departments/${id}`
 );
