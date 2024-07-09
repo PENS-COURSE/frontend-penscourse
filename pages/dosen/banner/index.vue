@@ -91,7 +91,7 @@
                         >
                           <DialogTitle as="h3">
                             <svg
-                              class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
+                              class="text-gray-400  w-11 h-11 mb-3.5 mx-auto"
                               aria-hidden="true"
                               fill="currentColor"
                               viewBox="0 0 20 20"

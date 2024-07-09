@@ -56,7 +56,7 @@
       >
       <!-- <div class="border border-alto-500 p-4" > -->
         
-        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Minggu {{ quiz.curriculum.week }}</span>
+        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded ">Minggu {{ quiz.curriculum.week }}</span>
 
         <h4 class="font-semibold text-base mb-1 mt-2">{{ quiz.title }}</h4>
         <!-- <p class="text-slate-gray-500 mb-4">
@@ -66,8 +66,8 @@
 
         <div class="flex flex-col mx-auto my-auto place-content-start gap-2 mt-2 ">
           
-          <span class=" text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2 dark:bg-gray-700 dark:text-gray-400">
-            <svg class="w-2.5 h-2.5 me-1.5 mb-0.5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <span class=" text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2  ">
+            <svg class="w-2.5 h-2.5 me-1.5 mb-0.5 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
             </svg>
             {{ moment(quiz.start_date).format('L') }} - 
@@ -75,7 +75,7 @@
           </span>
 
           <div class="flex flex-row">
-            <span class=" text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2 dark:bg-gray-700 dark:text-gray-400">
+            <span class=" text-gray-800 text-xs font-medium inline-flex items-center px-0.5 py-0.5 me-2 ">
               <svg class="w-2.5 h-2.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z"/>
               </svg>

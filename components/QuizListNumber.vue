@@ -45,7 +45,7 @@
       <button
         @click="openModal"
         type="button"
-        class="w-full text-[#14487A] font-semibold hover:text-white border-2 border-[#14487A] hover:bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-[10px] text-[12px] py-1 text-center dark:focus:ring-gray-500 mx-auto"
+        class="w-full text-[#14487A] font-semibold hover:text-white border-2 border-[#14487A] hover:bg-[#14487A] focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-[10px] text-[12px] py-1 text-center mx-auto"
       >
         Submit Jawaban
       </button>
