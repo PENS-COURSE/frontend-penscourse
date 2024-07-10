@@ -5,12 +5,15 @@
     <div
       class="w-full top-24 flex items-center justify-center px-8 md:px-10 lg:px-16 2xl:px-32 mx-auto"
     >
-      <div class="w-full md:px-12  pt-6">
+      <div class="w-full md:px-12 pt-0">
         <div class="flex flex-wrap md:relative py-4">
           <aside
             class="w-full sm:row sm:w-1/3 md:w-max-[160px] lg:w-[245px] px-2 flex-row mb-8"
           >
-            <div class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
+            <div>
+
+            </div>
+            <div v-if="!isMobile" class="p-4 bg-white rounded-xl w-full px-4 mx-auto mb-6">
               <div class="border-b-2 border-opacity-30 border-[#14487A] py-3 text-center font-semibold antialiased xl:text-lg text-base text-[#23262F]">
                 Sisa Waktu
               </div>
@@ -18,6 +21,7 @@
                 {{ formattedTimer }}
               </div>
             </div>
+
             <!-- <div v-if="formattedTimer == '00:00:00'">
               <h1>waktu habis!!!</h1>
             </div> -->
@@ -29,6 +33,7 @@
                 :soalLength="soal.length" 
                 :quizSessionid="quizzes?.detail?.session_id"
                 :quizUuid="quizzes?.quiz?.id"
+                :timer="formattedTimer"
                 :soal="soal"
               />
             </div>

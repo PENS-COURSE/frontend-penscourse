@@ -1,17 +1,22 @@
 <template>
   <div :class="isMobile ? 'w-full  border-[#14487A]  text-dark border-b-2 border-opacity-30' : 'border-b-2 border-opacity-30 border-[#14487A] p-2 text-start font-semibold antialiased xl:text-lg text-base text-[#23262F]'">
     <div class=" w-full items-center">
-      <button v-if="isMobile" @click.prevent="togglePanel" class="p-4 w-full font-semibold flex items-center justify-between ">
-       <span class="font-semibold ">Nomor Soal</span> 
-        <Icon
-          :name="'ic:baseline-keyboard-arrow-down'"
-          class="text-gray-600 w-7 h-7 items-right"
-          :class="{'rotate-180 transform transform': showPanel}"
-        />
+      <button v-if="isMobile" @click.prevent="togglePanel" class="px-2 py-3 w-full font-semibold flex flex-col items-center justify-between ">
+        <div class="flex flex-row w-full items-center justify-between">
+          <span class="font-semibold">Sisa Waktu</span> 
+          <span class="bg-blue-100 rounded-lg px-4 text-blue-600">{{ timer }}</span>
+          <Icon
+            :name="'ic:baseline-keyboard-arrow-down'"
+            class="text-gray-600 w-7 h-7 items-right"
+            :class="{'rotate-180 transform transform': showPanel}"
+          />
+        </div>
+       
+        
       </button>
-      <span v-else class="font-semibold text-lg flex flex-row ">Nomor Soal &thinsp;
+      <span v-else class="font-semibold text-base flex flex-row ">Nomor Soal &thinsp;
         <div v-for="index in (props.soalLength)" :key="index">
-          <span class="font-bold" v-if="((index + listNumber) - 1) === selectedButton" 
+          <span class="font- text-base bg-blue-100 rounded-lg px-2 text-blue-600" v-if="((index + listNumber) - 1) === selectedButton" 
             @click="notifyParent((index + listNumber) - 1)">
             {{ (index + listNumber) }} / {{ props.soalLength }}
           </span>
@@ -71,6 +76,16 @@
         class="hover:bg-[#14487A] m-auto border-2 border-[#14487A] text-black text-center hover:text-white  rounded-full h-[30px] w-[30px] inline-flex items-center">
           <Icon name="material-symbols:keyboard-double-arrow-right" class="text-[#14487A] hover:text-white ml-0.5 w-5 h-5 p-0" />
       </a>
+    </div>
+    <div v-if="isMobile" class="flex flex-row w-full items-center place-content-center mt-5">
+      <span class="font-semibold text-sm flex flex-row">Soal ke - &thinsp;
+        <div v-for="index in (props.soalLength)" :key="index">
+          <span class="font-bold" v-if="((index + listNumber) - 1) === selectedButton" 
+            @click="notifyParent((index + listNumber) - 1)">
+            {{ (index + listNumber) }} / {{ props.soalLength }}
+          </span>
+        </div>
+      </span>
     </div>
   </div>
   
@@ -152,12 +167,14 @@ import { toast } from "vue3-toastify";
 import { defineProps, defineEmits } from "vue";
 import { quizCookies } from "~/store/quiz";
 
+
 const { id, slug } = useRoute().query
 
 const listNumber = ref(0);
 const isOpen = ref(false);
 const isLoading: Ref<boolean> = ref(false);
 const numberLoop = ref(20);
+
 
 function closeModal() {
   isOpen.value = false;
@@ -170,6 +187,7 @@ const props = defineProps({
   soalLength: Number,
   quizSessionid: String,
   quizUuid: String,
+  timer: Object as any,
   soal: Object as any,
 });
 
@@ -198,6 +216,7 @@ const emit = defineEmits(["updateParentVariable"]);
 const selectedButton = ref<number | null>(0);
 const loading = ref(false);
 const flag = ref(0);
+
 
 const notifyParent = (index: number) => {
   if (selectedButton.value === index) {
