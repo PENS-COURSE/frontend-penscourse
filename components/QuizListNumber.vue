@@ -9,8 +9,17 @@
           :class="{'rotate-180 transform transform': showPanel}"
         />
       </button>
-      <span v-else class="font-semibold">Nomor Soal</span>
+      <span v-else class="font-semibold text-lg flex flex-row ">Nomor Soal &thinsp;
+        <div v-for="index in (props.soalLength)" :key="index">
+          <span class="font-bold" v-if="((index + listNumber) - 1) === selectedButton" 
+            @click="notifyParent((index + listNumber) - 1)">
+            {{ (index + listNumber) }} / {{ props.soalLength }}
+          </span>
+        </div>
+      </span>
       <!-- <span v-else class="font-semibold">{{ quizCookies().questions[0].answer.length }}</span> -->
+      
+
     </div>
   </div>
   
