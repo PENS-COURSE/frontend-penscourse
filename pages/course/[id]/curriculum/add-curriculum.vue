@@ -47,7 +47,7 @@
           name="description"
         />
         <InputField
-          label="Minggu"
+          label="Pertemuan ke berapa?"
           v-model:model-value="payload.week"
           :value="payload.week?.toString()"
           :required="true"

@@ -47,7 +47,7 @@
             name="description"
           />
           <InputField
-            label="Minggu"
+            label="Pertemuan ke berapa?"
             v-model:model-value="payload.week"
             :value="payload.week?.toString()"
             :required="true"
@@ -81,7 +81,10 @@ interface Curriculum {
   week: number;
 }
 
-const { id, curriculum } = useRoute().params;
+const { id, curriculum } = useRoute().params as {
+  id: string;
+  curriculum: string;
+};
 const isLoading: Ref<boolean> = ref(false);
 
 const { data: dataCourse } = await useRestClient<APIResponseDetail<Course>>(

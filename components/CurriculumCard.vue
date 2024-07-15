@@ -365,7 +365,7 @@ const quizzes = computed(() => props.curriculum?.subjects.quizzes);
 const materials = computed(() => props.curriculum?.subjects.file_contents);
 const videos = computed(() => props.curriculum?.subjects.video_contents);
 const streamings = computed(() => props.curriculum?.subjects.live_classes);
-console.log(streamings.value);
+// console.log(streamings.value);
 
 const auth = useAuthStore();
 const { user } = storeToRefs(auth);

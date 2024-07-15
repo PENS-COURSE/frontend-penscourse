@@ -1,5 +1,13 @@
 <template>
-  <h4 class="font-semibold text-2xl">Kursus Saya</h4>
+  <div class="flex justify-between">
+    <h4 class="font-semibold text-2xl">Kursus Saya</h4>
+    <NuxtLink
+      v-if="user.role === 'dosen'"
+      to="/dashboard/my-course/add-course"
+      class="bg-regal-blue-500 py-2 px-3 text-white rounded-md hover:bg-regal-blue-600 transition-colors"
+      ><span><Icon name="mdi:plus" /></span> Tambah Mata Kuliah</NuxtLink
+    >
+  </div>
 
   <!-- <div class="flex items-center justify-between mt-8 gap-2">
     <form>
@@ -129,6 +137,9 @@ definePageMeta({
   layout: "profile",
   middleware: "authenticated",
 });
+
+const auth = useAuthStore();
+const { user } = storeToRefs(auth);
 
 const { data: enrollments } =
   await useRestClient<APIResponsePagination<Enrollment>>("/enrollments");

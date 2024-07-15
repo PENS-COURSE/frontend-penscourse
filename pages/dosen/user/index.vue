@@ -35,13 +35,22 @@
             <td class="px-6 py-4">{{ user.role }}</td>
             <td class="px-6 py-4">
               <img
-                :src="
-                  user.avatar == null
-                    ? '/images/profile.png'
-                    : `${useRuntimeConfig().public.BASE_URL}/${user.avatar}`
-                "
+                v-if="user.avatar == null"
+                src="/images/profile.png"
                 :alt="user.name"
-                class="w-14 h-14 rounded-full object-cover"
+                class="w-12 h-12 rounded-full"
+              />
+              <img
+                v-else-if="user.avatar.includes('http')"
+                :src="user.avatar"
+                :alt="user.avatar"
+                class="w-12 h-12 rounded-full"
+              />
+              <img
+                v-else
+                :src="`${useRuntimeConfig().public.BASE_URL}/${user.avatar}`"
+                :alt="user.name"
+                class="w-12 h-12 rounded-full object-cover"
               />
             </td>
             <td class="px-6 py-4 flex gap-2">
@@ -116,7 +125,7 @@
                                 Tidak
                               </button>
                               <button
-                                @click="deleteBanner(user.id)"
+                                @click="deleteUser(user.id)"
                                 class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300"
                               >
                                 <span v-if="isLoading"><LoadingSpinner /></span>
@@ -183,23 +192,21 @@ const getUser = async () => {
   isLoading.value = false;
 };
 
-const deleteBanner = async (id: number) => {
-  const { data, error } = await useRestClient<APIResponseDetail<Banner>>(
-    `/banners/${id}/remove`,
+const deleteUser = async (id: number) => {
+  const { data, error } = await useRestClient<APIResponseDetail<User>>(
+    `/users/${id}/remove`,
     {
       method: "DELETE",
     }
   );
 
   if (data.value) {
-    console.log(data.value);
-    toast.success("Banner berhasil dihapus", {
+    toast.success("User berhasil dihapus", {
       position: "top-right",
       autoClose: 5000,
     });
   }
   if (error.value) {
-    console.log(error.value);
     toast.error("Terjadi Error", {
       position: "top-right",
       autoClose: 5000,

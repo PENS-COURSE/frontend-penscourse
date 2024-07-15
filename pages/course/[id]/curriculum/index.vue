@@ -30,7 +30,7 @@
         <thead class="w-full text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
             <th scope="col" class="px-6 py-3">Judul</th>
-            <th scope="col" class="px-6 py-3">Minggu</th>
+            <th scope="col" class="px-6 py-3">Pertemuan</th>
             <th scope="col" class="px-6 py-3">Deskripsi</th>
             <th scope="col" class="px-6 py-3">Aksi</th>
           </tr>

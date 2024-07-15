@@ -43,17 +43,10 @@
   </section>
 
   <section class="mx-10 lg:mx-16 xl:mx-32">
-    <div class="flex justify-between">
-      <h4 class="font-semibold text-3xl text-regal-blue-500">
-        Mata Kuliah Terpopuler
-      </h4>
-      <NuxtLink
-        v-if="user.role === 'admin' || user.role === 'dosen'"
-        :to="`/major/${major?.slug}/add-course`"
-        class="bg-regal-blue-500 py-2 px-3 text-white rounded-md hover:bg-regal-blue-600 transition-colors"
-        ><span><Icon name="mdi:plus" /></span> Tambah Mata Kuliah</NuxtLink
-      >
-    </div>
+    <h4 class="font-semibold text-3xl text-regal-blue-500">
+      Mata Kuliah Terpopuler
+    </h4>
+
     <div
       class="mt-12 gap-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
     >

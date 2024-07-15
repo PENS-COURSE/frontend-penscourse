@@ -27,6 +27,16 @@
       </div>
     </div>
 
+    <div class="flex justify-start max-w-xl mt-6 mb-4 gap-16">
+      <div class="flex gap-2 items-center">
+        <Icon name="mdi:calendar-month" class="text-white w-5 h-5" />
+        <p class="text-white">
+          {{ convertDate(course?.start_date) }} -
+          {{ convertDate(course?.end_date) }}
+        </p>
+      </div>
+    </div>
+
     <p class="text-white text-xs text-justify md:text-sm max-w-lg">
       Dibuat Oleh {{ course?.user?.name }}
     </p>
@@ -432,6 +442,8 @@ import {
   DialogPanel,
 } from "@headlessui/vue";
 import type { Review } from "~/models/Review";
+import convertDate from "~/utils/convertDate";
+
 const auth = useAuthStore();
 const { user } = storeToRefs(auth);
 const { id } = useRoute().params as { id: string };
@@ -504,7 +516,7 @@ const endrollCourse = async () => {
   if (error.value?.statusCode == 400) {
     closeModalCourse();
     isLoading.value = false;
-    toast.error("Maaf, mata kuliah ini sudah berakhir", {
+    toast.error("Maaf, Kelas ini sudah dimulai", {
       transition: "slide",
       autoClose: 5000,
       position: "top-right",
