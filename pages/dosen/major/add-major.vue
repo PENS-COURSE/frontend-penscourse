@@ -140,7 +140,6 @@ const handleSubmit = async () => {
 
   if (data.value) {
     isLoading.value = false;
-    console.log(data.value);
     navigateTo("/dosen/major");
     toast.success("Berhasil Menambah Jurusan!", {
       position: "top-right",
@@ -150,7 +149,6 @@ const handleSubmit = async () => {
 
   if (error.value) {
     isLoading.value = false;
-    console.log(error.value);
     navigateTo("/dosen/major");
     toast.error("Error!", {
       position: "top-right",

@@ -138,7 +138,10 @@ definePageMeta({
   middleware: "authenticated",
 });
 
-const { id, quiz } = useRoute().params;
+const { id, quiz } = useRoute().params as {
+  id: string;
+  quiz: string;
+};
 
 const userId = ref<number>();
 
@@ -157,11 +160,13 @@ const enrolls = computed(() => dataEnrolled.value?.data);
 const course = computed(() => dataCourse?.value?.data);
 
 const resetQuiz = async (userId: number | undefined) => {
-  console.log("user ID terpilih: ", userId);
-
-  const { data: dataReset, error, refresh } = await useRestClient<
-    APIResponseDetail<ResetQuiz>
-  >(`/quizzes/${quiz}/reset/${userId}`);
+  const {
+    data: dataReset,
+    error,
+    refresh,
+  } = await useRestClient<APIResponseDetail<ResetQuiz>>(
+    `/quizzes/${quiz}/reset/${userId}`
+  );
 
   if (dataReset.value) {
     console.log("Response: ", dataReset.value);

@@ -91,7 +91,7 @@
                         >
                           <DialogTitle as="h3">
                             <svg
-                              class="text-gray-400  w-11 h-11 mb-3.5 mx-auto"
+                              class="text-gray-400 w-11 h-11 mb-3.5 mx-auto"
                               aria-hidden="true"
                               fill="currentColor"
                               viewBox="0 0 20 20"
@@ -173,14 +173,12 @@ const deleteBanner = async (id: number) => {
   );
 
   if (data.value) {
-    console.log(data.value);
     toast.success("Banner berhasil dihapus", {
       position: "top-right",
       autoClose: 5000,
     });
   }
   if (error.value) {
-    console.log(error.value);
     toast.error("Terjadi Error", {
       position: "top-right",
       autoClose: 5000,

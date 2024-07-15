@@ -307,12 +307,10 @@ const handleSubmit = async () => {
 
   if (data.value) {
     isLoading.value = false;
-    console.log(data.value);
     navigateTo(`/course/${id}`);
   }
 
   if (error.value) {
-    console.log(error.value);
     toast.error("Error, terjadi kesalahan!", {
       autoClose: 5000,
       position: "bottom-right",
