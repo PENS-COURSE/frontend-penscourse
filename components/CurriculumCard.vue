@@ -12,7 +12,10 @@
     >
       {{ curriculum?.title }}
       <span
-        v-if="user.id == $props.course?.user_id || user.role == 'admin'"
+        v-if="
+          (user.id == $props.course?.user_id && user.role == 'dosen') ||
+          user.role == 'admin'
+        "
         class="flex items-center gap-3 justify-between"
       >
         <NuxtLink
