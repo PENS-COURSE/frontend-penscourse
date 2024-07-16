@@ -263,7 +263,7 @@ const handleSubmit = async () => {
 
   console.log(body);
   body.is_ended = false;
-  body.is_active = true;
+  body.is_active = false;
 
   if (data.value) {
     const { data: response, error: updateError } = await useRestClient<
@@ -274,10 +274,15 @@ const handleSubmit = async () => {
     });
     if (response.value) {
       isLoading.value = false;
+      toast.success("Berhasil menambahkan kuis!", {
+        autoClose: 5000,
+        position: "top-right",
+      });
       navigateTo(`/course/${course.value?.slug}`);
     }
 
     if (updateError.value) {
+      isLoading.value = false;
       toast.error("Error, terjadi kesalahan!", {
         autoClose: 5000,
         position: "bottom-right",

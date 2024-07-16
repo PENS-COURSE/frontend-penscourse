@@ -516,7 +516,16 @@ const endrollCourse = async () => {
   if (error.value?.statusCode == 400) {
     closeModalCourse();
     isLoading.value = false;
-    toast.error("Maaf, Kelas ini sudah dimulai", {
+    toast.error("Maaf, mata kuliah ini sudah dimulai", {
+      transition: "slide",
+      autoClose: 5000,
+      position: "top-right",
+    });
+  }
+
+  if (error.value?.statusCode == 403) {
+    closeModalCourse();
+    toast.error("Anda tidak bisa enroll mata kuliah ini!", {
       transition: "slide",
       autoClose: 5000,
       position: "top-right",
@@ -543,7 +552,16 @@ const handlePayment = async () => {
   if (error.value?.statusCode == 400) {
     closeModalCourse();
     isLoading.value = false;
-    toast.error("Maaf, mata kuliah ini sudah berakhir", {
+    toast.error("Maaf, mata kuliah ini sudah dimulai", {
+      transition: "slide",
+      autoClose: 5000,
+      position: "top-right",
+    });
+  }
+
+  if (error.value?.statusCode == 403) {
+    closeModalCourse();
+    toast.error("Anda tidak bisa enroll mata kuliah ini!", {
       transition: "slide",
       autoClose: 5000,
       position: "top-right",

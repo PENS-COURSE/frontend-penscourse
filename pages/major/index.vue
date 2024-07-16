@@ -30,6 +30,7 @@
           type="search"
           class="w-56 lg:w-96 py-2 text-s bg-alto-500 rounded-md pl-10 focus:outline-none focus:text-regal-blue-500"
           placeholder="Search..."
+          v-model="searchQuery"
         />
       </div>
     </form>
@@ -42,7 +43,7 @@
   <div
     class="px-10 lg:px-16 md:py-16 xl:px-32 gap-6 justify-items-center grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4"
   >
-    <div v-for="major in majors" :key="major.id">
+    <div v-for="major in filteredMajors" :key="major.id">
       <NuxtLink :to="`/major/${major.slug}`">
         <div
           class="px-6 w-64 h-64 border border-alto-500 flex flex-col justify-center items-center hover:bg-blue-200 transition-colors"
@@ -65,7 +66,27 @@ import { useRestClient } from "../../composables/useRestClient";
 import type { APIResponsePagination } from "../../models/Data";
 import type { Department } from "../../models/Department";
 
+const searchQuery: Ref<string> = ref("");
+const debouncedQuery: Ref<string> = ref("");
+let timeout: any;
+
 const { data } =
   await useRestClient<APIResponsePagination<Department>>("/departments");
-const majors = computed(() => data?.value?.data?.data);
+// const majors = computed(() => data?.value?.data?.data);
+
+watch(searchQuery, (newQuery) => {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    debouncedQuery.value = newQuery;
+  }, 500);
+});
+
+const filteredMajors = computed(() => {
+  if (!data.value) return [];
+  const allMajors = data.value.data.data || [];
+  if (!debouncedQuery.value) return allMajors;
+  return allMajors.filter((major) =>
+    major.name.toLowerCase().includes(debouncedQuery.value.toLowerCase())
+  );
+});
 </script>
